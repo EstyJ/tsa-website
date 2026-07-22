@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | The Snoogums Academy</title>
+  <meta name="description" content="Create your student account at The Snoogums Academy.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/register.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-bg" aria-hidden="true">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+    <div class="bg-shape shape-4"></div>
+    <div class="particles">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div class="auth-wrapper">
+
+    <!-- LEFT PANEL -->
+    <div class="auth-brand-panel">
+      <div class="brand-panel-content">
+        <a href="../index.html" class="brand-logo">
+          <img src="../images/logo.jpeg" alt="TSA Logo">
+          <span>The Snoogums Academy</span>
+        </a>
+        <div class="brand-image-wrap">
+          <img src="../images/s11.jpg" alt="Student ready to learn" class="brand-img">
+          <div class="brand-float-card">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+              <strong>Safe &amp; Secure</strong>
+              <p>Your data is fully protected</p>
+            </div>
+          </div>
+        </div>
+        <div class="brand-steps">
+          <div class="brand-step active-step">
+            <div class="bstep-num">1</div>
+            <div class="bstep-text"><strong>Register</strong><span>Create your account</span></div>
+          </div>
+          <div class="bstep-line"></div>
+          <div class="brand-step">
+            <div class="bstep-num">2</div>
+            <div class="bstep-text"><strong>Admin Activates</strong><span>After reviewing your programme</span></div>
+          </div>
+          <div class="bstep-line"></div>
+          <div class="brand-step">
+            <div class="bstep-num">3</div>
+            <div class="bstep-text"><strong>Pay &amp; Start</strong><span>Select contacts &amp; pay</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="auth-form-panel">
+      <div class="auth-form-container">
+
+        <a href="../index.html" class="back-home-link">
+          <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <div class="form-header">
+          <div class="form-icon"><i class="fas fa-user-graduate"></i></div>
+          <h1 class="form-title">Create Your Account</h1>
+          <p class="form-subtitle">Join The Snoogums Academy — learning all year round</p>
+        </div>
+
+        <div class="notice-box">
+          <div class="notice-icon"><i class="fas fa-info-circle"></i></div>
+          <div class="notice-text">
+            <strong>How it works:</strong>
+            Register and select your programme. Our admin will review and activate your account.
+            You can then log in, select your preferred number of contacts per week, and make payment.
+          </div>
+        </div>
+
+        <form id="registerForm" action="/api/auth/register" method="POST" novalidate>
+
+          <!-- Name -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName" class="form-label">First Name <span class="required">*</span></label>
+              <div class="input-wrap">
+                <span class="input-icon"><i class="fas fa-user"></i></span>
+                <input type="text" id="firstName" name="firstName" class="form-input" placeholder="e.g. Amaka" required>
+              </div>
+              <p class="field-error" id="firstNameError"></p>
+            </div>
+            <div class="form-group">
+              <label for="lastName" class="form-label">Last Name <span class="required">*</span></label>
+              <div class="input-wrap">
+                <span class="input-icon"><i class="fas fa-user"></i></span>
+                <input type="text" id="lastName" name="lastName" class="form-input" placeholder="e.g. Okafor" required>
+              </div>
+              <p class="field-error" id="lastNameError"></p>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address <span class="required">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon"><i class="fas fa-envelope"></i></span>
+              <input type="email" id="email" name="email" class="form-input" placeholder="e.g. amaka@gmail.com" required>
+              <span class="input-status" id="emailStatus"></span>
+            </div>
+            <p class="field-error" id="emailError"></p>
+          </div>
+
+          <!-- Phone -->
+          <div class="form-group">
+            <label for="phone" class="form-label">Phone Number <span class="required">*</span></label>
+            <div class="input-wrap phone-wrap">
+              <select class="phone-prefix" id="phonePrefix" name="phonePrefix">
+                <option value="+234">&#127475;&#127468; +234</option>
+                <option value="+1">&#127482;&#127480; +1</option>
+                <option value="+44">&#127468;&#127463; +44</option>
+              </select>
+              <input type="tel" id="phone" name="phone" class="form-input phone-input" placeholder="e.g. 08012345678" required>
+              <span class="input-status" id="phoneStatus"></span>
+            </div>
+            <p class="field-hint">Enter your number without the country code</p>
+            <p class="field-error" id="phoneError"></p>
+          </div>
+
+          <!-- Category -->
+          <div class="form-group">
+            <label for="category" class="form-label">Category <span class="required">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon"><i class="fas fa-layer-group"></i></span>
+              <select id="category" name="category" class="form-input form-select" required>
+                <option value="">-- Select a category --</option>
+                <option value="academic">Academic</option>
+                <option value="exam">Exam Preparation</option>
+                <option value="international">International</option>
+                <option value="skills">Skills</option>
+                <option value="summer">Summer Lessons</option>
+              </select>
+            </div>
+            <p class="field-error" id="categoryError"></p>
+          </div>
+
+          <!-- Programme (loads based on category) -->
+          <div class="form-group" id="programmeGroup" style="display:none;">
+            <label class="form-label">Programme(s) <span class="required">*</span>
+              <span style="font-size:0.75rem;font-weight:400;color:rgba(255,255,255,0.4);"> — select all that apply</span>
+            </label>
+            <div class="programme-options" id="programmeOptions">
+              <!-- Populated by JavaScript based on category -->
+            </div>
+            <p class="field-error" id="programmeError"></p>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="password" class="form-label">Password <span class="required">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon"><i class="fas fa-lock"></i></span>
+              <input type="password" id="password" name="password" class="form-input" placeholder="Create a strong password" required>
+              <button type="button" class="password-toggle" id="passwordToggle" aria-label="Show password">
+                <i class="fas fa-eye" id="passwordToggleIcon"></i>
+              </button>
+            </div>
+            <div class="strength-bar-wrap">
+              <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+              <span class="strength-label" id="strengthLabel"></span>
+            </div>
+            <ul class="password-rules">
+              <li class="rule" id="ruleLength"><i class="fas fa-circle rule-dot"></i> At least 8 characters</li>
+              <li class="rule" id="ruleUpper"><i class="fas fa-circle rule-dot"></i> At least one uppercase letter</li>
+              <li class="rule" id="ruleNumber"><i class="fas fa-circle rule-dot"></i> At least one number</li>
+              <li class="rule" id="ruleSpecial"><i class="fas fa-circle rule-dot"></i> At least one special character</li>
+            </ul>
+            <p class="field-error" id="passwordError"></p>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="form-group">
+            <label for="confirmPassword" class="form-label">Confirm Password <span class="required">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon"><i class="fas fa-lock"></i></span>
+              <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Re-enter your password" required>
+              <span class="input-status" id="confirmStatus"></span>
+            </div>
+            <p class="field-error" id="confirmPasswordError"></p>
+          </div>
+
+          <!-- Terms -->
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+              <span class="checkmark"></span>
+              <span class="checkbox-text">
+                I agree to the <a href="#" class="form-link">Terms &amp; Conditions</a> and <a href="#" class="form-link">Privacy Policy</a>
+              </span>
+            </label>
+            <p class="field-error" id="termsError"></p>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+            <span class="btn-text"><i class="fas fa-user-plus"></i> Create My Account</span>
+            <span class="btn-loading" style="display:none;"><i class="fas fa-spinner fa-spin"></i> Creating account...</span>
+          </button>
+
+        </form>
+
+        <p class="auth-switch">Already have an account? <a href="login.html" class="form-link">Sign In</a></p>
+
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage" style="display:none;">
+          <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+          <h2>Account Created!</h2>
+          <p>Welcome to The Snoogums Academy, <strong id="successName"></strong>!</p>
+          <div class="success-notice">
+            <i class="fas fa-clock"></i>
+            <div>
+              <strong>What happens next?</strong>
+              <p>Our admin team has been notified of your registration and selected programme. Once your account is activated, you will receive an email. You can then log in, choose your preferred number of contacts per week, and make payment to begin your classes.</p>
+            </div>
+          </div>
+          <div class="success-actions">
+            <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Go to Login</a>
+            <a href="../index.html" class="btn btn-outline"><i class="fas fa-home"></i> Back to Home</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/register.js"></script>
+</body>
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  THE SNOOGUMS ACADEMY - TEAM PAGE
+  File: pages/team.html
+
+  PURPOSE:
+  Introduce the real instructors at TSA. This builds trust —
+  parents and students want to know WHO is actually teaching.
+
+  KEY FEATURE — "READ MORE" MODAL:
+  These bios are quite long (some are several paragraphs).
+  Showing the full text on every card would make the page
+  feel cluttered and overwhelming. So instead:
+  - Each card shows a SHORT excerpt of the bio
+  - Clicking "Read Full Bio" opens a MODAL (popup window)
+    showing the complete biography
+  - This keeps the grid clean while still giving full info
+    to anyone who wants to read more
+
+  WHAT IS A MODAL?
+  A modal is a popup box that appears ON TOP of the page,
+  usually with a dark overlay behind it. The rest of the page
+  becomes temporarily un-interactive until the modal is closed.
+  We build this entirely with HTML/CSS/JS — no library needed.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Team | The Snoogums Academy</title>
+  <meta name="description" content="Meet the expert instructors at The Snoogums Academy — passionate educators in technology, mathematics, science, English, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/about.css">
+  <link rel="stylesheet" href="../css/team.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="../index.html" class="navbar-logo">
+        <img src="../images/logo.jpeg" alt="TSA Logo" class="logo-img">
+        <span class="logo-text">The Snoogums Academy</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Open navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="courses.html" class="nav-link">Courses</a></li>
+        <li><a href="team.html" class="nav-link active">Our Team</a></li>
+        <li><a href="careers.html" class="nav-link">Careers</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="register.html" class="nav-link btn btn-outline">Register</a></li>
+        <li><a href="login.html" class="nav-link btn btn-primary">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- PAGE HERO -->
+  <section class="page-hero team-hero">
+    <div class="page-hero-shapes" aria-hidden="true">
+      <div class="phs phs-1"></div>
+      <div class="phs phs-2"></div>
+    </div>
+    <div class="container">
+      <div class="page-hero-content">
+        <p class="section-eyebrow" style="color: var(--color-gold);">
+          <i class="fas fa-users"></i> The People Behind TSA
+        </p>
+        <h1 class="page-hero-title">Meet Our Instructors</h1>
+        <p class="page-hero-subtitle">
+          Passionate, qualified, and dedicated educators — committed to
+          making every learner feel seen, supported, and inspired.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       TEAM GRID
+       Each card has a data-member attribute matching a key
+       in the JS bios object — this connects the "Read More"
+       button to the correct full biography in the modal.
+  ============================================================ -->
+  <section class="team-section">
+    <div class="container">
+
+      <div class="team-grid">
+
+        <!-- ===== Esther Joshua ===== -->
+        <article class="team-card reveal" data-member="esther">
+          <div class="team-card-photo">
+            <img src="../images/team-esther.jpeg" alt="Esther Joshua">
+            <div class="team-card-overlay">
+              <div class="team-socials">
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="team-card-body">
+            <h3>Esther Joshua</h3>
+            <p class="team-role">Technology &amp; Web Development Facilitator</p>
+            <div class="team-tags">
+              <span class="team-tag">Web Development</span>
+              <span class="team-tag">Cybersecurity</span>
+            </div>
+            <p class="team-excerpt">
+              A passionate technology facilitator with a strong foundation in
+              web development, cybersecurity, and digital solutions...
+            </p>
+            <button class="read-more-btn" data-member="esther">
+              Read Full Bio <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </article>
+
+        <!-- ===== Odinaka Udewena ===== -->
+        <article class="team-card reveal" data-member="odinaka">
+          <div class="team-card-photo">
+            <img src="../images/team-odinaka.jpeg" alt="Odinaka Udewena">
+            <div class="team-card-overlay">
+              <div class="team-socials">
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="team-card-body">
+            <h3>Odinaka Udewena</h3>
+            <p class="team-role">Creative Media &amp; AI Video Production</p>
+            <div class="team-tags">
+              <span class="team-tag">AI Video</span>
+              <span class="team-tag">Graphic Design</span>
+            </div>
+            <p class="team-excerpt">
+              A certified teacher and creative media professional bringing a
+              unique blend of education and digital storytelling...
+            </p>
+            <button class="read-more-btn" data-member="odinaka">
+              Read Full Bio <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </article>
+
+        <!-- ===== Confidence Simeon ===== -->
+        <article class="team-card reveal" data-member="confidence">
+          <div class="team-card-photo">
+            <img src="../images/team-confidence.jpeg" alt="Confidence Simeon">
+            <div class="team-card-overlay">
+              <div class="team-socials">
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="team-card-body">
+            <h3>Confidence Simeon</h3>
+            <p class="team-role">ICT &amp; Computer Science Educator</p>
+            <div class="team-tags">
+              <span class="team-tag">ICT</span>
+              <span class="team-tag">Programming</span>
+            </div>
+            <p class="team-excerpt">
+              Over five years of dedicated experience in ICT education,
+              holding an HND in Computer Science...
+            </p>
+            <button class="read-more-btn" data-member="confidence">
+              Read Full Bio <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </article>
+
+        <!-- ===== Hegan Amarachi ===== -->
+        <article class="team-card reveal" data-member="amarachi">
+          <div class="team-card-photo">
+            <img src="../images/team-amarachi.jpeg" alt="Hegan Amarachi">
+            <div class="team-card-overlay">
+              <div class="team-socials">
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="team-card-body">
+            <h3>Hegan Amarachi</h3>
+            <p class="team-role">Primary Education Specialist (KS1 &amp; KS2)</p>
+            <div class="team-tags">
+              <span class="team-tag">Mathematics</span>
+              <span class="team-tag">British Curriculum</span>
+            </div>
+            <p class="team-excerpt">
+              15+ years of transformative experience with primary school
+              learners, with a deep passion for Mathematics...
+            </p>
+            <button class="read-more-btn" data-member="amarachi">
+              Read Full Bio <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </article>
+
+        <!-- ===== Nelson Amibor O. ===== -->
+        <article class="team-card reveal" data-member="nelson">
+          <div class="team-card-photo">
+            <img src="../images/team-nelson.jpeg" alt="Nelson Amibor O.">
+            <div class="team-card-overlay">
+              <div class="team-socials">
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="team-card-body">
+            <h3>Nelson Amibor O.</h3>
+            <p class="team-role">Mathematics, English &amp; Humanities</p>
+            <div class="team-tags">
+              <span class="team-tag">Geography</span>
+              <span class="team-tag">Elocution</span>
+            </div>
+            <p class="team-excerpt">
+              A versatile educator with a rich teaching background spanning
+              Mathematics, English, Geography, and History...
+            </p>
+            <button class="read-more-btn" data-member="nelson">
+              Read Full Bio <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </article>
+
+        <!-- ===== Johny Austine ===== -->
+        <article class="team-card reveal" data-member="johny">
+          <div class="team-card-photo">
+            <img src="../images/team-johny.jpeg" alt="Johny Austine">
+            <div class="team-card-badge">
+              <i class="fas fa-trophy"></i> Best Tutor of the Year
+            </div>
+            <div class="team-card-overlay">
+              <div class="team-socials">
+                <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" aria-label="Email"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="team-card-body">
+            <h3>Johny Austine</h3>
+            <p class="team-role">AI Tools Educator &amp; STEM Specialist</p>
+            <div class="team-tags">
+              <span class="team-tag">AI &amp; Robotics</span>
+              <span class="team-tag">Exam Prep</span>
+            </div>
+            <p class="team-excerpt">
+              Award-winning educator and certified AI Tools Educator,
+              renowned for transforming learning through innovative methods...
+            </p>
+            <button class="read-more-btn" data-member="johny">
+              Read Full Bio <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       JOIN TEAM CTA
+  ============================================================ -->
+  <section class="cta-banner">
+    <div class="cta-banner-overlay"></div>
+    <div class="container">
+      <div class="cta-content reveal">
+        <h2>Want To Join Our Team?</h2>
+        <p>We're always looking for passionate educators who share our vision of accessible, quality education.</p>
+        <div class="cta-buttons">
+          <a href="careers.html" class="btn btn-gold btn-large">
+            <i class="fas fa-chalkboard-teacher"></i> Apply to Teach
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="../images/logo.jpeg" alt="TSA Logo" class="footer-logo">
+          <p class="footer-tagline">Knowledge Without Barriers, Potential Without Limits.</p>
+          <div class="footer-socials">
+            <a href="https://wa.me/2349041251514" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com/@thesnoogumsacademy?si=I5cBnfzldprnh5yx" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=ksznhg3" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="team.html">Our Team</a></li>
+            <li><a href="careers.html">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Students</h4>
+          <ul>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="#">Student Dashboard</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact Us</h4>
+          <p><i class="fas fa-map-marker-alt"></i> Gwarimpa Estate, 1st Avenue, Abuja, FCT</p>
+          <p><i class="fas fa-envelope"></i> info.snoogums@gmail.com</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 The Snoogums Academy. All rights reserved.</p>
+        <p>Built with ❤️ for learners everywhere.</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       BIO MODAL
+       Hidden by default. JS shows this and fills in the
+       correct instructor's full bio when "Read Full Bio" is clicked.
+       
+       This ONE modal is reused for all 6 team members —
+       we don't need 6 separate modals, just one that gets
+       its content swapped by JavaScript. This is far more
+       efficient than duplicating modal HTML six times.
+  ============================================================ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox" role="dialog" aria-modal="true" aria-labelledby="modalName">
+      <button class="modal-close" id="modalClose" aria-label="Close">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="modal-header">
+        <img src="" alt="" id="modalPhoto" class="modal-photo">
+        <div>
+          <h2 id="modalName"></h2>
+          <p id="modalRole" class="modal-role"></p>
+        </div>
+      </div>
+
+      <div class="modal-body" id="modalBio">
+        <!-- JS fills this with the full bio paragraphs -->
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/team.js"></script>
+</body>
+</html>

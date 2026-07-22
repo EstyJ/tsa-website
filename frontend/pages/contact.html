@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  THE SNOOGUMS ACADEMY - CONTACT PAGE
+  File: pages/contact.html
+
+  PURPOSE:
+  Give visitors every reasonable way to reach TSA, and answer
+  the most common questions upfront via an FAQ accordion —
+  reducing repetitive emails to the admin team.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | The Snoogums Academy</title>
+  <meta name="description" content="Get in touch with The Snoogums Academy. We're here to answer your questions about courses, enrollment, and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/about.css">
+  <link rel="stylesheet" href="../css/register.css">
+  <link rel="stylesheet" href="../css/contact.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="../index.html" class="navbar-logo">
+        <img src="../images/logo.jpeg" alt="TSA Logo" class="logo-img">
+        <span class="logo-text">The Snoogums Academy</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Open navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="courses.html" class="nav-link">Courses</a></li>
+        <li><a href="team.html" class="nav-link">Our Team</a></li>
+        <li><a href="careers.html" class="nav-link">Careers</a></li>
+        <li><a href="contact.html" class="nav-link active">Contact</a></li>
+        <li><a href="register.html" class="nav-link btn btn-outline">Register</a></li>
+        <li><a href="login.html" class="nav-link btn btn-primary">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- PAGE HERO -->
+  <section class="page-hero contact-hero">
+    <div class="page-hero-shapes" aria-hidden="true">
+      <div class="phs phs-1"></div>
+      <div class="phs phs-2"></div>
+    </div>
+    <div class="container">
+      <div class="page-hero-content">
+        <p class="section-eyebrow" style="color: var(--color-gold);">
+          <i class="fas fa-comment-dots"></i> Get In Touch
+        </p>
+        <h1 class="page-hero-title">We'd Love To Hear From You</h1>
+        <p class="page-hero-subtitle">
+          Questions about courses, enrollment, or payment? Our team is ready to help.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CONTACT INFO CARDS
+  ============================================================ -->
+  <section class="contact-info-section">
+    <div class="container">
+      <div class="contact-info-grid">
+
+        <div class="contact-info-card reveal">
+          <div class="cic-icon"><i class="fas fa-envelope"></i></div>
+          <h3>Email Us</h3>
+          <p>For general enquiries and support</p>
+          <a href="mailto:info.snoogums@gmail.com" class="cic-link">info.snoogums@gmail.com</a>
+        </div>
+
+        <div class="contact-info-card reveal">
+          <div class="cic-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <h3>Visit Us</h3>
+          <p>Kano Liaison Office</p>
+          <span class="cic-link">Gwarimpa Estate, 1st Avenue, Abuja, FCT</span>
+        </div>
+
+        <div class="contact-info-card reveal">
+          <div class="cic-icon"><i class="fab fa-whatsapp"></i></div>
+          <h3>WhatsApp</h3>
+          <p>Quick questions? Message us directly</p>
+          <a href="https://wa.me/2349041251514" target="_blank" rel="noopener noreferrer" class="cic-link">Chat with us</a>
+        </div>
+
+        <div class="contact-info-card reveal">
+          <div class="cic-icon"><i class="fas fa-clock"></i></div>
+          <h3>Response Time</h3>
+          <p>We typically reply within</p>
+          <span class="cic-link">24 - 48 hours</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CONTACT FORM + MAP
+  ============================================================ -->
+  <section class="contact-main-section">
+    <div class="container">
+      <div class="contact-main-grid">
+
+        <!-- LEFT: Form -->
+        <div class="contact-form-wrap reveal">
+          <h2 class="section-title">Send Us A Message</h2>
+          <p class="section-subtitle" style="margin: 0 0 var(--space-lg);">
+            Fill out the form and our team will get back to you shortly
+          </p>
+
+          <form id="contactForm" action="/api/contact" method="POST" novalidate>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="ctName" class="form-label">
+                  Full Name <span class="required">*</span>
+                </label>
+                <div class="input-wrap">
+                  <span class="input-icon"><i class="fas fa-user"></i></span>
+                  <input type="text" id="ctName" name="name" class="form-input"
+                    placeholder="Your full name" required>
+                </div>
+                <p class="field-error" id="ctNameError"></p>
+              </div>
+
+              <div class="form-group">
+                <label for="ctEmail" class="form-label">
+                  Email Address <span class="required">*</span>
+                </label>
+                <div class="input-wrap">
+                  <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                  <input type="email" id="ctEmail" name="email" class="form-input"
+                    placeholder="your@email.com" required>
+                </div>
+                <p class="field-error" id="ctEmailError"></p>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="ctSubject" class="form-label">
+                Subject <span class="required">*</span>
+              </label>
+              <div class="input-wrap">
+                <span class="input-icon"><i class="fas fa-tag"></i></span>
+                <select id="ctSubject" name="subject" class="form-input form-select" required>
+                  <option value="">-- What is this about? --</option>
+                  <option value="enrollment">Enrollment / Registration</option>
+                  <option value="payment">Payment / Billing</option>
+                  <option value="courses">Course Information</option>
+                  <option value="technical">Technical Support</option>
+                  <option value="careers">Careers / Teaching</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <p class="field-error" id="ctSubjectError"></p>
+            </div>
+
+            <div class="form-group">
+              <label for="ctMessage" class="form-label">
+                Message <span class="required">*</span>
+              </label>
+              <textarea id="ctMessage" name="message" class="form-input form-textarea"
+                placeholder="How can we help you?" required minlength="20"></textarea>
+              <p class="field-error" id="ctMessageError"></p>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" id="contactSubmitBtn">
+              <span class="btn-text">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </span>
+              <span class="btn-loading" style="display:none;">
+                <i class="fas fa-spinner fa-spin"></i> Sending...
+              </span>
+            </button>
+
+          </form>
+
+          <!-- Success message -->
+          <div class="success-message" id="contactSuccess" style="display:none;">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h2>Message Sent!</h2>
+            <p>Thank you for reaching out. We'll get back to you within 24–48 hours.</p>
+            <button class="btn btn-primary" onclick="location.reload()">
+              <i class="fas fa-envelope"></i> Send Another Message
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT: Map + quick info -->
+        <div class="contact-side reveal">
+          <!--
+            EMBEDDED GOOGLE MAP
+            An iframe pointing to Google Maps showing our location.
+            We use Google's standard embed URL format with the address
+            URL-encoded. No API key needed for basic embeds like this.
+          -->
+          <div class="contact-map-wrap">
+            <iframe
+              class="contact-map"
+              src="https://www.google.com/maps?q=Gwarimpa+Estate,+1st+Avenue,+Abuja,+FCT&output=embed"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="The Snoogums Academy location"
+            ></iframe>
+          </div>
+
+          <div class="contact-side-card">
+            <h4><i class="fas fa-building"></i> Head Office</h4>
+            <p>Kano Liaison Office<br>Gwarimpa Estate, 1st Avenue<br>Gwarimpa, Abuja, FCT</p>
+          </div>
+
+          <div class="contact-side-card">
+            <h4><i class="fas fa-share-alt"></i> Follow Us</h4>
+            <div class="footer-socials" style="margin-top: 0.5rem;">
+              <a href="https://wa.me/2349041251514" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+              <a href="https://youtube.com/@thesnoogumsacademy?si=I5cBnfzldprnh5yx" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+              <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=ksznhg3" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FAQ ACCORDION
+  ============================================================ -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Quick Answers</p>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+      </div>
+
+      <!--
+        ACCORDION STRUCTURE
+        Each .faq-item has a button (the question, always visible)
+        and a hidden answer div. JS toggles the "open" class.
+      -->
+      <div class="faq-list">
+
+        <div class="faq-item reveal">
+          <button class="faq-question" aria-expanded="false">
+            <span>How do I register as a student?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Click "Register" in the navigation menu, fill in your details, verify your email and phone number, then submit. Your account will be created, but course access requires payment confirmation from our admin team.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question" aria-expanded="false">
+            <span>How do I pay for a course?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>We offer two payment methods: instant online payment via Paystack (card, bank transfer, or USSD), or manual bank transfer with admin confirmation. After registering, you'll see both options on your dashboard.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question" aria-expanded="false">
+            <span>How do I become a teacher at TSA?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Teachers don't self-register. Visit our <a href="careers.html">Careers page</a>, fill out the application form, and upload your CV. Our admin team reviews applications and creates accounts for successful applicants.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question" aria-expanded="false">
+            <span>What platform do you use for live classes?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Live classes are powered by Jitsi Meet, embedded directly into your dashboard. No separate app download is needed — just log in and join when your teacher goes live.</p>
+          </div>
+        </div>
+
+        <div class="faq-item reveal">
+          <button class="faq-question" aria-expanded="false">
+            <span>How long does payment confirmation take?</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Online payments via Paystack are confirmed instantly. Manual bank transfers are typically confirmed by our admin team within 24 hours of proof of payment being submitted.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="../images/logo.jpeg" alt="TSA Logo" class="footer-logo">
+          <p class="footer-tagline">Knowledge Without Barriers, Potential Without Limits.</p>
+          <div class="footer-socials">
+            <a href="https://wa.me/2349041251514" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com/@thesnoogumsacademy?si=I5cBnfzldprnh5yx" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=ksznhg3" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="team.html">Our Team</a></li>
+            <li><a href="careers.html">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Students</h4>
+          <ul>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="#">Student Dashboard</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact Us</h4>
+          <p><i class="fas fa-map-marker-alt"></i> Gwarimpa Estate, 1st Avenue, Abuja, FCT</p>
+          <p><i class="fas fa-envelope"></i> info.snoogums@gmail.com</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 The Snoogums Academy. All rights reserved.</p>
+        <p>Built with ❤️ for learners everywhere.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/contact.js"></script>
+</body>
+</html>

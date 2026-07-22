@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  THE SNOOGUMS ACADEMY - PAYMENT CALLBACK PAGE
+  File: pages/payment-success.html
+
+  WHAT IS THIS PAGE?
+  After a student pays via Paystack, Paystack redirects them
+  back to our site at this URL (set as callback_url in paymentController.js).
+  
+  This page:
+  1. Reads the "reference" from the URL
+  2. Calls our backend to verify the payment with Paystack
+  3. Shows success or failure to the student
+  4. Redirects to their dashboard
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Status | The Snoogums Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --pink: #D0006F; --gold: #FFC200; --green: #38A169;
+      --red: #E53E3E; --dark: #0D0D1A; --white: #FFFFFF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--dark);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .card {
+      background: white; border-radius: 20px;
+      padding: 3rem 2rem; max-width: 480px; width: 100%;
+      text-align: center; box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    }
+    .icon { font-size: 4rem; margin-bottom: 1.5rem; display: block; }
+    .icon-loading { color: var(--gold); animation: spin 1s linear infinite; }
+    .icon-success { color: var(--green); }
+    .icon-error   { color: var(--red); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    h1 { font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--dark); }
+    p  { color: #718096; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem; }
+    .amount { font-size: 1.3rem; font-weight: 800; color: var(--green); margin: 0.5rem 0; }
+    .ref { font-size: 0.78rem; color: #A0AEC0; margin-bottom: 1.5rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.85rem 2rem; border-radius: 99px;
+      font-family: 'Poppins', sans-serif; font-weight: 700;
+      font-size: 0.95rem; text-decoration: none;
+      background: linear-gradient(135deg, var(--pink), #6B0FA8);
+      color: white; border: none; cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent; color: var(--pink);
+      border: 2px solid var(--pink); margin-top: 0.5rem;
+    }
+    .countdown { font-size: 0.82rem; color: #A0AEC0; margin-top: 1rem; }
+    .logo { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 1.5rem; display: block; object-fit: contain; }
+  </style>
+</head>
+<body>
+
+  <div class="card" id="card">
+    <img src="../images/logo.jpeg" alt="TSA Logo" class="logo">
+
+    <!-- Loading state -->
+    <div id="stateLoading">
+      <i class="fas fa-spinner icon icon-loading"></i>
+      <h1>Verifying Payment...</h1>
+      <p>Please wait while we confirm your payment with Paystack.</p>
+    </div>
+
+    <!-- Success state (hidden) -->
+    <div id="stateSuccess" style="display:none;">
+      <i class="fas fa-check-circle icon icon-success"></i>
+      <h1>Payment Successful!</h1>
+      <p>Your payment has been confirmed.</p>
+      <div class="amount" id="paidAmount"></div>
+      <div class="ref" id="paidRef"></div>
+      <p>Your account is now <strong>active</strong>. You can access all your courses and live classes.</p>
+      <a href="dashboard-student/index.html" class="btn">
+        <i class="fas fa-graduation-cap"></i> Go to My Dashboard
+      </a>
+      <div class="countdown" id="countdownText">Redirecting in 5 seconds...</div>
+    </div>
+
+    <!-- Error state (hidden) -->
+    <div id="stateError" style="display:none;">
+      <i class="fas fa-times-circle icon icon-error"></i>
+      <h1 id="errorTitle">Payment Failed</h1>
+      <p id="errorMessage">Your payment could not be confirmed. No money has been charged.</p>
+      <a href="dashboard-student/index.html" class="btn">
+        <i class="fas fa-redo"></i> Try Again
+      </a>
+      <br>
+      <a href="contact.html" class="btn btn-outline" style="margin-top:0.5rem;">
+        <i class="fas fa-envelope"></i> Contact Support
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:5000/api';
+
+    /*
+      URLSearchParams reads the query string from the URL.
+      After Paystack payment, the URL looks like:
+      /pages/payment-success.html?reference=TSA-5-1702000000000&trxref=TSA-5-1702000000000
+      
+      We extract the reference and use it to verify with our backend.
+    */
+    const params    = new URLSearchParams(window.location.search);
+    const reference = params.get('reference') || params.get('trxref');
+
+    async function verifyPayment() {
+      if (!reference) {
+        showError('No Reference Found', 'No payment reference was found. Please contact support.');
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('tsa_token');
+
+        if (!token) {
+          // Not logged in — redirect to login
+          window.location.href = 'login.html';
+          return;
+        }
+
+        const response = await fetch(`${API_BASE}/payment/paystack/verify/${reference}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showSuccess(result.data.amount, reference);
+        } else {
+          showError('Payment Not Confirmed', result.message || 'Payment could not be verified.');
+        }
+
+      } catch (error) {
+        showError('Verification Error', 'Could not connect to our server. Please contact support.');
+      }
+    }
+
+    function showSuccess(amount, ref) {
+      document.getElementById('stateLoading').style.display = 'none';
+      document.getElementById('stateSuccess').style.display = 'block';
+      document.getElementById('paidAmount').textContent = `₦${Number(amount).toLocaleString()}`;
+      document.getElementById('paidRef').textContent = `Reference: ${ref}`;
+
+      // Countdown redirect
+      let seconds = 5;
+      const countdownEl = document.getElementById('countdownText');
+      const timer = setInterval(() => {
+        seconds--;
+        countdownEl.textContent = `Redirecting in ${seconds} seconds...`;
+        if (seconds <= 0) {
+          clearInterval(timer);
+          window.location.href = 'dashboard-student/index.html';
+        }
+      }, 1000);
+    }
+
+    function showError(title, message) {
+      document.getElementById('stateLoading').style.display = 'none';
+      document.getElementById('stateError').style.display  = 'block';
+      document.getElementById('errorTitle').textContent    = title;
+      document.getElementById('errorMessage').textContent  = message;
+    }
+
+    // Run verification on page load
+    verifyPayment();
+  </script>
+</body>
+</html>

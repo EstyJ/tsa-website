@@ -1,0 +1,104 @@
+/*
+  ============================================================
+  THE SNOOGUMS ACADEMY - TEACHER CONTROLLER
+  File: controllers/teacherController.js
+  ============================================================
+*/
+const pool = require('../config/db');
+
+/* Get teacher's scheduled classes */
+exports.getClasses = async (req, res) => {
+  try {
+    const [classes] = await pool.query(
+      `SELECT lc.id, lc.title, lc.jitsi_room, lc.scheduled_at,
+              lc.duration_mins, lc.status, lc.clocked_in_at,
+              c.title AS course_title
+       FROM live_classes lc
+       JOIN courses c ON lc.course_id = c.id
+       WHERE lc.teacher_id = ?
+       ORDER BY lc.scheduled_at ASC`,
+      [req.user.id]
+    );
+    res.status(200).json({ success: true, data: classes });
+  } catch (error) {
+    console.error('Get teacher classes error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/* Clock in — marks class as live, students see notification */
+exports.clockIn = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Verify this class belongs to this teacher
+    const [classes] = await pool.query(
+      'SELECT id, status FROM live_classes WHERE id = ? AND teacher_id = ?',
+      [id, req.user.id]
+    );
+
+    if (classes.length === 0) {
+      return res.status(404).json({ success: false, message: 'Class not found' });
+    }
+
+    if (classes[0].status === 'live') {
+      return res.status(400).json({ success: false, message: 'You are already clocked in for this class' });
+    }
+
+    // Set status to live and record clock-in time
+    await pool.query(
+      `UPDATE live_classes
+       SET status = 'live', clocked_in_at = CURRENT_TIMESTAMP
+       WHERE id = ?`,
+      [id]
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Clocked in successfully! Students can now see your class is live.'
+    });
+  } catch (error) {
+    console.error('Clock in error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/* Get students enrolled in teacher's courses */
+exports.getStudents = async (req, res) => {
+  try {
+    const [students] = await pool.query(
+      `SELECT u.id, u.first_name, u.last_name, u.email, u.is_active,
+              c.title AS course_title
+       FROM users u
+       JOIN enrollments e ON u.id = e.student_id
+       JOIN courses c ON e.course_id = c.id
+       WHERE c.instructor_id = ? AND u.role = 'student'
+       ORDER BY u.first_name ASC`,
+      [req.user.id]
+    );
+    res.status(200).json({ success: true, data: students });
+  } catch (error) {
+    console.error('Get teacher students error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/* Get attendance records for teacher's completed classes */
+exports.getAttendance = async (req, res) => {
+  try {
+    const [records] = await pool.query(
+      `SELECT lc.id, lc.title, lc.scheduled_at, lc.duration_mins,
+              COUNT(a.id) AS student_count
+       FROM live_classes lc
+       LEFT JOIN attendance a ON lc.id = a.live_class_id
+       WHERE lc.teacher_id = ? AND lc.status = 'completed'
+       GROUP BY lc.id
+       ORDER BY lc.scheduled_at DESC`,
+      [req.user.id]
+    );
+    res.status(200).json({ success: true, data: records });
+  } catch (error) {
+    console.error('Get attendance error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

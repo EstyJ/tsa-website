@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  THE SNOOGUMS ACADEMY - LOGIN PAGE
+  File: pages/login.html
+
+  WHO LOGS IN HERE?
+  ALL three user types use this ONE login page:
+  - Students
+  - Teachers  
+  - Admins
+
+  HOW DOES IT WORK?
+  The user selects their role using the tab buttons at the top.
+  Then they enter their email and password.
+  The backend checks their credentials AND their role.
+  Based on the role, the server sends them to the right dashboard:
+  - Student  → /dashboard/student
+  - Teacher  → /dashboard/teacher
+  - Admin    → /dashboard/admin
+
+  WHY ONE PAGE FOR ALL ROLES?
+  Simpler UX — one URL to remember.
+  The role selector makes it clear which account type they're using.
+  The backend is the real security layer — it verifies the role matches.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | The Snoogums Academy</title>
+  <meta name="description" content="Sign in to The Snoogums Academy student, teacher, or admin portal.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/register.css">
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body class="auth-page">
+
+  <!-- Animated background (reused from register page) -->
+  <div class="auth-bg" aria-hidden="true">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+    <div class="bg-shape shape-4"></div>
+    <div class="particles">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <div class="auth-wrapper">
+
+    <!-- LEFT PANEL: Brand side -->
+    <div class="auth-brand-panel login-brand-panel">
+      <div class="brand-panel-content">
+
+        <a href="../index.html" class="brand-logo">
+          <img src="../images/logo.jpeg" alt="TSA Logo">
+          <span>The Snoogums Academy</span>
+        </a>
+
+        <!-- Different image from register — use s16 (focused woman on laptop) -->
+        <div class="brand-image-wrap">
+          <img src="../images/s16.jpg" alt="Student studying online" class="brand-img">
+          <div class="brand-float-card">
+            <i class="fas fa-lock"></i>
+            <div>
+              <strong>Secure Login</strong>
+              <p>Your session is encrypted</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Login-specific info panel -->
+        <div class="login-info-panel">
+          <h3>Welcome Back!</h3>
+          <p>Sign in to access your personalised dashboard, courses, and live classes.</p>
+          <div class="login-features">
+            <div class="login-feature-item">
+              <i class="fas fa-video"></i>
+              <span>Join live classes instantly</span>
+            </div>
+            <div class="login-feature-item">
+              <i class="fas fa-book-open"></i>
+              <span>Access all your course materials</span>
+            </div>
+            <div class="login-feature-item">
+              <i class="fas fa-chart-line"></i>
+              <span>Track your learning progress</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Login Form -->
+    <div class="auth-form-panel">
+      <div class="auth-form-container">
+
+        <a href="../index.html" class="back-home-link">
+          <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <div class="form-header">
+          <div class="form-icon" id="loginIcon">
+            <!-- Icon changes based on selected role tab -->
+            <i class="fas fa-user-graduate"></i>
+          </div>
+          <h1 class="form-title">Sign In</h1>
+          <p class="form-subtitle" id="loginSubtitle">
+            Welcome back, Student! Enter your details below.
+          </p>
+        </div>
+
+        <!-- ============================================================
+             ROLE SELECTOR TABS
+             Three tabs: Student, Teacher, Admin.
+             Clicking a tab updates the form's appearance and
+             sets a hidden field so the backend knows which role to verify.
+        ============================================================ -->
+        <div class="role-tabs" role="tablist" aria-label="Select your account type">
+
+          <button
+            class="role-tab active"
+            id="tab-student"
+            role="tab"
+            aria-selected="true"
+            aria-controls="loginForm"
+            data-role="student"
+            data-icon="fa-user-graduate"
+            data-label="Student"
+            data-color="pink"
+          >
+            <!--
+              data-* attributes are custom attributes we define ourselves.
+              They store extra information on an HTML element that JS can read.
+              data-role="student" tells our JS what role this tab represents.
+              We use dataset.role in JS to read it: tab.dataset.role
+            -->
+            <i class="fas fa-user-graduate"></i>
+            <span>Student</span>
+          </button>
+
+          <button
+            class="role-tab"
+            id="tab-teacher"
+            role="tab"
+            aria-selected="false"
+            aria-controls="loginForm"
+            data-role="teacher"
+            data-icon="fa-chalkboard-teacher"
+            data-label="Teacher"
+            data-color="purple"
+          >
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>Teacher</span>
+          </button>
+
+          <button
+            class="role-tab"
+            id="tab-admin"
+            role="tab"
+            aria-selected="false"
+            aria-controls="loginForm"
+            data-role="admin"
+            data-icon="fa-user-shield"
+            data-label="Admin"
+            data-color="gold"
+          >
+            <i class="fas fa-user-shield"></i>
+            <span>Admin</span>
+          </button>
+
+        </div>
+
+        <!--
+          THE LOGIN FORM
+
+          action="/api/auth/login" — backend login endpoint
+          method="POST" — credentials sent securely in request body
+          novalidate — we handle validation in JS
+        -->
+        <form id="loginForm" action="/api/auth/login" method="POST" novalidate>
+
+          <!--
+            HIDDEN INPUT — the selected role.
+            This is sent to the backend along with email and password.
+            It's not visible to the user but is part of the form data.
+            JS updates its value when the user clicks a role tab.
+          -->
+          <input type="hidden" id="selectedRole" name="role" value="student">
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="loginEmail" class="form-label">
+              Email Address <span class="required">*</span>
+            </label>
+            <div class="input-wrap">
+              <span class="input-icon"><i class="fas fa-envelope"></i></span>
+              <input
+                type="email"
+                id="loginEmail"
+                name="email"
+                class="form-input"
+                placeholder="Enter your email address"
+                autocomplete="email"
+                required
+              >
+            </div>
+            <p class="field-error" id="loginEmailError"></p>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <div class="password-label-row">
+              <label for="loginPassword" class="form-label">
+                Password <span class="required">*</span>
+              </label>
+              <!--
+                Forgot password link — sits on the right of the label.
+                We use flexbox on .password-label-row to push them apart.
+              -->
+              <a href="#" class="forgot-link" id="forgotLink">Forgot password?</a>
+            </div>
+            <div class="input-wrap">
+              <span class="input-icon"><i class="fas fa-lock"></i></span>
+              <input
+                type="password"
+                id="loginPassword"
+                name="password"
+                class="form-input"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+              >
+              <button type="button" class="password-toggle" id="loginPasswordToggle" aria-label="Show password">
+                <i class="fas fa-eye" id="loginPasswordToggleIcon"></i>
+              </button>
+            </div>
+            <p class="field-error" id="loginPasswordError"></p>
+          </div>
+
+          <!-- Remember me checkbox -->
+          <div class="form-group remember-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="rememberMe" name="rememberMe">
+              <span class="checkmark"></span>
+              <span class="checkbox-text">Remember me for 30 days</span>
+            </label>
+          </div>
+
+          <!-- Submit button — text changes based on selected role -->
+          <button type="submit" class="btn btn-primary btn-full" id="loginSubmitBtn">
+            <span class="btn-text" id="loginBtnText">
+              <i class="fas fa-sign-in-alt"></i> Sign In as Student
+            </span>
+            <span class="btn-loading" style="display:none;">
+              <i class="fas fa-spinner fa-spin"></i> Signing in...
+            </span>
+          </button>
+
+        </form>
+
+        <!-- Switch to register -->
+        <p class="auth-switch">
+          Don't have an account?
+          <a href="register.html" class="form-link">Register here</a>
+        </p>
+
+        <!-- Teacher/Admin note — shown only when those tabs are selected -->
+        <div class="role-note" id="roleNote" style="display:none;">
+          <i class="fas fa-info-circle"></i>
+          <span id="roleNoteText"></span>
+        </div>
+
+        <!-- ============================================================
+             SUCCESS MESSAGE (shown after successful login simulation)
+        ============================================================ -->
+        <div class="success-message login-success" id="loginSuccess" style="display:none;">
+          <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h2>Login Successful!</h2>
+          <p id="loginSuccessText">Redirecting you to your dashboard...</p>
+          <!-- Animated progress bar showing redirect countdown -->
+          <div class="redirect-bar">
+            <div class="redirect-fill" id="redirectFill"></div>
+          </div>
+          <p class="redirect-note">
+            <i class="fas fa-spinner fa-spin"></i>
+            Taking you to your dashboard in <span id="countdown">3</span>s
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/login.js"></script>
+</body>
+</html>

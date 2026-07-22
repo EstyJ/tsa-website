@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  THE SNOOGUMS ACADEMY (TSA) - HOMEPAGE
+  File: index.html
+  
+  WHAT IS THIS FILE?
+  This is the "entry point" of the website. When someone types
+  your web address, this is the FIRST file the browser loads.
+  Every webpage is an HTML file. HTML = the skeleton/structure.
+  CSS = the clothes/style. JavaScript = the brain/behaviour.
+  ============================================================
+-->
+<html lang="en">
+<!--
+  lang="en" tells the browser (and Google) this page is in English.
+  This helps screen readers for visually impaired users too.
+  Remember TSA's value: Radical Inclusivity.
+-->
+
+<head>
+  <!--
+    The <head> section is NOT visible on the page.
+    It contains instructions FOR the browser, not content FOR the user.
+    Think of it as the briefing room before the show starts.
+  -->
+
+  <!-- This tells the browser to use full unicode characters (emojis, accents, etc.) -->
+  <meta charset="UTF-8">
+
+  <!--
+    This is the MOST IMPORTANT meta tag for mobile responsiveness.
+    "viewport" = the visible area of the browser window.
+    Without this, mobile phones zoom out and show a tiny desktop version.
+    width=device-width = match the screen width
+    initial-scale=1.0 = don't zoom in or out on load
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- What appears on the browser tab and in Google search results -->
+  <title>The Snoogums Academy | Knowledge Without Barriers</title>
+
+  <!-- Description that appears under your link in Google search -->
+  <meta name="description" content="The Snoogums Academy - A world-class online bootcamp. Live classes, video lessons, and expert instructors. Enrol today.">
+
+  <!--
+    GOOGLE FONTS - We're loading two fonts from the internet:
+    - Poppins: Strong, modern. Used for headings (H1, H2, H3).
+    - Nunito: Warm, rounded, friendly. Used for body text and paragraphs.
+    We load them here (in <head>) so they're ready before the page shows.
+    If we loaded them at the bottom, text would flash in the wrong font first.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!--
+    Font Awesome - A library of icons (little pictures for buttons, nav, etc.)
+    Instead of designing icons ourselves, we use this free library.
+    Example: <i class="fas fa-graduation-cap"></i> gives us a graduation cap icon.
+  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!--
+    Our own CSS file. The "href" is a RELATIVE PATH.
+    "css/style.css" means: look in the folder called "css",
+    find a file called "style.css". It's relative to THIS file's location.
+  -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <!--
+    The <body> is everything VISIBLE on the page.
+    We organise it into logical sections:
+    1. Navigation Bar (top)
+    2. Hero Section (big opening banner)
+    3. Stats Bar
+    4. How It Works
+    5. Courses Preview
+    6. About / Mission
+    7. Meet the Teachers
+    8. Testimonials
+    9. Call To Action Banner
+    10. Footer
+  -->
+
+  <!-- ============================================================
+       SECTION 1: NAVIGATION BAR
+       The bar at the top with logo and links.
+       "nav" is a semantic HTML tag - it tells the browser AND
+       screen readers "this area contains navigation links".
+       Using semantic tags is better than just using <div> everywhere.
+  ============================================================ -->
+  <nav class="navbar" id="navbar">
+    <!--
+      The "navbar-container" div is a layout wrapper.
+      We use it to control the max-width and center the content.
+      Without this, on a very wide monitor, the logo would be
+      on the far left and links on the far right — too spread out.
+    -->
+    <div class="navbar-container">
+
+      <!-- LOGO AREA -->
+      <a href="index.html" class="navbar-logo">
+        <!--
+          The logo image. 
+          alt="TSA Logo" is REQUIRED for accessibility.
+          Screen readers for blind users read the alt text aloud.
+          Also, if the image fails to load, the alt text shows instead.
+        -->
+        <img src="images/logo.jpeg" alt="TSA Logo" class="logo-img">
+        <span class="logo-text">The Snoogums Academy</span>
+      </a>
+
+      <!--
+        HAMBURGER MENU BUTTON (Mobile Only)
+        On small screens (phones), we can't show all nav links.
+        So we show a "☰" icon instead. When clicked, it opens a menu.
+        aria-label explains the button to screen readers.
+        This button is HIDDEN on desktop via CSS (display: none).
+      -->
+      <button class="hamburger" id="hamburger" aria-label="Open navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <!-- NAVIGATION LINKS -->
+      <ul class="nav-links" id="navLinks">
+        <!--
+          <ul> = unordered list. Navigation links are semantically a list of options.
+          Each <li> = list item = one link.
+          This structure helps Google understand your site structure.
+        -->
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="pages/about.html" class="nav-link">About</a></li>
+        <li><a href="pages/courses.html" class="nav-link">Courses</a></li>
+        <li><a href="pages/team.html" class="nav-link">Our Team</a></li>
+        <li><a href="pages/careers.html" class="nav-link">Careers</a></li>
+        <li><a href="pages/contact.html" class="nav-link">Contact</a></li>
+        <!--
+          The Register and Login buttons are styled differently
+          from regular links — they're ACTION buttons.
+          Notice they use class="btn" alongside "nav-link".
+          Multiple classes on one element = stacking styles.
+        -->
+        <li><a href="pages/register.html" class="nav-link btn btn-outline">Register</a></li>
+        <li><a href="pages/login.html" class="nav-link btn btn-primary">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       SECTION 2: HERO SECTION
+       The BIG opening section. First thing visitors see.
+       This is your most valuable screen real estate.
+       It must immediately answer: "What is this? Is it for me?"
+  ============================================================ -->
+  <section class="hero" id="hero">
+    <!--
+      The hero has a BACKGROUND IMAGE (s20 - the African girl with MacBook).
+      We apply the image via CSS (not as an <img> tag) because:
+      - It's decorative, not content
+      - CSS lets us control position, overlay, and responsiveness easily
+      - Screen readers won't try to describe it unnecessarily
+    -->
+
+    <!-- Dark overlay - sits on top of the bg image to make text readable -->
+    <div class="hero-overlay"></div>
+
+    <!-- Animated background circles (decorative, done in CSS) -->
+    <div class="hero-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+
+    <!-- The actual text content of the hero -->
+    <div class="hero-content">
+      <!--
+        The "eyebrow" - small text above the main heading.
+        Sets context before the big claim.
+      -->
+      <p class="hero-eyebrow">
+        <i class="fas fa-graduation-cap"></i>
+        Welcome to The Snoogums Academy
+      </p>
+
+      <!--
+        H1 = the most important heading on the page.
+        There should ONLY be ONE h1 per page.
+        Google uses it to understand what the page is about.
+        Keep it clear and keyword-rich.
+      -->
+      <h1 class="hero-title">
+        Knowledge Without Barriers,
+        <span class="hero-title-highlight">Potential Without Limits.</span>
+      </h1>
+
+      <!--
+        The typewriter text - this changes dynamically via JavaScript.
+        We give it an id so JavaScript can "find" and update it.
+        id must be UNIQUE on the page (only one element can have a given id).
+      -->
+      <p class="hero-subtitle">
+        Join <span id="typewriter" class="typewriter-text"></span>
+      </p>
+
+      <p class="hero-description">
+        World-class live classes, video lessons, and expert instructors — 
+        all in one place. Learn at your own pace, from anywhere.
+      </p>
+
+      <!-- CTA = Call To Action. The main buttons we want visitors to click. -->
+      <div class="hero-cta">
+        <a href="pages/register.html" class="btn btn-primary btn-large">
+          <i class="fas fa-rocket"></i>
+          Enrol Now
+        </a>
+        <a href="pages/courses.html" class="btn btn-outline btn-large">
+          <i class="fas fa-book-open"></i>
+          View Courses
+        </a>
+      </div>
+
+      <!-- Small social proof under the buttons -->
+      <div class="hero-proof">
+        <div class="proof-avatars">
+          <!-- These small circles represent student avatars -->
+          <div class="avatar-stack">
+            <div class="avatar av1"></div>
+            <div class="avatar av2"></div>
+            <div class="avatar av3"></div>
+            <div class="avatar av4"></div>
+          </div>
+        </div>
+        <p class="proof-text">
+          <strong>100+ students</strong> enrolled this season
+        </p>
+      </div>
+    </div>
+
+    <!-- Hero image (right side on desktop, hidden on mobile) -->
+    <div class="hero-image-wrap">
+      <div class="hero-image-card">
+        <img src="images/front1img.jpeg" alt="TSA student with laptop" class="hero-img">
+        <!-- Floating badge on the image -->
+        <div class="floating-badge badge-top">
+          <i class="fas fa-video"></i>
+          <span>Live Classes</span>
+        </div>
+        <div class="floating-badge badge-bottom">
+          <i class="fas fa-star"></i>
+          <span>World-Class Tutors</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator at the bottom of the hero -->
+    <div class="scroll-indicator">
+      <span>Scroll to explore</span>
+      <div class="scroll-arrow">
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 3: STATS BAR
+       Quick numbers that build trust and credibility.
+       "data-target" is a custom attribute we use in JavaScript
+       to animate the numbers counting up from 0.
+  ============================================================ -->
+  <section class="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+
+        <div class="stat-item reveal">
+          <div class="stat-icon"><i class="fas fa-users"></i></div>
+          <div class="stat-number" data-target="100">0</div>
+          <div class="stat-label">Active Students</div>
+        </div>
+
+        <div class="stat-item reveal">
+          <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+          <div class="stat-number" data-target="12">0</div>
+          <div class="stat-label">Expert Instructors</div>
+        </div>
+
+        <div class="stat-item reveal">
+          <div class="stat-icon"><i class="fas fa-book"></i></div>
+          <div class="stat-number" data-target="20">0</div>
+          <div class="stat-label">Courses Available</div>
+        </div>
+
+        <div class="stat-item reveal">
+          <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+          <div class="forced-flex">
+            <div class="stat-number" data-target="95">0</div>
+            <div class="stat-suffix">%</div>
+          </div>
+          <div class="stat-label">Completion Rate</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 4: HOW IT WORKS
+       Inspired by EdBriTish's 3-step registration flow,
+       but more visual and interactive.
+  ============================================================ -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Simple Process</p>
+        <h2 class="section-title">How To Get Started</h2>
+        <p class="section-subtitle">Three simple steps to begin your learning journey</p>
+      </div>
+
+      <div class="steps-grid">
+
+        <!-- Step 1 -->
+        <div class="step-card reveal">
+          <div class="step-number">01</div>
+          <div class="step-icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <h3 class="step-title">Register</h3>
+          <p class="step-desc">
+            Create your student account. We'll verify your email and phone 
+            number to keep the community safe and trusted.
+          </p>
+          <div class="step-connector"></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card reveal">
+          <div class="step-number">02</div>
+          <div class="step-icon">
+            <i class="fas fa-credit-card"></i>
+          </div>
+          <h3 class="step-title">Pay Your Fees</h3>
+          <p class="step-desc">
+            Complete your tuition payment. Our admin team manually 
+            confirms each payment and unlocks your course access.
+          </p>
+          <div class="step-connector"></div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card reveal">
+          <div class="step-number">03</div>
+          <div class="step-icon">
+            <i class="fas fa-play-circle"></i>
+          </div>
+          <h3 class="step-title">Start Learning</h3>
+          <p class="step-desc">
+            Access your courses, join live classes, watch videos, 
+            and download materials — all in one dashboard.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="hiw-cta reveal">
+        <a href="pages/register.html" class="btn btn-primary btn-large">
+          <i class="fas fa-arrow-right"></i>
+          Start Your Journey
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 5: COURSES PREVIEW
+       Show 4-6 course cards. Each links to the full courses page.
+       Images s10, s13, s15, s17 are used as thumbnails.
+  ============================================================ -->
+  <section class="courses-preview" id="courses">
+    <div class="container">
+
+      <div class="section-header reveal">
+        <p class="section-eyebrow">What We Offer</p>
+        <h2 class="section-title">Explore Our Courses</h2>
+        <p class="section-subtitle">Expert-led programmes designed for real learning outcomes</p>
+      </div>
+
+      <div class="courses-grid">
+
+        <!-- Course Card 1: Coding -->
+        <div class="course-card reveal">
+          <div class="course-thumbnail">
+            <img src="images/s13.jpg" alt="Coding course">
+            <div class="course-badge">Popular</div>
+          </div>
+          <div class="course-body">
+            <div class="course-meta">
+              <span class="course-category"><i class="fas fa-code"></i> Technology</span>
+              <span class="course-level">Beginner</span>
+            </div>
+            <h3 class="course-title">Introduction to Coding</h3>
+            <p class="course-desc">Learn the fundamentals of programming with hands-on projects and live instructor support.</p>
+            <div class="course-footer">
+              <div class="course-info">
+                <span><i class="fas fa-video"></i> 24 Lessons</span>
+                <span><i class="fas fa-clock"></i> 8 Weeks</span>
+              </div>
+              <a href="pages/courses.html" class="btn btn-sm btn-primary">View Course</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Card 2: Mathematics -->
+        <div class="course-card reveal">
+          <div class="course-thumbnail">
+            <img src="images/s10.jpg" alt="Mathematics course">
+          </div>
+          <div class="course-body">
+            <div class="course-meta">
+              <span class="course-category"><i class="fas fa-calculator"></i> Mathematics</span>
+              <span class="course-level">All Levels</span>
+            </div>
+            <h3 class="course-title">Mathematics Mastery</h3>
+            <p class="course-desc">From basic arithmetic to advanced algebra — structured lessons with quizzes and assignments.</p>
+            <div class="course-footer">
+              <div class="course-info">
+                <span><i class="fas fa-video"></i> 30 Lessons</span>
+                <span><i class="fas fa-clock"></i> 10 Weeks</span>
+              </div>
+              <a href="pages/courses.html" class="btn btn-sm btn-primary">View Course</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Card 3: Science -->
+        <div class="course-card reveal">
+          <div class="course-thumbnail">
+            <img src="images/s15.jpg" alt="Science course">
+            <div class="course-badge new-badge">New</div>
+          </div>
+          <div class="course-body">
+            <div class="course-meta">
+              <span class="course-category"><i class="fas fa-flask"></i> Science</span>
+              <span class="course-level">Intermediate</span>
+            </div>
+            <h3 class="course-title">Science Explorers</h3>
+            <p class="course-desc">Discover biology, chemistry and physics through engaging video experiments and live sessions.</p>
+            <div class="course-footer">
+              <div class="course-info">
+                <span><i class="fas fa-video"></i> 20 Lessons</span>
+                <span><i class="fas fa-clock"></i> 6 Weeks</span>
+              </div>
+              <a href="pages/courses.html" class="btn btn-sm btn-primary">View Course</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Card 4: English -->
+        <div class="course-card reveal">
+          <div class="course-thumbnail">
+            <img src="images/s17.jpg" alt="English course">
+          </div>
+          <div class="course-body">
+            <div class="course-meta">
+              <span class="course-category"><i class="fas fa-book-open"></i> English</span>
+              <span class="course-level">All Levels</span>
+            </div>
+            <h3 class="course-title">English Language & Literature</h3>
+            <p class="course-desc">Build confidence in reading, writing, grammar and comprehension with expert guidance.</p>
+            <div class="course-footer">
+              <div class="course-info">
+                <span><i class="fas fa-video"></i> 28 Lessons</span>
+                <span><i class="fas fa-clock"></i> 9 Weeks</span>
+              </div>
+              <a href="pages/courses.html" class="btn btn-sm btn-primary">View Course</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="courses-cta reveal">
+        <a href="pages/courses.html" class="btn btn-outline btn-large">
+          View All Courses <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 6: ABOUT / MISSION
+       Pulled from the brand PDF.
+       Uses images s2 and s8 (teacher/student human moments).
+  ============================================================ -->
+  <section class="about-strip" id="about">
+    <div class="container">
+      <div class="about-grid">
+
+        <!-- Left: Images stacked -->
+        <div class="about-images reveal">
+          <div class="about-img-main">
+            <img src="images/s2.jpg" alt="TSA students collaborating">
+          </div>
+          <div class="about-img-secondary">
+            <img src="images/s8.jpg" alt="Teacher with student">
+          </div>
+          <!-- Floating mission card on the images -->
+          <div class="about-float-card">
+            <i class="fas fa-globe-africa"></i>
+            <p>Serving learners across Nigeria and beyond</p>
+          </div>
+        </div>
+
+        <!-- Right: Text -->
+        <div class="about-text reveal">
+          <p class="section-eyebrow">Who We Are</p>
+          <h2 class="section-title">Education Is A Universal Human Right</h2>
+          <p class="about-desc">
+            At The Snoogums Academy, we believe the spark of curiosity exists 
+            in every person. We were founded to bridge the gap — ensuring no 
+            child's location or financial situation ever limits their potential.
+          </p>
+
+          <!-- Core values list -->
+          <div class="values-list">
+            <div class="value-item">
+              <div class="value-icon"><i class="fas fa-heart"></i></div>
+              <div>
+                <strong>Radical Inclusivity</strong>
+                <p>We design for everyone — including learners with disabilities.</p>
+              </div>
+            </div>
+            <div class="value-item">
+              <div class="value-icon"><i class="fas fa-balance-scale"></i></div>
+              <div>
+                <strong>Equity in Education</strong>
+                <p>Affordable rates so economic status is never a barrier.</p>
+              </div>
+            </div>
+            <div class="value-item">
+              <div class="value-icon"><i class="fas fa-star"></i></div>
+              <div>
+                <strong>Uncompromising Quality</strong>
+                <p>World-class materials and live instruction, always.</p>
+              </div>
+            </div>
+          </div>
+
+          <a href="pages/about.html" class="btn btn-primary">
+            Learn More About Us <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 7: LIVE CLASS FEATURE HIGHLIGHT
+       Showcases the Jitsi live class system.
+       Uses images s1 and s19.
+  ============================================================ -->
+  <section class="live-class-section">
+    <div class="container">
+      <div class="live-grid">
+
+        <!-- Text side -->
+        <div class="live-text reveal">
+          <p class="section-eyebrow">Real-Time Learning</p>
+          <h2 class="section-title">Live Interactive Classrooms</h2>
+          <p class="live-desc">
+            Our instructors teach you live, face-to-face, right inside your browser. 
+            No downloads needed. Ask questions, get answers, and learn together 
+            with classmates in real time.
+          </p>
+
+          <div class="live-features">
+            <div class="live-feature">
+              <i class="fas fa-video"></i>
+              <span>HD Video & Audio</span>
+            </div>
+            <div class="live-feature">
+              <i class="fas fa-comments"></i>
+              <span>Live Chat & Q&A</span>
+            </div>
+            <div class="live-feature">
+              <i class="fas fa-clock"></i>
+              <span>Attendance Tracked</span>
+            </div>
+            <div class="live-feature">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Scheduled Sessions</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image side -->
+        <div class="live-images reveal">
+          <img src="images/s1.jpg" alt="Student in live class" class="live-img-main">
+          <div class="live-img-overlay">
+            <img src="images/s19.jpg" alt="Online class session" class="live-img-secondary">
+          </div>
+          <!-- Live now badge -->
+          <div class="live-badge">
+            <span class="live-dot"></span>
+            LIVE NOW
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 8: TESTIMONIALS
+       Social proof - what parents/students say.
+       Uses placeholder data for now. Client will provide real ones.
+  ============================================================ -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Student Voices</p>
+        <h2 class="section-title">What Our Community Says</h2>
+      </div>
+
+      <!--
+        TESTIMONIALS SLIDER
+        The "testimonial-track" moves left/right via JavaScript.
+        All cards sit side-by-side; we hide the ones out of view.
+      -->
+      <div class="testimonials-slider">
+        <div class="testimonial-track" id="testimonialTrack">
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+              "My daughter struggled with maths before TSA. After just one term, 
+              she's topping her class. The live sessions made all the difference."
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar ta1"></div>
+              <div>
+                <strong>Mrs. Amaka Okafor</strong>
+                <span>Parent, Abuja</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+              "The platform is so easy to use. I log in, find my class, and the 
+              teacher is already there. I feel like I'm in a real school."
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar ta2"></div>
+              <div>
+                <strong>Chidi, Student</strong>
+                <span>Age 14, Lagos</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="testimonial-card">
+            <div class="testimonial-stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">
+              "The courses are well-structured and the instructors are patient and 
+              thorough. Best investment I made for my child's education."
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar ta3"></div>
+              <div>
+                <strong>Mr. Emmanuel Daka</strong>
+                <span>Parent, Kano</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Slider navigation dots -->
+        <div class="slider-dots" id="sliderDots">
+          <button class="dot active" data-index="0"></button>
+          <button class="dot" data-index="1"></button>
+          <button class="dot" data-index="2"></button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 9: FINAL CALL TO ACTION BANNER
+       Last push to get visitors to register.
+  ============================================================ -->
+  <section class="cta-banner">
+    <div class="cta-banner-overlay"></div>
+    <div class="container">
+      <div class="cta-content reveal">
+        <h2>Ready to Begin Your Learning Journey?</h2>
+        <p>Join The Snoogums Academy today. Register, pay your fees, and unlock a world of knowledge.</p>
+        <div class="cta-buttons">
+          <a href="pages/register.html" class="btn btn-gold btn-large">
+            <i class="fas fa-user-plus"></i> Register Now
+          </a>
+          <a href="pages/contact.html" class="btn btn-outline-white btn-large">
+            <i class="fas fa-envelope"></i> Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 10: FOOTER
+       Bottom of every page. Contains links, contact info, socials.
+  ============================================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- Column 1: Brand info -->
+        <div class="footer-brand">
+          <img src="images/logo.jpeg" alt="TSA Logo" class="footer-logo">
+          <p class="footer-tagline">Knowledge Without Barriers, Potential Without Limits.</p>
+          <div class="footer-socials">
+            <a href="https://wa.me/2349041251514" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com/@thesnoogumsacademy?si=I5cBnfzldprnh5yx" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=ksznhg3" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+
+        <!-- Column 2: Quick links -->
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pages/about.html">About Us</a></li>
+            <li><a href="pages/courses.html">Courses</a></li>
+            <li><a href="pages/team.html">Our Team</a></li>
+            <li><a href="pages/careers.html">Careers</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Student links -->
+        <div class="footer-links">
+          <h4>Students</h4>
+          <ul>
+            <li><a href="pages/register.html">Register</a></li>
+            <li><a href="pages/login.html">Login</a></li>
+            <li><a href="#">Student Dashboard</a></li>
+            <li><a href="#">Payment Info</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Contact -->
+        <div class="footer-contact">
+          <h4>Contact Us</h4>
+          <p><i class="fas fa-map-marker-alt"></i> Gwarimpa Estate, 1st Avenue, Abuja, FCT</p>
+          <p><i class="fas fa-envelope"></i> info.snoogums@gmail.com</p>
+        </div>
+
+      </div>
+
+      <!-- Footer bottom bar -->
+      <div class="footer-bottom">
+        <p>&copy; 2025 The Snoogums Academy. All rights reserved.</p>
+        <p>Built with ❤️ for learners everywhere.</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--
+    JAVASCRIPT FILES - loaded at the BOTTOM of the body.
+    WHY AT THE BOTTOM?
+    HTML loads top to bottom. If we put JS in the <head>,
+    the script would run BEFORE the HTML elements exist.
+    Then when JS says "find the element with id=navbar",
+    it won't find anything because it hasn't been created yet!
+    Putting JS at the bottom ensures all HTML is loaded first.
+  -->
+
+  <!-- ============================================================
+       ANTHEM AUDIO PLAYER
+       Autoplays when the site loads. Has play/pause/volume controls.
+       Anthem.mp3 is in the frontend root folder.
+       autoplay + muted is required by browsers — they block autoplay
+       with sound. We unmute it after a user interaction.
+  ============================================================ -->
+  <div class="anthem-player" id="anthemPlayer">
+    <div class="anthem-inner">
+      <button class="anthem-btn" id="anthemToggle" aria-label="Play anthem">
+        <i class="fas fa-volume-up" id="anthemIcon"></i>
+      </button>
+      <div class="anthem-info">
+        <span class="anthem-title">TSA Anthem</span>
+        <div class="anthem-bar">
+          <div class="anthem-progress" id="anthemProgress"></div>
+        </div>
+      </div>
+      <button class="anthem-close" id="anthemClose" aria-label="Close player">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  <audio id="anthemAudio" src="../Anthem.mp3" loop></audio>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

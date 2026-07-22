@@ -1,0 +1,23 @@
+# =============================================================
+# .gitignore
+# Files and folders listed here are IGNORED by Git.
+# They will never be uploaded to GitHub or shared accidentally.
+# =============================================================
+
+# Environment variables — contains secrets, NEVER commit this
+.env
+
+# Node modules — huge folder (thousands of files), always reinstalled
+# via "npm install" from package.json
+node_modules/
+
+# CV uploads folder — user files, not code
+uploads/
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/

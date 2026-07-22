@@ -1,0 +1,1039 @@
+/*
+  ============================================================
+  THE SNOOGUMS ACADEMY - REGISTER PAGE STYLES
+  File: css/register.css
+
+  This file ONLY contains styles specific to the register
+  and login pages. It works TOGETHER with style.css —
+  style.css loads first (buttons, colours, fonts),
+  then this file adds the page-specific layout on top.
+
+  Think of it like this:
+  style.css   = the school uniform (shared by everyone)
+  register.css = the name badge (specific to this page)
+  ============================================================
+*/
+
+
+/* ============================================================
+   AUTH PAGE BODY
+   When <body> has class "auth-page", we apply these styles.
+   This overrides the white background from style.css
+   specifically on the register and login pages.
+============================================================ */
+.auth-page {
+  background: var(--color-dark);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+
+/* ============================================================
+   ANIMATED BACKGROUND
+   The decorative shapes that float behind the form.
+   position: fixed means they stay in place even when scrolling.
+============================================================ */
+.auth-bg {
+  position: fixed;    /* Stays in place as user scrolls */
+  inset: 0;           /* Covers the entire viewport */
+  z-index: 0;         /* Behind everything else */
+  overflow: hidden;
+}
+
+/* Each shape is an absolutely positioned div with a gradient */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  /*
+    filter: blur() — creates a soft glow effect.
+    The shape itself is a solid circle, but blur makes it look
+    like a soft cloud of colour. This is a popular modern design technique.
+  */
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: shapeFloat 12s ease-in-out infinite;
+}
+
+.shape-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(208, 0, 111, 0.6), transparent);
+  top: -150px;
+  right: -100px;
+  animation-duration: 15s;
+}
+
+.shape-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(107, 15, 168, 0.5), transparent);
+  bottom: -100px;
+  left: -80px;
+  animation-duration: 18s;
+  animation-delay: -5s;
+}
+
+.shape-3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 194, 0, 0.3), transparent);
+  top: 40%;
+  left: 30%;
+  animation-duration: 10s;
+  animation-delay: -8s;
+}
+
+.shape-4 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(208, 0, 111, 0.3), transparent);
+  bottom: 20%;
+  right: 10%;
+  animation-duration: 13s;
+  animation-delay: -3s;
+}
+
+@keyframes shapeFloat {
+  0%, 100% { transform: translateY(0px) scale(1) rotate(0deg); }
+  33%       { transform: translateY(-40px) scale(1.1) rotate(5deg); }
+  66%       { transform: translateY(20px) scale(0.95) rotate(-3deg); }
+}
+
+
+/* ============================================================
+   FLOATING PARTICLES
+   Small dots that drift around the background.
+   Each <span> inside .particles is one dot.
+============================================================ */
+.particles {
+  position: absolute;
+  inset: 0;
+}
+
+.particles span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  animation: particleDrift 20s linear infinite;
+}
+
+/*
+  We use nth-child to position each particle differently.
+  nth-child(n) targets the nth element in its parent.
+  This way we can style each span uniquely without adding classes.
+*/
+.particles span:nth-child(1)  { left: 10%; top: 20%; animation-delay: 0s;    animation-duration: 18s; }
+.particles span:nth-child(2)  { left: 25%; top: 60%; animation-delay: -3s;   animation-duration: 22s; }
+.particles span:nth-child(3)  { left: 50%; top: 10%; animation-delay: -6s;   animation-duration: 16s; }
+.particles span:nth-child(4)  { left: 70%; top: 40%; animation-delay: -9s;   animation-duration: 20s; }
+.particles span:nth-child(5)  { left: 85%; top: 70%; animation-delay: -12s;  animation-duration: 25s; }
+.particles span:nth-child(6)  { left: 40%; top: 80%; animation-delay: -4s;   animation-duration: 19s; }
+.particles span:nth-child(7)  { left: 15%; top: 85%; animation-delay: -7s;   animation-duration: 21s; }
+.particles span:nth-child(8)  { left: 60%; top: 25%; animation-delay: -2s;   animation-duration: 17s; }
+.particles span:nth-child(9)  { left: 90%; top: 15%; animation-delay: -10s;  animation-duration: 23s; }
+
+@keyframes particleDrift {
+  0%   { transform: translateY(0px) translateX(0px); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-200px) translateX(30px); opacity: 0; }
+}
+
+
+/* ============================================================
+   AUTH WRAPPER
+   The main container holding both panels side by side.
+   position: relative + z-index: 1 puts it ABOVE the background.
+============================================================ */
+.auth-wrapper {
+  position: relative;
+  z-index: 1;           /* Sit above the .auth-bg (z-index: 0) */
+  display: flex;        /* Side by side panels */
+  min-height: 100vh;
+  /*
+    We use min-height (not height) because the form panel
+    can grow taller than the viewport on small screens or
+    if there are many form fields.
+  */
+}
+
+
+/* ============================================================
+   LEFT PANEL — BRAND SIDE
+============================================================ */
+.auth-brand-panel {
+  /*
+    flex: 0 0 420px means:
+    - flex-grow: 0   (don't grow)
+    - flex-shrink: 0 (don't shrink)
+    - flex-basis: 420px (always be exactly 420px wide)
+    This keeps the brand panel at a fixed width.
+  */
+  flex: 0 0 420px;
+  background: linear-gradient(160deg, rgba(208,0,111,0.15) 0%, rgba(107,15,168,0.2) 100%);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;   /* Stays in view as the right panel scrolls */
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.brand-panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  width: 100%;
+  animation: fadeInLeft 0.8s ease both;
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Logo in the brand panel */
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+}
+
+.brand-logo img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: contain;
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+.brand-logo span {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--color-white);
+  line-height: 1.3;
+}
+
+/* Brand image with floating card */
+.brand-image-wrap {
+  position: relative;
+}
+
+.brand-img {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  aspect-ratio: 4/3;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.brand-float-card {
+  position: absolute;
+  bottom: -16px;
+  right: -16px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+.brand-float-card i {
+  font-size: 1.4rem;
+  color: var(--color-gold);
+}
+
+.brand-float-card strong {
+  display: block;
+  color: var(--color-white);
+  font-size: 0.85rem;
+  font-family: var(--font-heading);
+}
+
+.brand-float-card p {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+/* 3-step progress tracker in the brand panel */
+.brand-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: var(--space-md);
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.brand-step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.5rem 0;
+  opacity: 0.5;
+  transition: var(--transition);
+}
+
+/* The currently active step is fully visible */
+.brand-step.active-step {
+  opacity: 1;
+}
+
+.bstep-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+  flex-shrink: 0;
+}
+
+.active-step .bstep-num {
+  background: var(--gradient-pink);
+  border-color: transparent;
+  color: white;
+  box-shadow: var(--shadow-pink);
+}
+
+.bstep-text strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.bstep-text span {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.5);
+}
+
+/* Vertical line between steps */
+.bstep-line {
+  width: 2px;
+  height: 20px;
+  background: rgba(255,255,255,0.1);
+  margin-left: 15px;  /* Aligns with centre of the step number circle */
+}
+
+
+/* ============================================================
+   RIGHT PANEL — FORM SIDE
+============================================================ */
+.auth-form-panel {
+  flex: 1;              /* Take up all remaining space */
+  overflow-y: auto;     /* Allow scrolling if form is taller than viewport */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.auth-form-container {
+  width: 100%;
+  max-width: 540px;     /* Form doesn't stretch too wide on large screens */
+  animation: fadeInRight 0.8s ease both;
+  padding: var(--space-lg) 0;
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Back link at the top */
+.back-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: var(--space-lg);
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.back-home-link:hover {
+  color: var(--color-gold);
+}
+
+/* Form header section */
+.form-header {
+  margin-bottom: var(--space-lg);
+}
+
+.form-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: var(--space-md);
+  box-shadow: var(--shadow-pink);
+}
+
+.form-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: var(--color-white);
+  margin-bottom: 0.5rem;
+}
+
+.form-subtitle {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.95rem;
+}
+
+
+/* ============================================================
+   NOTICE BOX
+   The yellow info box before the form.
+============================================================ */
+.notice-box {
+  display: flex;
+  gap: var(--space-sm);
+  background: rgba(255, 194, 0, 0.08);
+  border: 1px solid rgba(255, 194, 0, 0.25);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.notice-icon {
+  color: var(--color-gold);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.notice-text {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.notice-text strong {
+  color: var(--color-gold);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.notice-text em {
+  color: var(--color-pink);
+  font-style: normal;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   FORM ELEMENTS
+   Styles for all inputs, labels, and error messages.
+============================================================ */
+
+/* Side-by-side fields (first name + last name) */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+/* Each field group: label + input + error */
+.form-group {
+  margin-bottom: var(--space-md);
+}
+
+.form-label {
+  display: block;       /* Labels on their own line above the input */
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 0.4rem;
+  font-family: var(--font-heading);
+}
+
+/* The asterisk (*) next to required fields */
+.required {
+  color: var(--color-pink);
+  margin-left: 2px;
+}
+
+/*
+  INPUT WRAP — the container around each input.
+  position: relative — allows icon and status to be positioned
+  INSIDE the input area using position: absolute.
+*/
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* The icon inside the left side of the input */
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: rgba(255,255,255,0.3);
+  font-size: 0.95rem;
+  pointer-events: none;   /* Clicks pass through to the input underneath */
+  z-index: 1;
+  transition: var(--transition);
+}
+
+/* When the input is focused (being typed in), icon turns pink */
+.input-wrap:focus-within .input-icon {
+  color: var(--color-pink);
+}
+
+/*
+  THE ACTUAL INPUT FIELD
+  We style it heavily because browsers have ugly default styles.
+*/
+.form-input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 0.85rem 2.8rem 0.85rem 2.8rem;
+  /*
+    padding order: top right bottom left
+    Left and right padding are large to make room for the icon (left)
+    and status indicator (right).
+  */
+  transition: var(--transition);
+  outline: none;    /* Remove the default blue focus ring — we'll add our own */
+}
+
+/*
+  The ::placeholder pseudo-element styles the placeholder text
+  (the grey hint text shown when the field is empty).
+*/
+.form-input::placeholder {
+  color: rgba(255,255,255,0.25);
+}
+
+/* On focus (when user clicks/tabs into the input): */
+.form-input:focus {
+  background: rgba(255,255,255,0.09);
+  border-color: var(--color-pink);
+  /*
+    box-shadow creates a soft glow ring around the focused input.
+    This is our custom focus indicator (better than the browser default).
+  */
+  box-shadow: 0 0 0 3px rgba(208, 0, 111, 0.15);
+}
+
+/* When JS adds class "input-error" — red border */
+.form-input.input-error {
+  border-color: #FF4D6D;
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.15);
+}
+
+/* When JS adds class "input-success" — green border */
+.form-input.input-success {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+}
+
+/*
+  Status icon (tick or cross) on the right side of input.
+  Shown after the user types and JS validates the field.
+*/
+.input-status {
+  position: absolute;
+  right: 14px;
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* Error message paragraph below each field */
+.field-error {
+  color: #FF6B6B;
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  min-height: 1.2em;  /* Reserve space so layout doesn't jump when error appears */
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* Small hint text below fields */
+.field-hint {
+  color: rgba(255,255,255,0.35);
+  font-size: 0.78rem;
+  margin-top: 0.3rem;
+}
+
+
+/* ============================================================
+   PHONE INPUT — special layout with country code selector
+============================================================ */
+.phone-wrap {
+  gap: 0;   /* No gap between select and input — they sit flush */
+}
+
+.phone-prefix {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-right: none;   /* Remove right border so it merges with the input */
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  color: var(--color-white);
+  font-size: 0.85rem;
+  padding: 0.85rem 0.75rem;
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+  /*
+    We can't easily style <select> dropdowns — browser controls them.
+    We can only style the "closed" appearance.
+    In a production app we might use a custom dropdown built with JS.
+    For now, this is clean enough.
+  */
+}
+
+/* Phone input connects to the right of the selector */
+.phone-input {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding-left: var(--space-md);  /* No icon on the left for phone input */
+}
+
+
+/* ============================================================
+   PASSWORD TOGGLE BUTTON
+   The eye icon to show/hide the password.
+============================================================ */
+.password-toggle {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.3);
+  cursor: pointer;
+  font-size: 0.95rem;
+  padding: 4px;
+  transition: var(--transition);
+}
+
+.password-toggle:hover {
+  color: var(--color-pink);
+}
+
+
+/* ============================================================
+   PASSWORD STRENGTH BAR
+   A coloured bar that grows and changes colour as the
+   password gets stronger.
+============================================================ */
+.strength-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.strength-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  width: 0%;            /* Starts at 0 — JS sets this to 25%, 50%, 75%, 100% */
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease, background-color 0.4s ease;
+  /* JS also sets the background-color to red/orange/yellow/green */
+}
+
+.strength-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  min-width: 60px;
+  text-align: right;
+}
+
+
+/* ============================================================
+   PASSWORD RULES CHECKLIST
+============================================================ */
+.password-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.rule {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.35);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition);
+}
+
+/* The small dot icon next to each rule */
+.rule-dot {
+  font-size: 0.4rem;    /* Very small circle */
+  color: rgba(255,255,255,0.2);
+  transition: var(--transition);
+}
+
+/*
+  When JS adds class "rule-met" to a rule item:
+  - Text turns green
+  - Dot turns into a checkmark (we change the icon class in JS)
+*/
+.rule.rule-met {
+  color: #4CAF50;
+}
+
+.rule.rule-met .rule-dot {
+  color: #4CAF50;
+}
+
+
+/* ============================================================
+   CHECKBOX — TERMS & CONDITIONS
+   Custom styled checkbox (browsers have ugly default checkboxes)
+============================================================ */
+.checkbox-group {
+  margin-bottom: var(--space-md);
+}
+
+/* The label wraps the checkbox + text, making the whole thing clickable */
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  cursor: pointer;
+}
+
+/*
+  Hide the default browser checkbox — we'll draw our own.
+  We use opacity: 0 instead of display: none because display: none
+  would make it un-focusable (bad for keyboard/screen reader users).
+*/
+.checkbox-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Our custom checkbox square */
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  flex-shrink: 0;
+  transition: var(--transition);
+  margin-top: 2px;
+  position: relative;
+}
+
+/*
+  The checkmark tick — hidden by default.
+  When the checkbox is checked, we show it using ::after.
+  
+  :checked is a CSS pseudo-class that activates when the checkbox is ticked.
+  ~ is the "sibling combinator" — targets .checkmark that comes AFTER the input.
+*/
+.checkbox-label input[type="checkbox"]:checked ~ .checkmark {
+  background: var(--gradient-pink);
+  border-color: transparent;
+}
+
+/* The tick mark inside */
+.checkmark::after {
+  content: '';          /* ::after requires content, even if empty */
+  position: absolute;
+  display: none;        /* Hidden until checked */
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid white;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);  /* Rotates the L-shape into a tick */
+}
+
+.checkbox-label input[type="checkbox"]:checked ~ .checkmark::after {
+  display: block;   /* Show the tick when checked */
+}
+
+/* Focus ring for keyboard navigation */
+.checkbox-label input[type="checkbox"]:focus ~ .checkmark {
+  box-shadow: 0 0 0 3px rgba(208, 0, 111, 0.25);
+}
+
+.checkbox-text {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.5;
+}
+
+/* Links inside the checkbox text */
+.form-link {
+  color: var(--color-pink);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.form-link:hover {
+  color: var(--color-gold);
+  text-decoration: underline;
+}
+
+
+/* ============================================================
+   SUBMIT BUTTON
+   btn-full makes the button stretch full width of the form.
+============================================================ */
+.btn-full {
+  width: 100%;
+  justify-content: center;
+  padding: 1rem;
+  font-size: 1rem;
+  margin-top: var(--space-sm);
+}
+
+/* Auth switch line: "Already have an account? Sign in" */
+.auth-switch {
+  text-align: center;
+  color: rgba(255,255,255,0.45);
+  font-size: 0.9rem;
+  margin-top: var(--space-lg);
+}
+
+
+/* ============================================================
+   SUCCESS MESSAGE
+   Shown after successful form submission.
+   Replaces the form content with a celebration screen.
+============================================================ */
+.success-message {
+  text-align: center;
+  padding: var(--space-xl) 0;
+  animation: fadeInUp 0.6s ease both;
+}
+
+.success-icon {
+  font-size: 5rem;
+  color: #4CAF50;         /* Green checkmark */
+  margin-bottom: var(--space-md);
+  animation: successPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes successPop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.success-message h2 {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-white);
+  margin-bottom: var(--space-sm);
+}
+
+.success-message > p {
+  color: rgba(255,255,255,0.65);
+  margin-bottom: var(--space-lg);
+  font-size: 1rem;
+}
+
+.success-notice {
+  display: flex;
+  gap: var(--space-md);
+  text-align: left;
+  background: rgba(255,194,0,0.08);
+  border: 1px solid rgba(255,194,0,0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.success-notice > i {
+  color: var(--color-gold);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.success-notice strong {
+  display: block;
+  color: var(--color-gold);
+  font-family: var(--font-heading);
+  margin-bottom: 0.4rem;
+}
+
+.success-notice p {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.success-actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+/* ============================================================
+   RESPONSIVE — MEDIA QUERIES
+============================================================ */
+
+/* Hide brand panel on tablets — not enough horizontal space */
+@media screen and (max-width: 900px) {
+  .auth-brand-panel {
+    display: none;
+  }
+
+  .auth-form-panel {
+    padding: var(--space-lg) var(--space-md);
+  }
+}
+
+/* Stack first name / last name on small phones */
+@media screen and (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;   /* One column on mobile */
+  }
+
+  .auth-form-container {
+    padding: var(--space-sm) 0;
+  }
+
+  .form-title {
+    font-size: 1.6rem;
+  }
+}
+
+/* Programme selection checkboxes */
+.programme-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.programme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.04);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.programme-option:hover {
+  border-color: var(--color-pink);
+  background: rgba(208,0,111,0.06);
+}
+
+.programme-option input[type="checkbox"] {
+  position: absolute; opacity: 0; width: 0; height: 0;
+}
+
+.programme-check-box {
+  width: 20px; height: 20px;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  flex-shrink: 0;
+  transition: var(--transition);
+  position: relative;
+}
+
+.programme-option input:checked ~ .programme-check-box {
+  background: var(--gradient-pink);
+  border-color: transparent;
+}
+
+.programme-check-box::after {
+  content: ''; position: absolute; display: none;
+  left: 5px; top: 1px; width: 6px; height: 10px;
+  border: 2px solid white; border-top: none; border-left: none;
+  transform: rotate(45deg);
+}
+
+.programme-option input:checked ~ .programme-check-box::after { display: block; }
+
+.programme-option:has(input:checked) {
+  border-color: var(--color-pink);
+  background: rgba(208,0,111,0.08);
+}
+
+.programme-label { flex: 1; }
+.programme-name {
+  display: block; font-size: 0.875rem; font-weight: 700;
+  color: var(--color-white);
+}
+.programme-meta {
+  font-size: 0.75rem; color: rgba(255,255,255,0.45);
+}
+.programme-price {
+  font-family: var(--font-heading); font-weight: 800;
+  color: var(--color-gold); font-size: 0.9rem; flex-shrink: 0;
+}
+
+/* Category select */
+.form-select {
+  appearance: none; -webkit-appearance: none; cursor: pointer;
+  padding-right: 2.8rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666680' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  color: black;
+}

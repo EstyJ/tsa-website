@@ -1,0 +1,750 @@
+/*
+  ============================================================
+  THE SNOOGUMS ACADEMY - CAREERS PAGE STYLES
+  File: css/careers.css
+
+  Works on top of: style.css, about.css, register.css
+  - style.css    → base colours, fonts, buttons, navbar, footer
+  - about.css    → .page-hero, .section-header, .serve-card pattern
+  - register.css → .form-input, .form-label, .field-error, .checkbox-label
+  
+  This file only adds what's unique to the careers page:
+  the "why teach" grid, process steps, application layout,
+  file upload zone, and availability checkboxes.
+  ============================================================
+*/
+
+
+/* ============================================================
+   CAREERS HERO OVERRIDE
+   Adds extra bottom padding so the "Apply Now" button
+   has breathing room, and uses a slightly different shape
+   position to keep things visually fresh.
+============================================================ */
+.careers-hero {
+  padding-bottom: calc(var(--space-xxl) + 1rem);
+}
+
+.careers-hero .phs-1 {
+  background: var(--color-purple);
+  top: -80px;
+  right: -60px;
+}
+
+.careers-hero .phs-2 {
+  background: var(--color-pink);
+  bottom: -100px;
+  left: -40px;
+}
+
+.hero-apply-btn {
+  margin-top: var(--space-lg);
+  display: inline-flex;
+}
+
+
+/* ============================================================
+   WHY TEACH SECTION
+============================================================ */
+.why-teach-section {
+  padding: var(--space-xxl) 0;
+  background: var(--color-white);
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-lg);
+}
+
+.why-card {
+  background: var(--color-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl) var(--space-lg);
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+}
+
+.why-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-pink);
+  background: var(--color-white);
+}
+
+.why-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: white;
+  margin-bottom: var(--space-md);
+  box-shadow: var(--shadow-pink);
+  transition: var(--transition);
+}
+
+.why-card:hover .why-icon {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.why-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 0.5rem;
+}
+
+.why-card p {
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+
+/* ============================================================
+   PROCESS STEPS SECTION
+============================================================ */
+.process-section {
+  padding: var(--space-xxl) 0;
+  background: var(--color-dark);
+}
+
+.process-section .section-eyebrow {
+  color: var(--color-gold);
+}
+
+.process-section .section-title {
+  color: var(--color-white);
+}
+
+/* Horizontal steps layout */
+.process-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  margin-top: var(--space-xl);
+}
+
+.process-step {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  max-width: 200px;
+  text-align: left;
+}
+
+.process-num {
+  /*
+    flex-shrink: 0 — the number circle must NEVER compress.
+    Without this, when space is tight, flex might try to shrink it.
+  */
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--gradient-pink);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1rem;
+  box-shadow: var(--shadow-pink);
+}
+
+.process-text h4 {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-white);
+  margin-bottom: 0.3rem;
+}
+
+.process-text p {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6;
+}
+
+/* The arrow between steps */
+.process-arrow {
+  color: var(--color-gold);
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   APPLICATION SECTION — TWO-COLUMN LAYOUT
+   Left: context image + notes
+   Right: the form
+============================================================ */
+.apply-section {
+  padding: var(--space-xxl) 0;
+  background: var(--color-light);
+}
+
+.apply-wrapper {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: var(--space-xxl);
+  align-items: flex-start;
+}
+
+/* LEFT: Context sidebar */
+.apply-context {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  position: sticky;   /* Sticks while the form scrolls past it */
+  top: calc(var(--navbar-height) + var(--space-md));
+}
+
+.apply-img {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  aspect-ratio: 4/3;
+  box-shadow: var(--shadow-md);
+}
+
+.apply-note {
+  display: flex;
+  gap: var(--space-sm);
+  background: rgba(255, 194, 0, 0.08);
+  border: 1px solid rgba(255, 194, 0, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  font-size: 0.875rem;
+}
+
+.apply-note i {
+  color: var(--color-gold);
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  margin-top: 2px;
+}
+
+.apply-note strong {
+  display: block;
+  color: var(--color-dark);
+  font-family: var(--font-heading);
+  margin-bottom: 0.25rem;
+}
+
+.apply-note p {
+  color: var(--color-text-light);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.apply-note a {
+  color: var(--color-pink);
+  font-weight: 600;
+}
+
+.apply-contact {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+}
+
+.apply-contact h4 {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: var(--space-sm);
+}
+
+.apply-contact p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  margin-bottom: 0.5rem;
+}
+
+.apply-contact i {
+  color: var(--color-pink);
+  width: 14px;
+  flex-shrink: 0;
+}
+
+/* RIGHT: The form card */
+.apply-form-wrap {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.apply-form-header {
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.apply-form-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-md);
+  background: var(--gradient-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: var(--space-md);
+  box-shadow: var(--shadow-pink);
+}
+
+.apply-form-header h2 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-bottom: 0.3rem;
+}
+
+.apply-form-header p {
+  color: var(--color-text-light);
+  font-size: 0.875rem;
+}
+
+/*
+  Override: form fields inside .apply-form-wrap use LIGHT theme
+  (white background page), not the dark auth-page theme from register.css.
+  We override the dark colours here.
+*/
+.apply-form-wrap .form-input {
+  background: var(--color-light);
+  border: 1px solid var(--color-border);
+  color: var(--color-dark);
+}
+
+.apply-form-wrap .form-input::placeholder {
+  color: var(--color-text-light);
+}
+
+.apply-form-wrap .form-input:focus {
+  background: var(--color-white);
+  border-color: var(--color-pink);
+  box-shadow: 0 0 0 3px rgba(208, 0, 111, 0.1);
+}
+
+.apply-form-wrap .form-label {
+  color: var(--color-dark);
+}
+
+.apply-form-wrap .input-icon {
+  color: var(--color-text-light);
+}
+
+.apply-form-wrap .input-wrap:focus-within .input-icon {
+  color: var(--color-pink);
+}
+
+
+/* ============================================================
+   SELECT (DROPDOWN) STYLING
+   Browser <select> elements are hard to style.
+   We give them a custom arrow using background-image.
+============================================================ */
+.form-select {
+  /*
+    appearance: none removes the browser's built-in dropdown arrow
+    so we can add our own using background-image below.
+  */
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 2.8rem; /* Make room for the custom arrow */
+  /*
+    We add a custom chevron arrow as an SVG background image.
+    SVG data URIs let us embed an SVG directly in CSS — no external file needed.
+    %23 is the URL-encoded version of # (needed inside a data URI).
+  */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666680' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+
+/* ============================================================
+   TEXTAREA
+============================================================ */
+.form-textarea {
+  min-height: 130px;
+  resize: vertical; /* User can drag to make it taller, not wider */
+  padding-left: var(--space-md); /* No icon on left for textarea */
+  line-height: 1.6;
+}
+
+.char-count {
+  text-align: right;
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+  margin-top: 0.3rem;
+  transition: var(--transition);
+}
+
+/* Turns green when minimum is met */
+.char-count.count-met {
+  color: #4CAF50;
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   AVAILABILITY CHECKBOXES
+   A row of styled option checkboxes.
+   Different from the single terms checkbox — these are
+   multi-select options presented in a grid.
+============================================================ */
+.checkbox-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-sm);
+  margin-top: 0.4rem;
+}
+
+.check-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-light);
+  transition: var(--transition);
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.check-option:hover {
+  border-color: var(--color-pink);
+  background: rgba(208, 0, 111, 0.04);
+}
+
+/* Hide default browser checkbox */
+.check-option input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Custom checkbox box */
+.check-option-box {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--color-border);
+  background: var(--color-white);
+  flex-shrink: 0;
+  transition: var(--transition);
+  position: relative;
+}
+
+/* When checked: fill the box and show tick */
+.check-option input[type="checkbox"]:checked ~ .check-option-box {
+  background: var(--gradient-pink);
+  border-color: transparent;
+}
+
+.check-option-box::after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: 2px solid white;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+.check-option input[type="checkbox"]:checked ~ .check-option-box::after {
+  display: block;
+}
+
+/* Highlight the whole option row when checked */
+.check-option input[type="checkbox"]:checked ~ .check-option-box,
+.check-option:has(input:checked) {
+  border-color: var(--color-pink);
+  background: rgba(208, 0, 111, 0.05);
+}
+
+.check-option:has(input:checked) {
+  border-color: var(--color-pink);
+  background: rgba(208, 0, 111, 0.05);
+  color: var(--color-pink);
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   FILE UPLOAD ZONE
+   Custom styled drag-and-drop file upload area.
+   The real <input type="file"> is invisible — we trigger
+   it from JavaScript when the user clicks the styled zone.
+============================================================ */
+.file-upload-wrap {
+  position: relative;
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.file-upload-wrap:hover {
+  border-color: var(--color-pink);
+  background: rgba(208, 0, 111, 0.02);
+}
+
+/* Drag-over state — JS adds this class when a file is dragged over */
+.file-upload-wrap.drag-over {
+  border-color: var(--color-pink);
+  background: rgba(208, 0, 111, 0.05);
+  transform: scale(1.01);
+}
+
+/*
+  The real file input — INVISIBLE.
+  position: absolute + inset: 0 makes it cover the entire .file-upload-wrap.
+  opacity: 0 makes it invisible.
+  cursor: pointer + z-index: 2 means the user's clicks land ON the input.
+  This gives us the custom styling AND the native file picker behaviour.
+*/
+.file-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+}
+
+/* The visible styled upload area */
+.file-upload-ui {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.file-upload-icon {
+  font-size: 2.5rem;
+  color: var(--color-pink);
+  opacity: 0.7;
+}
+
+.file-upload-main {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--color-dark);
+  font-size: 0.95rem;
+}
+
+.file-upload-sub {
+  color: var(--color-text-light);
+  font-size: 0.82rem;
+}
+
+/* Shown after a file is selected — replaces the upload UI */
+.file-selected {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(76, 175, 80, 0.05);
+  border-color: #4CAF50;
+}
+
+.file-selected-icon {
+  font-size: 2rem;
+  color: var(--color-pink);
+  flex-shrink: 0;
+}
+
+.file-selected-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-dark);
+  word-break: break-all; /* Long filenames don't overflow */
+}
+
+.file-selected-size {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+}
+
+/* Remove file button */
+.file-remove {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 77, 109, 0.1);
+  border: none;
+  color: #FF4D6D;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  position: relative;
+  z-index: 3; /* Above the invisible file input so it's clickable */
+}
+
+.file-remove:hover {
+  background: rgba(255, 77, 109, 0.2);
+  transform: scale(1.1);
+}
+
+/* When a file is selected, the wrap gets a green border */
+.file-upload-wrap.has-file {
+  border-style: solid;
+  border-color: #4CAF50;
+}
+
+
+/* ============================================================
+   SUCCESS MESSAGE — light theme override
+   The .success-message from register.css uses white text
+   because it was designed for dark backgrounds.
+   We override the text colours for the light careers page.
+============================================================ */
+.apply-form-wrap .success-message {
+  padding: var(--space-xl) 0;
+}
+
+.apply-form-wrap .success-message h2 {
+  color: var(--color-dark);
+}
+
+.apply-form-wrap .success-message > p {
+  color: var(--color-text-light);
+}
+
+.apply-form-wrap .success-notice {
+  background: rgba(255, 194, 0, 0.08);
+  border-color: rgba(255, 194, 0, 0.25);
+}
+
+.apply-form-wrap .success-notice strong {
+  color: var(--color-dark);
+}
+
+.apply-form-wrap .success-notice p {
+  color: var(--color-text-light);
+}
+
+
+/* ============================================================
+   RESPONSIVE — CAREERS PAGE
+============================================================ */
+
+@media screen and (max-width: 1024px) {
+  .apply-wrapper {
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-xl);
+  }
+}
+
+@media screen and (max-width: 900px) {
+  /* Stack sidebar above form on tablets */
+  .apply-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  /* Unstick the sidebar on mobile — no need for sticky on single column */
+  .apply-context {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+  }
+
+  .apply-img {
+    display: none; /* Hide image on mobile to save space */
+  }
+
+  .apply-note,
+  .apply-contact {
+    flex: 1 1 260px; /* Side by side on tablets */
+  }
+
+  /* Process steps: wrap naturally */
+  .process-steps {
+    gap: var(--space-sm);
+  }
+
+  .process-arrow {
+    transform: rotate(90deg); /* Point down when steps stack vertically */
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .apply-form-wrap {
+    padding: var(--space-lg);
+  }
+
+  .apply-context {
+    flex-direction: column;
+  }
+
+  .checkbox-options {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Stack process steps vertically */
+  .process-steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .process-step {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .process-arrow {
+    transform: rotate(90deg);
+    padding: 0.2rem 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .checkbox-options {
+    grid-template-columns: 1fr;
+  }
+
+  .apply-form-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .file-upload-ui {
+    padding: var(--space-lg);
+  }
+}

@@ -1,0 +1,561 @@
+/*
+  ============================================================
+  THE SNOOGUMS ACADEMY - COURSES PAGE STYLES
+  File: css/courses.css
+
+  Works on top of: style.css, about.css
+  - style.css  → base colours, fonts, buttons, navbar, footer
+  - about.css  → .page-hero shared styles
+
+  This file adds:
+  - Hero stats bar
+  - Access notice banner
+  - Filter tabs
+  - Full course cards (.course-card-full)
+  - Empty state
+  - Responsive adjustments
+  ============================================================
+*/
+
+
+/* ============================================================
+   COURSES HERO STATS BAR
+   Row of quick numbers inside the page hero.
+============================================================ */
+.courses-hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.ch-stat {
+  text-align: center;
+}
+
+.ch-stat strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--color-gold);
+  line-height: 1;
+}
+
+.ch-stat span {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Thin vertical divider between stats */
+.ch-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+
+/* ============================================================
+   ACCESS NOTICE BANNER
+   The sticky strip below the hero reminding visitors of
+   the register → pay → access flow.
+============================================================ */
+.access-banner {
+  background: var(--color-dark-2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: var(--space-md) 0;
+  position: sticky;
+  /*
+    position: sticky — the banner scrolls with the page normally,
+    but when it reaches the top of the viewport it "sticks" there.
+    This means students always see the access instructions
+    without us blocking the whole page.
+  */
+  top: var(--navbar-height);
+  z-index: 900;   /* Below the navbar (1000) but above page content */
+}
+
+.access-banner-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.access-banner-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(208, 0, 111, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-pink);
+  flex-shrink: 0;
+}
+
+.access-banner-text {
+  flex: 1;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.access-banner-text strong {
+  color: var(--color-gold);
+  margin-right: 0.4rem;
+}
+
+.access-banner-text a {
+  color: var(--color-pink);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.access-banner-text a:hover {
+  text-decoration: underline;
+}
+
+/* The arrows between steps — styled as text decorators */
+.access-banner-text a::after,
+.access-banner-text span::after {
+  content: ' →';
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.access-banner-btn {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+
+/* ============================================================
+   MAIN COURSES SECTION
+============================================================ */
+.courses-page-section {
+  padding: var(--space-xxl) 0;
+  background: var(--color-light);
+}
+
+
+/* ============================================================
+   FILTER TABS
+   A horizontal scrollable row of filter buttons.
+   On mobile the row scrolls horizontally instead of wrapping.
+============================================================ */
+.courses-filter {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: var(--space-md);
+  /*
+    overflow-x: auto allows horizontal scrolling on mobile when
+    there are too many tabs to fit on screen.
+    We use padding-bottom to avoid clipping the scrollbar.
+  */
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  /* Hide the scrollbar visually but keep it functional */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-pink) transparent;
+}
+
+/* WebKit scrollbar styling (Chrome, Safari) */
+.courses-filter::-webkit-scrollbar {
+  height: 3px;
+}
+.courses-filter::-webkit-scrollbar-track {
+  background: transparent;
+}
+.courses-filter::-webkit-scrollbar-thumb {
+  background: var(--color-pink);
+  border-radius: 99px;
+}
+
+.filter-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-text-light);
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;  /* Prevent tab text from wrapping */
+  flex-shrink: 0;       /* Prevent tabs from shrinking */
+}
+
+.filter-tab:hover {
+  border-color: var(--color-pink);
+  color: var(--color-pink);
+  background: rgba(208, 0, 111, 0.04);
+}
+
+.filter-tab.active {
+  background: var(--gradient-pink);
+  border-color: transparent;
+  color: white;
+  box-shadow: var(--shadow-pink);
+}
+
+/* Results count text */
+.filter-results {
+  color: var(--color-text-light);
+  font-size: 0.875rem;
+  margin-bottom: var(--space-lg);
+}
+
+.filter-results span {
+  color: var(--color-pink);
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   COURSE CARDS GRID
+   Uses CSS Grid with auto-fit for responsive columns.
+============================================================ */
+.courses-page-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  /*
+    auto-fill vs auto-fit:
+    auto-fill: always creates as many columns as possible (even empty ones)
+    auto-fit: collapses empty columns so filled ones expand
+    
+    We use auto-fill here because we want consistent card widths
+    regardless of how many filtered results show.
+  */
+  gap: var(--space-lg);
+}
+
+
+/* ============================================================
+   INDIVIDUAL COURSE CARD (.course-card-full)
+   More detailed than the homepage preview cards.
+   Structure:
+   - .ccf-thumbnail (image + badges)
+   - .ccf-body (all text content)
+   - .ccf-footer (lock notice + enrol button)
+============================================================ */
+.course-card-full {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;  /* Stack thumbnail → body → footer vertically */
+}
+
+.course-card-full:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(208, 0, 111, 0.2);
+}
+
+/*
+  When a card is filtered OUT (JS adds class "hidden"),
+  we animate it away with opacity and scale,
+  then set display:none so it takes up no space in the grid.
+*/
+.course-card-full.hidden {
+  display: none;
+}
+
+/* Animate IN when a card becomes visible */
+.course-card-full.animate-in {
+  animation: cardAppear 0.4s ease both;
+}
+
+@keyframes cardAppear {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* --- THUMBNAIL --- */
+.ccf-thumbnail {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.ccf-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.course-card-full:hover .ccf-thumbnail img {
+  transform: scale(1.06);
+}
+
+/* Badge (Popular / New) — top left */
+.ccf-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ccf-badge.popular {
+  background: var(--gradient-pink);
+  color: white;
+}
+
+.ccf-badge.new-badge {
+  background: var(--gradient-gold);
+  color: var(--color-dark);
+}
+
+/* Category tag — bottom right of thumbnail */
+.ccf-category-tag {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(13, 13, 26, 0.8);
+  backdrop-filter: blur(4px);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* --- BODY --- */
+.ccf-body {
+  padding: var(--space-md);
+  flex: 1;          /* Takes up all available space between thumbnail and footer */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Top row: level pill + star rating */
+.ccf-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Level pill — colour varies by level */
+.ccf-level {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: var(--radius-full);
+  letter-spacing: 0.04em;
+}
+
+.ccf-level.beginner    { background: rgba(76,175,80,0.12);  color: #2e7d32; }
+.ccf-level.intermediate{ background: rgba(255,152,0,0.12);  color: #e65100; }
+.ccf-level.advanced    { background: rgba(208,0,111,0.12);  color: var(--color-pink); }
+.ccf-level.all-levels  { background: rgba(107,15,168,0.1);  color: var(--color-purple); }
+
+/* Star rating */
+.ccf-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  font-size: 0.75rem;
+  color: var(--color-gold);
+}
+
+.ccf-rating span {
+  color: var(--color-text-light);
+  font-weight: 700;
+  margin-left: 0.2rem;
+}
+
+/* Course title */
+.ccf-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  line-height: 1.3;
+}
+
+/* Short description */
+.ccf-desc {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  line-height: 1.7;
+  flex: 1;  /* Pushes meta and instructor to the bottom of the body */
+}
+
+/* Meta info row: lessons, weeks, type */
+.ccf-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem var(--space-sm);
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+}
+
+.ccf-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ccf-meta i {
+  color: var(--color-pink);
+}
+
+/* Instructor mini-profile */
+.ccf-instructor {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.8rem;
+}
+
+.ccf-instructor-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Each instructor avatar gets a unique gradient colour */
+.ci1 { background: linear-gradient(135deg, #D0006F, #6B0FA8); }
+.ci2 { background: linear-gradient(135deg, #FFC200, #FF8C00); }
+.ci3 { background: linear-gradient(135deg, #4ECDC4, #45B7D1); }
+.ci4 { background: linear-gradient(135deg, #96CEB4, #FFEAA7); }
+.ci5 { background: linear-gradient(135deg, #DDA0DD, #BA68C8); }
+
+.ccf-instructor strong {
+  display: block;
+  color: var(--color-dark);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ccf-instructor span {
+  color: var(--color-text-light);
+}
+
+/* --- FOOTER --- */
+.ccf-footer {
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  background: var(--color-light);
+}
+
+/* The "lock" access notice */
+.ccf-access {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+}
+
+.ccf-access i {
+  color: var(--color-pink);
+}
+
+
+/* ============================================================
+   EMPTY STATE
+   Shown when a filter tab returns no cards.
+============================================================ */
+.no-results {
+  text-align: center;
+  padding: var(--space-xxl) 0;
+  color: var(--color-text-light);
+}
+
+.no-results i {
+  font-size: 3rem;
+  color: var(--color-border);
+  margin-bottom: var(--space-md);
+  display: block;
+}
+
+.no-results h3 {
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  color: var(--color-dark);
+  margin-bottom: 0.5rem;
+}
+
+.no-results p {
+  margin-bottom: var(--space-lg);
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media screen and (max-width: 992px) {
+  .courses-page-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media screen and (max-width: 768px) {
+  /* Full-width cards on mobile */
+  .courses-page-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Access banner: stack on small screens */
+  .access-banner-inner {
+    gap: var(--space-sm);
+  }
+
+  .access-banner-btn {
+    width: 100%;
+    justify-content: center;
+    margin-left: 0;
+  }
+
+  .courses-hero-stats {
+    gap: var(--space-md);
+  }
+
+  .ch-divider {
+    display: none;  /* Hide dividers when stats wrap */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .ccf-thumbnail { height: 180px; }
+
+  .ccf-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ccf-footer .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

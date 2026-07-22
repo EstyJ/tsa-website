@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Dashboard | The Snoogums Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="teacher.css">
+</head>
+<body>
+
+  <div class="auth-loading" id="authLoading">
+    <div class="auth-loading-inner">
+      <img src="../../images/logo.jpeg" alt="TSA Logo">
+      <div class="loading-spinner"></div>
+      <p>Loading teacher portal...</p>
+    </div>
+  </div>
+
+  <div class="dashboard-wrapper" id="dashboardWrapper" style="display:none;">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="../../images/logo.jpeg" alt="TSA Logo" class="sidebar-logo">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-name">Snoogums</span>
+          <span class="sidebar-brand-role">Teacher Portal</span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar" id="sidebarAvatar">T</div>
+        <div class="sidebar-profile-info">
+          <strong id="sidebarName">Teacher</strong>
+          <span>Instructor</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <p class="sidebar-nav-label">Teaching</p>
+        <a href="#" class="sidebar-link active" data-section="overview">
+          <i class="fas fa-home"></i><span>Overview</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="classes">
+          <i class="fas fa-video"></i><span>My Classes</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="students">
+          <i class="fas fa-users"></i><span>My Students</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="attendance">
+          <i class="fas fa-clipboard-check"></i><span>Attendance</span>
+        </a>
+        <p class="sidebar-nav-label">Account</p>
+        <a href="#" class="sidebar-link" data-section="profile">
+          <i class="fas fa-user"></i><span>My Profile</span>
+        </a>
+        <a href="#" class="sidebar-link" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <button class="header-hamburger" id="headerHamburger"><i class="fas fa-bars"></i></button>
+          <span id="headerTitle">Overview</span>
+        </div>
+        <div class="header-right">
+          <div class="header-admin">
+            <div class="header-avatar" id="headerAvatar">T</div>
+            <span id="headerName">Teacher</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- OVERVIEW -->
+      <section class="dash-section active" id="section-overview">
+        <div class="section-header">
+          <h2 id="welcomeMsg">Welcome back!</h2>
+          <p>Your teaching summary for today</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card stat-purple">
+            <div class="stat-card-icon"><i class="fas fa-video"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statClasses">0</span>
+              <span class="stat-card-label">Scheduled Classes</span>
+            </div>
+          </div>
+          <div class="stat-card stat-pink">
+            <div class="stat-card-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statStudents">0</span>
+              <span class="stat-card-label">My Students</span>
+            </div>
+          </div>
+          <div class="stat-card stat-gold">
+            <div class="stat-card-icon"><i class="fas fa-clipboard-check"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statAttendance">—</span>
+              <span class="stat-card-label">Last Class Attendance</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Next class + clock in -->
+        <div class="dash-card" id="nextClassCard">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-video"></i> Next Class</h3>
+          </div>
+          <div class="dash-card-body" id="nextClassBody">
+            <div class="loading-rows"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLASSES -->
+      <section class="dash-section" id="section-classes">
+        <div class="section-header">
+          <h2>My Live Classes</h2>
+          <p>Manage and start your scheduled live sessions</p>
+        </div>
+        <div class="classes-list" id="classesList">
+          <div class="loading-rows"></div>
+        </div>
+      </section>
+
+      <!-- STUDENTS -->
+      <section class="dash-section" id="section-students">
+        <div class="section-header">
+          <h2>My Students</h2>
+          <p>Students enrolled in your courses</p>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-body table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr><th>Name</th><th>Email</th><th>Course</th><th>Status</th></tr>
+              </thead>
+              <tbody id="studentsBody">
+                <tr><td colspan="4" class="table-loading">Loading students...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ATTENDANCE -->
+      <section class="dash-section" id="section-attendance">
+        <div class="section-header">
+          <h2>Attendance Records</h2>
+          <p>View attendance for your past live classes</p>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-body table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr><th>Class</th><th>Date</th><th>Students Present</th><th>Duration</th></tr>
+              </thead>
+              <tbody id="attendanceBody">
+                <tr><td colspan="4" class="table-loading">Loading attendance...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROFILE -->
+      <section class="dash-section" id="section-profile">
+        <div class="section-header">
+          <h2>My Profile</h2>
+          <p>Manage your teacher account</p>
+        </div>
+        <div class="dash-card settings-card">
+          <div class="dash-card-header"><h3><i class="fas fa-user"></i> Account Information</h3></div>
+          <div class="dash-card-body" id="profileInfo"><div class="loading-rows"></div></div>
+        </div>
+        <div class="dash-card settings-card" style="margin-top:1rem;">
+          <div class="dash-card-header"><h3><i class="fas fa-lock"></i> Change Password</h3></div>
+          <div class="dash-card-body">
+            <form id="changePasswordForm">
+              <div class="settings-form-group">
+                <label>Current Password</label>
+                <input type="password" id="currentPassword" class="settings-input" placeholder="Current password">
+              </div>
+              <div class="settings-form-group">
+                <label>New Password</label>
+                <input type="password" id="newPassword" class="settings-input" placeholder="New password (min 8 characters)">
+              </div>
+              <div class="settings-form-group">
+                <label>Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" class="settings-input" placeholder="Repeat new password">
+              </div>
+              <p class="settings-msg" id="passwordMsg"></p>
+              <button type="submit" class="dash-btn dash-btn-primary">
+                <i class="fas fa-save"></i> Update Password
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Jitsi Modal -->
+  <div class="modal-overlay" id="jitsiModal">
+    <div class="modal-box jitsi-modal-box">
+      <div class="jitsi-header">
+        <h3 id="jitsiClassName">Live Class</h3>
+        <button class="modal-close" id="jitsiClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="jitsiContainer" class="jitsi-container"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle toast-icon" id="toastIcon"></i>
+    <span id="toastMessage"></span>
+  </div>
+
+  <script src="teacher.js"></script>
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  THE SNOOGUMS ACADEMY - ADMIN DASHBOARD
+  File: dashboard/admin/index.html
+
+  ACCESS CONTROL:
+  This page checks for a valid JWT token on load.
+  If no token or token is invalid → redirect to login.
+  If token exists but role is not 'admin' → redirect to login.
+  This check happens in admin.js before anything renders.
+
+  LAYOUT:
+  Fixed sidebar on the left + scrollable main content on the right.
+  Sidebar has navigation links that show/hide dashboard sections.
+  We use ONE HTML file with multiple sections — JS shows/hides them.
+  This is called a Single Page Application (SPA) pattern.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | The Snoogums Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+  <!--
+    LOADING SCREEN
+    Shown while we verify the JWT token.
+    Hides once authentication is confirmed.
+    Prevents the dashboard flashing before the auth check completes.
+  -->
+  <div class="auth-loading" id="authLoading">
+    <div class="auth-loading-inner">
+      <img src="../../images/logo.jpeg" alt="TSA Logo">
+      <div class="loading-spinner"></div>
+      <p>Verifying access...</p>
+    </div>
+  </div>
+
+  <!-- MAIN DASHBOARD (hidden until auth confirmed) -->
+  <div class="dashboard-wrapper" id="dashboardWrapper" style="display:none;">
+
+    <!-- ============================================================
+         SIDEBAR
+    ============================================================ -->
+    <aside class="sidebar" id="sidebar">
+
+      <!-- Sidebar Header -->
+      <div class="sidebar-header">
+        <img src="../../images/logo.jpeg" alt="TSA Logo" class="sidebar-logo">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-name">Snoogums</span>
+          <span class="sidebar-brand-role">Admin Portal</span>
+        </div>
+        <!-- Mobile close button -->
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Admin profile mini-card -->
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar" id="sidebarAvatar">A</div>
+        <div class="sidebar-profile-info">
+          <strong id="sidebarName">Admin</strong>
+          <span>Administrator</span>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav">
+        <p class="sidebar-nav-label">Main Menu</p>
+
+        <a href="#" class="sidebar-link active" data-section="overview">
+          <i class="fas fa-chart-pie"></i>
+          <span>Overview</span>
+        </a>
+
+        <a href="#" class="sidebar-link" data-section="users">
+          <i class="fas fa-users"></i>
+          <span>Users</span>
+          <span class="sidebar-badge" id="badgeUsers">0</span>
+        </a>
+
+        <a href="#" class="sidebar-link" data-section="payments">
+          <i class="fas fa-credit-card"></i>
+          <span>Payments</span>
+          <span class="sidebar-badge pending-badge" id="badgePayments">0</span>
+        </a>
+
+        <a href="#" class="sidebar-link" data-section="applications">
+          <i class="fas fa-file-alt"></i>
+          <span>Applications</span>
+          <span class="sidebar-badge pending-badge" id="badgeApplications">0</span>
+        </a>
+
+        <a href="#" class="sidebar-link" data-section="messages">
+          <i class="fas fa-envelope"></i>
+          <span>Messages</span>
+          <span class="sidebar-badge pending-badge" id="badgeMessages">0</span>
+        </a>
+
+        <a href="#" class="sidebar-link" data-section="courses">
+          <i class="fas fa-book"></i>
+          <span>Courses</span>
+        </a>
+
+        <p class="sidebar-nav-label">Account</p>
+
+        <a href="#" class="sidebar-link" data-section="settings">
+          <i class="fas fa-cog"></i>
+          <span>Settings</span>
+        </a>
+
+        <a href="#" class="sidebar-link" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </nav>
+
+    </aside>
+
+    <!-- ============================================================
+         MAIN CONTENT AREA
+    ============================================================ -->
+    <main class="dashboard-main">
+
+      <!-- Top Header Bar -->
+      <header class="dashboard-header">
+        <div class="header-left">
+          <!-- Hamburger for mobile -->
+          <button class="header-hamburger" id="headerHamburger" aria-label="Open menu">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="header-breadcrumb">
+            <span id="headerTitle">Overview</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="header-date" id="headerDate"></div>
+          <div class="header-admin">
+            <div class="header-avatar" id="headerAvatar">A</div>
+            <span id="headerName">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ======================================================
+           SECTION: OVERVIEW
+      ====================================================== -->
+      <section class="dash-section active" id="section-overview">
+
+        <div class="section-header">
+          <h2>Dashboard Overview</h2>
+          <p>Welcome back! Here's what's happening at TSA today.</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+
+          <div class="stat-card stat-pink">
+            <div class="stat-card-icon"><i class="fas fa-users"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statTotalStudents">—</span>
+              <span class="stat-card-label">Total Students</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-gold">
+            <div class="stat-card-icon"><i class="fas fa-clock"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statPendingPayments">—</span>
+              <span class="stat-card-label">Pending Payments</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-purple">
+            <div class="stat-card-icon"><i class="fas fa-file-alt"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statPendingApplications">—</span>
+              <span class="stat-card-label">New Applications</span>
+            </div>
+          </div>
+
+          <div class="stat-card stat-green">
+            <div class="stat-card-icon"><i class="fas fa-envelope"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statUnreadMessages">—</span>
+              <span class="stat-card-label">Unread Messages</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Recent Activity: Recent Registrations + Pending Payments side by side -->
+        <div class="overview-grid">
+
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3><i class="fas fa-user-plus"></i> Recent Registrations</h3>
+              <a href="#" class="dash-card-link" data-section="users">View all</a>
+            </div>
+            <div class="dash-card-body" id="recentRegistrations">
+              <div class="loading-rows"></div>
+            </div>
+          </div>
+
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3><i class="fas fa-credit-card"></i> Pending Payments</h3>
+              <a href="#" class="dash-card-link" data-section="payments">View all</a>
+            </div>
+            <div class="dash-card-body" id="recentPayments">
+              <div class="loading-rows"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================
+           SECTION: USERS
+      ====================================================== -->
+      <section class="dash-section" id="section-users">
+
+        <div class="section-header">
+          <h2>User Management</h2>
+          <p>View and manage all students and teachers</p>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="filter-row">
+          <button class="filter-btn active" data-role="all">All Users</button>
+          <button class="filter-btn" data-role="student">Students</button>
+          <button class="filter-btn" data-role="teacher">Teachers</button>
+          <button class="filter-btn" data-role="admin">Admins</button>
+        </div>
+
+        <!-- Users table -->
+        <div class="dash-card">
+          <div class="dash-card-body table-wrap">
+            <table class="dash-table" id="usersTable">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Joined</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="6" class="table-loading">Loading users...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================
+           SECTION: PAYMENTS
+      ====================================================== -->
+      <section class="dash-section" id="section-payments">
+
+        <div class="section-header">
+          <h2>Payment Management</h2>
+          <p>Confirm or reject student payments to grant course access</p>
+        </div>
+
+        <div class="filter-row">
+          <button class="filter-btn active" data-status="all">All</button>
+          <button class="filter-btn" data-status="pending">Pending</button>
+          <button class="filter-btn" data-status="confirmed">Confirmed</button>
+          <button class="filter-btn" data-status="rejected">Rejected</button>
+        </div>
+
+        <div class="dash-card">
+          <div class="dash-card-body table-wrap">
+            <table class="dash-table" id="paymentsTable">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="paymentsTableBody">
+                <tr><td colspan="6" class="table-loading">Loading payments...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================
+           SECTION: APPLICATIONS
+      ====================================================== -->
+      <section class="dash-section" id="section-applications">
+
+        <div class="section-header">
+          <h2>Teacher Applications</h2>
+          <p>Review applications from prospective instructors</p>
+        </div>
+
+        <div class="dash-card">
+          <div class="dash-card-body table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Subject</th>
+                  <th>Experience</th>
+                  <th>Status</th>
+                  <th>Applied</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="applicationsTableBody">
+                <tr><td colspan="7" class="table-loading">Loading applications...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================
+           SECTION: MESSAGES
+      ====================================================== -->
+      <section class="dash-section" id="section-messages">
+
+        <div class="section-header">
+          <h2>Contact Messages</h2>
+          <p>Messages sent through the contact form</p>
+        </div>
+
+        <div class="messages-list" id="messagesList">
+          <div class="table-loading">Loading messages...</div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================
+           SECTION: COURSES
+      ====================================================== -->
+      <section class="dash-section" id="section-courses">
+
+        <div class="section-header">
+          <h2>Course Management</h2>
+          <p>Manage all courses offered at TSA</p>
+        </div>
+
+        <div class="dash-card">
+          <div class="dash-card-body table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Category</th>
+                  <th>Level</th>
+                  <th>Instructor</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="coursesTableBody">
+                <tr><td colspan="6" class="table-loading">Loading courses...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ======================================================
+           SECTION: SETTINGS
+      ====================================================== -->
+      <section class="dash-section" id="section-settings">
+
+        <div class="section-header">
+          <h2>Account Settings</h2>
+          <p>Manage your admin account</p>
+        </div>
+
+        <div class="dash-card settings-card">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-lock"></i> Change Password</h3>
+          </div>
+          <div class="dash-card-body">
+            <form id="changePasswordForm">
+              <div class="settings-form-group">
+                <label>Current Password</label>
+                <input type="password" id="currentPassword" class="settings-input" placeholder="Enter current password">
+              </div>
+              <div class="settings-form-group">
+                <label>New Password</label>
+                <input type="password" id="newPassword" class="settings-input" placeholder="Enter new password (min 8 characters)">
+              </div>
+              <div class="settings-form-group">
+                <label>Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" class="settings-input" placeholder="Repeat new password">
+              </div>
+              <p class="settings-msg" id="passwordMsg"></p>
+              <button type="submit" class="dash-btn dash-btn-primary">
+                <i class="fas fa-save"></i> Update Password
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- ============================================================
+       MODAL — for viewing full details (application bio, message, etc.)
+  ============================================================ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose">
+        <i class="fas fa-times"></i>
+      </button>
+      <h3 id="modalTitle"></h3>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION (for success/error feedback) -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle toast-icon" id="toastIcon"></i>
+    <span id="toastMessage"></span>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

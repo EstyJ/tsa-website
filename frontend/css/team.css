@@ -1,0 +1,436 @@
+/*
+  ============================================================
+  THE SNOOGUMS ACADEMY - TEAM PAGE STYLES
+  File: css/team.css
+
+  Works on top of: style.css, about.css
+  Adds: team card grid, the bio modal popup, badges, tags.
+  ============================================================
+*/
+
+
+/* ============================================================
+   TEAM HERO TWEAKS
+============================================================ */
+.team-hero .phs-1 { background: var(--color-gold); }
+.team-hero .phs-2 { background: var(--color-pink); }
+
+
+/* ============================================================
+   TEAM SECTION & GRID
+============================================================ */
+.team-section {
+  padding: var(--space-xxl) 0;
+  background: var(--color-white);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+
+/* ============================================================
+   TEAM CARD
+============================================================ */
+.team-card {
+  background: var(--color-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(208, 0, 111, 0.2);
+}
+
+/* --- Photo area --- */
+.team-card-photo {
+  position: relative;
+  height: 280px;
+  overflow: hidden;
+}
+
+.team-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /*
+    object-position controls WHICH part of the image shows
+    when it's cropped by object-fit: cover.
+    "center 20%" keeps faces (usually near the top of a photo)
+    nicely visible instead of cropping into foreheads.
+  */
+  object-position: center 20%;
+  transition: transform 0.5s ease;
+}
+
+.team-card:hover .team-card-photo img {
+  transform: scale(1.08);
+}
+
+/* Achievement badge (e.g. "Best Tutor of the Year") */
+.team-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--gradient-gold);
+  color: var(--color-dark);
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  box-shadow: 0 4px 12px rgba(255, 194, 0, 0.4);
+  z-index: 2;
+}
+
+/*
+  Dark gradient overlay that appears on hover, revealing
+  social icons. Sits on top of the photo, bottom-anchored.
+*/
+.team-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(13,13,26,0.85) 0%, transparent 50%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: var(--space-md);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.team-card:hover .team-card-overlay {
+  opacity: 1;
+}
+
+.team-socials {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.team-socials a {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.95rem;
+  transform: translateY(10px);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+/* Stagger the social icons sliding up when the card is hovered */
+.team-card:hover .team-socials a {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.team-card:hover .team-socials a:nth-child(2) {
+  transition-delay: 0.05s;
+}
+
+.team-socials a:hover {
+  background: var(--color-pink);
+}
+
+/* --- Card body --- */
+.team-card-body {
+  padding: var(--space-md);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.team-card-body h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 0.2rem;
+}
+
+.team-role {
+  font-size: 0.85rem;
+  color: var(--color-pink);
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+}
+
+/* Subject/skill tags */
+.team-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: var(--space-sm);
+}
+
+.team-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(107, 15, 168, 0.08);
+  color: var(--color-purple);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.team-excerpt {
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  line-height: 1.7;
+  margin-bottom: var(--space-md);
+  flex: 1;  /* Pushes the button to the bottom regardless of excerpt length */
+}
+
+/* Read more button */
+.read-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  color: var(--color-pink);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0;
+  align-self: flex-start;
+  transition: var(--transition);
+}
+
+.read-more-btn i {
+  transition: transform 0.3s ease;
+  font-size: 0.75rem;
+}
+
+.read-more-btn:hover {
+  color: var(--color-purple);
+}
+
+.read-more-btn:hover i {
+  transform: translateX(4px);
+}
+
+
+/* ============================================================
+   BIO MODAL
+   The popup window showing a team member's full biography.
+============================================================ */
+
+/*
+  THE OVERLAY
+  Covers the ENTIRE screen with a semi-transparent dark background.
+  position: fixed keeps it covering the viewport even when scrolling.
+  Hidden by default (display:none), JS shows it (display:flex) on click.
+*/
+.modal-overlay {
+  display: none;       /* Hidden by default */
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 13, 26, 0.85);
+  backdrop-filter: blur(4px);
+  z-index: 2000;        /* Must be above EVERYTHING, including the navbar (1000) */
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+
+  /*
+    When JS adds class "active", we switch display to flex
+    (see .modal-overlay.active below) which centers the modal box.
+  */
+}
+
+.modal-overlay.active {
+  display: flex;
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* THE MODAL BOX ITSELF */
+.modal-box {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  max-width: 640px;
+  width: 100%;
+  max-height: 85vh;       /* Never taller than 85% of the screen */
+  overflow-y: auto;        /* Scrolls internally if bio is long */
+  position: relative;
+  padding: var(--space-xl);
+  animation: modalSlideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  /*
+    cubic-bezier(0.34, 1.56, 0.64, 1) creates a slight "overshoot"
+    bounce effect — the modal pops up past its final size slightly,
+    then settles. This is called an "ease-out-back" easing curve.
+    It makes the modal feel lively rather than mechanical.
+  */
+}
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Close button (✕) top right of the modal */
+.modal-close {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-light);
+  border: none;
+  color: var(--color-text-light);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  z-index: 1;
+}
+
+.modal-close:hover {
+  background: var(--color-pink);
+  color: white;
+  transform: rotate(90deg);
+  /*
+    Rotating the X by 90 degrees on hover is a nice playful touch —
+    it doesn't change what the icon looks like (X is symmetrical)
+    but the ROTATION itself feels satisfying and intentional.
+  */
+}
+
+/* Modal header: photo + name + role */
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 2px solid var(--color-border);
+  padding-right: var(--space-xl); /* Avoid overlapping the close button */
+}
+
+.modal-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 3px solid var(--color-pink);
+  flex-shrink: 0;
+}
+
+.modal-header h2 {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-dark);
+  margin-bottom: 0.2rem;
+}
+
+.modal-role {
+  color: var(--color-pink);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* Modal body — the full bio text */
+.modal-body {
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.85;
+}
+
+/*
+  JS inserts each paragraph of the bio as a separate <p> tag.
+  We add spacing between them here.
+*/
+.modal-body p {
+  margin-bottom: var(--space-md);
+}
+
+.modal-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* The italic closing tagline each bio ends with */
+.modal-body .bio-tagline {
+  font-style: italic;
+  font-weight: 700;
+  color: var(--color-purple);
+  border-left: 3px solid var(--color-pink);
+  padding-left: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+/*
+  PREVENT BACKGROUND SCROLLING WHEN MODAL IS OPEN
+  JS adds class "modal-open" to <body> when a modal is shown.
+  This stops the page behind the modal from scrolling,
+  which would look broken/confusing to the user.
+*/
+body.modal-open {
+  overflow: hidden;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media screen and (max-width: 768px) {
+  .team-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+
+  .team-card-photo {
+    height: 240px;
+  }
+
+  .modal-box {
+    padding: var(--space-lg);
+    max-height: 90vh;
+  }
+
+  .modal-header {
+    flex-direction: column;
+    text-align: center;
+    padding-right: 0;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-photo {
+    width: 64px;
+    height: 64px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.2rem;
+  }
+}

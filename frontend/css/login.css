@@ -1,0 +1,330 @@
+/*
+  ============================================================
+  THE SNOOGUMS ACADEMY - LOGIN PAGE STYLES
+  File: css/login.css
+
+  This file ADDS to register.css and style.css.
+  It only contains styles unique to the login page —
+  the role tabs, the login brand panel tweaks,
+  and the redirect bar.
+  ============================================================
+*/
+
+
+/* ============================================================
+   LOGIN BRAND PANEL OVERRIDES
+   The left panel on login has slightly different content
+   from register, so we adjust a few things.
+============================================================ */
+.login-brand-panel .brand-img {
+  aspect-ratio: 3/4;   /* Portrait ratio — suits the s16 image better */
+}
+
+/* Login info box that replaces the step tracker */
+.login-info-panel {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.login-info-panel h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-white);
+  margin-bottom: 0.4rem;
+}
+
+.login-info-panel > p {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: var(--space-md);
+}
+
+.login-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.login-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.login-feature-item i {
+  color: var(--color-pink);
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   ROLE SELECTOR TABS
+   Three buttons at the top of the form that switch between
+   Student, Teacher, and Admin login modes.
+============================================================ */
+.role-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+  gap: 0.4rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 0.3rem;
+  margin-bottom: var(--space-lg);
+}
+
+.role-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.75rem 0.5rem;
+  border: none;
+  border-radius: calc(var(--radius-md) - 4px);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.45);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.role-tab i {
+  font-size: 1.2rem;
+}
+
+.role-tab:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/*
+  Active state for each role tab — different colour per role.
+  JS adds class "active" + a data-color attribute.
+  We use separate classes for each colour theme.
+*/
+.role-tab.active {
+  color: white;
+  font-weight: 700;
+}
+
+/* Student = pink theme */
+.role-tab.active[data-color="pink"] {
+  background: var(--gradient-pink);
+  box-shadow: var(--shadow-pink);
+}
+
+/* Teacher = purple theme */
+.role-tab.active[data-color="purple"] {
+  background: linear-gradient(135deg, #6B0FA8, #4A0080);
+  box-shadow: 0 8px 24px rgba(107, 15, 168, 0.35);
+}
+
+/* Admin = gold theme */
+.role-tab.active[data-color="gold"] {
+  background: var(--gradient-gold);
+  color: var(--color-dark);
+  box-shadow: 0 8px 24px rgba(255, 194, 0, 0.3);
+}
+
+
+/* ============================================================
+   DYNAMIC BUTTON THEMES
+   When a role is selected, the submit button changes colour.
+   JS adds a class to the button to match the role colour.
+============================================================ */
+#loginSubmitBtn.theme-purple {
+  background: linear-gradient(135deg, #6B0FA8, #4A0080);
+  box-shadow: 0 8px 24px rgba(107, 15, 168, 0.35);
+}
+
+#loginSubmitBtn.theme-purple:hover {
+  box-shadow: 0 12px 40px rgba(107, 15, 168, 0.5);
+}
+
+#loginSubmitBtn.theme-gold {
+  background: var(--gradient-gold);
+  color: var(--color-dark);
+  box-shadow: 0 8px 24px rgba(255, 194, 0, 0.3);
+}
+
+#loginSubmitBtn.theme-gold:hover {
+  box-shadow: 0 12px 40px rgba(255, 194, 0, 0.5);
+}
+
+/* Form icon theme changes */
+.form-icon.theme-purple {
+  background: linear-gradient(135deg, #6B0FA8, #4A0080);
+  box-shadow: 0 8px 24px rgba(107, 15, 168, 0.35);
+}
+
+.form-icon.theme-gold {
+  background: var(--gradient-gold);
+  color: var(--color-dark);
+  box-shadow: 0 8px 24px rgba(255, 194, 0, 0.3);
+}
+
+
+/* ============================================================
+   FORGOT PASSWORD LINK
+   Sits on the right side of the password label row.
+============================================================ */
+.password-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+/* Override the margin that .form-label normally has */
+.password-label-row .form-label {
+  margin-bottom: 0;
+}
+
+.forgot-link {
+  font-size: 0.8rem;
+  color: var(--color-pink);
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.forgot-link:hover {
+  color: var(--color-gold);
+  text-decoration: underline;
+}
+
+
+/* ============================================================
+   REMEMBER ME ROW
+============================================================ */
+.remember-row {
+  margin-bottom: var(--space-md);
+}
+
+.remember-row .checkbox-text {
+  font-size: 0.85rem;
+}
+
+
+/* ============================================================
+   ROLE NOTE
+   Small info box shown under the form for Teacher/Admin tabs.
+   Explains they can't self-register.
+============================================================ */
+.role-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem var(--space-sm);
+  margin-top: var(--space-sm);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.6;
+}
+
+.role-note i {
+  color: var(--color-gold);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.role-note a {
+  color: var(--color-pink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.role-note a:hover {
+  text-decoration: underline;
+}
+
+
+/* ============================================================
+   SUCCESS / REDIRECT SCREEN
+   Shown after a successful login.
+   Includes an animated bar counting down to redirect.
+============================================================ */
+.login-success {
+  padding-top: var(--space-xl);
+}
+
+.redirect-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: var(--space-md) 0 var(--space-sm);
+}
+
+.redirect-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--gradient-pink);
+  border-radius: var(--radius-full);
+  /*
+    transition on width — this animates the bar filling up.
+    We set the width via JS, and the CSS transition makes it smooth.
+    We set a very long transition duration and let JS control the timing.
+  */
+  transition: width 3s linear;
+}
+
+.redirect-note {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.85rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.redirect-note span {
+  color: var(--color-gold);
+  font-weight: 700;
+}
+
+
+/* ============================================================
+   RESPONSIVE ADJUSTMENTS FOR LOGIN PAGE
+============================================================ */
+@media screen and (max-width: 900px) {
+  /* Brand panel already hidden by register.css on mobile */
+  /* Just ensure the form panel uses full width */
+  .auth-form-panel {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  /* Make role tab text smaller on very small phones */
+  .role-tab {
+    font-size: 0.72rem;
+    padding: 0.6rem 0.3rem;
+  }
+
+  .role-tab i {
+    font-size: 1rem;
+  }
+
+  /* Stack the forgot password link below the label on tiny screens */
+  .password-label-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+}

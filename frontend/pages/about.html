@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  THE SNOOGUMS ACADEMY - ABOUT PAGE
+  File: pages/about.html
+
+  PURPOSE:
+  Tell the TSA story properly. This page exists to build TRUST.
+  Visitors who reach this page are seriously considering enrolling
+  (or a parent is researching before paying). We answer:
+  - Who are you?
+  - Why should I trust you with my child's education?
+  - What do you actually believe in?
+
+  CONTENT SOURCE:
+  Everything here is adapted from the official TSA brand document
+  (company profile PDF) provided by the client.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | The Snoogums Academy</title>
+  <meta name="description" content="Learn about The Snoogums Academy's mission to make quality education accessible to every child, regardless of location, ability, or income.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <!--
+    Page-specific stylesheet for About page only.
+    Same pattern we used for register.css and login.css —
+    keep page-specific rules out of the main style.css file.
+  -->
+  <link rel="stylesheet" href="../css/about.css">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAVIGATION BAR
+       Identical structure to the homepage navbar.
+       NOTE: Since this page lives inside /pages/, all links use
+       "../" to go up one level, except links to OTHER pages
+       inside /pages/ which stay relative (e.g. "register.html").
+  ============================================================ -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="../index.html" class="navbar-logo">
+        <img src="../images/logo.jpeg" alt="TSA Logo" class="logo-img">
+        <span class="logo-text">The Snoogums Academy</span>
+      </a>
+
+      <button class="hamburger" id="hamburger" aria-label="Open navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link active">About</a></li>
+        <li><a href="courses.html" class="nav-link">Courses</a></li>
+        <li><a href="team.html" class="nav-link">Our Team</a></li>
+        <li><a href="careers.html" class="nav-link">Careers</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="register.html" class="nav-link btn btn-outline">Register</a></li>
+        <li><a href="login.html" class="nav-link btn btn-primary">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       SECTION 1: PAGE HERO BANNER
+       Smaller than the homepage hero — just establishes the page.
+       We use a solid gradient background instead of an image here,
+       since this is a sub-page, not the main landing page.
+  ============================================================ -->
+  <section class="page-hero">
+    <div class="page-hero-shapes" aria-hidden="true">
+      <div class="phs phs-1"></div>
+      <div class="phs phs-2"></div>
+    </div>
+    <div class="container">
+      <div class="page-hero-content">
+        <p class="section-eyebrow" style="color: var(--color-gold);">Our Story</p>
+        <h1 class="page-hero-title">Knowledge Without Barriers</h1>
+        <p class="page-hero-subtitle">
+          We believe the spark of curiosity exists in every person —
+          but the opportunity to fan that spark into a flame isn't always equal.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 2: OUR STORY
+       The founding narrative, adapted from the brand document.
+  ============================================================ -->
+  <section class="story-section">
+    <div class="container">
+      <div class="story-grid">
+
+        <div class="story-image reveal">
+          <img src="../images/s5.jpg" alt="Students collaborating on a project">
+          <div class="story-badge">
+            <i class="fas fa-globe-africa"></i>
+            <span>Founded under The Snoogums Ltd</span>
+          </div>
+        </div>
+
+        <div class="story-text reveal">
+          <p class="section-eyebrow">Where We Began</p>
+          <h2 class="section-title">A Bridge, Not A Gate</h2>
+          <p class="story-paragraph">
+            Our journey began under the umbrella of The Snoogums Ltd with a vision
+            to solve a global problem. For too long, high-quality learning has been
+            gated by high costs, physical distance, and a lack of support for those
+            with different abilities.
+          </p>
+          <p class="story-paragraph">
+            We decided to build a <strong>bridge instead of a gate</strong>. We are
+            more than just a Learning Management System — we are an equalizer,
+            combining cutting-edge technology with a human touch to create a space
+            where every learner can thrive.
+          </p>
+
+          <!-- Pull quote -->
+          <blockquote class="pull-quote">
+            "Education is a universal human right."
+          </blockquote>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 3: WHO WE SERVE
+       The three groups explicitly named in the brand document.
+  ============================================================ -->
+  <section class="serve-section">
+    <div class="container">
+
+      <div class="section-header reveal">
+        <p class="section-eyebrow">Our Promise</p>
+        <h2 class="section-title">By Combining Technology With A Human Touch</h2>
+        <p class="section-subtitle">We provide a space where every learner, regardless of circumstance, can grow</p>
+      </div>
+
+      <div class="serve-grid">
+
+        <div class="serve-card reveal">
+          <div class="serve-icon icon-pink">
+            <i class="fas fa-universal-access"></i>
+          </div>
+          <h3>The Learner With Disabilities</h3>
+          <p>Finds a digital environment tailored to their needs, ensuring physical challenges never hinder intellectual growth.</p>
+        </div>
+
+        <div class="serve-card reveal">
+          <div class="serve-icon icon-gold">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <h3>The Child In A Remote Village</h3>
+          <p>Can access the same expert instruction as a student in a capital city — no matter where they call home.</p>
+        </div>
+
+        <div class="serve-card reveal">
+          <div class="serve-icon icon-purple">
+            <i class="fas fa-hand-holding-heart"></i>
+          </div>
+          <h3>The Budget-Conscious Family</h3>
+          <p>Can afford premium education without financial strain. Affordability never means a lower standard.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 4: CORE VALUES (5 PILLARS)
+       Full detail version — homepage only teased 3 of these.
+  ============================================================ -->
+  <section class="values-section">
+    <div class="container">
+
+      <div class="section-header reveal">
+        <p class="section-eyebrow" style="color: var(--color-gold);">What Guides Us</p>
+        <h2 class="section-title" style="color: white;">Our Five Core Values</h2>
+        <p class="section-subtitle" style="color: rgba(255,255,255,0.6);">
+          These pillars guide every decision we make — from the code in our software to the teachers we hire
+        </p>
+      </div>
+
+      <div class="pillars-grid">
+
+        <div class="pillar-card reveal">
+          <span class="pillar-num">01</span>
+          <i class="fas fa-heart pillar-icon"></i>
+          <h3>Radical Inclusivity</h3>
+          <p>We design for the "edges." If a student with a disability can navigate our platform with ease, then everyone can.</p>
+        </div>
+
+        <div class="pillar-card reveal">
+          <span class="pillar-num">02</span>
+          <i class="fas fa-balance-scale pillar-icon"></i>
+          <h3>Equity in Education</h3>
+          <p>We believe the right to learn should not depend on a bank account. We maintain affordable rates always.</p>
+        </div>
+
+        <div class="pillar-card reveal">
+          <span class="pillar-num">03</span>
+          <i class="fas fa-laptop-code pillar-icon"></i>
+          <h3>Human-Centric Technology</h3>
+          <p>Technology should serve the student, not confuse them. Our LMS is intuitive, warm, and built for real connection.</p>
+        </div>
+
+        <div class="pillar-card reveal">
+          <span class="pillar-num">04</span>
+          <i class="fas fa-globe pillar-icon"></i>
+          <h3>Global Citizenship</h3>
+          <p>We are borderless. We celebrate diversity and connect learners from different cultures into one community.</p>
+        </div>
+
+        <div class="pillar-card reveal">
+          <span class="pillar-num">05</span>
+          <i class="fas fa-medal pillar-icon"></i>
+          <h3>Uncompromising Quality</h3>
+          <p>Affordability does not mean a lower standard. World-class materials and live instruction, everywhere.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 5: MISSION & VISION
+       Two side-by-side cards.
+  ============================================================ -->
+  <section class="mv-section">
+    <div class="container">
+      <div class="mv-grid">
+
+        <div class="mv-card reveal">
+          <div class="mv-icon"><i class="fas fa-bullseye"></i></div>
+          <h3>Our Mission</h3>
+          <p>
+            To make high-quality learning universally accessible by providing
+            an inclusive, affordable, and flexible digital environment.
+            We ensure no one is left behind.
+          </p>
+        </div>
+
+        <div class="mv-card reveal">
+          <div class="mv-icon"><i class="fas fa-eye"></i></div>
+          <h3>Our Vision</h3>
+          <p>
+            To create a world where education is a reality for everyone,
+            fostering a global community of empowered individuals.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 6: CORPORATE IDENTITY STRIP
+       Builds legitimacy — official registration details.
+  ============================================================ -->
+  <section class="identity-section">
+    <div class="container">
+      <div class="identity-card reveal">
+
+        <div class="identity-header">
+          <i class="fas fa-building"></i>
+          <h3>Corporate Identity</h3>
+        </div>
+
+        <div class="identity-grid">
+          <div class="identity-item">
+            <span class="identity-label">Official Name</span>
+            <span class="identity-value">The Snoogums Ltd</span>
+          </div>
+          <div class="identity-item">
+            <span class="identity-label">Academy Division</span>
+            <span class="identity-value">The Snoogums Academy</span>
+          </div>
+          <div class="identity-item">
+            <span class="identity-label">Principal Activity</span>
+            <span class="identity-value">Professional, Scientific, and Educational Activities</span>
+          </div>
+          <div class="identity-item">
+            <span class="identity-label">Head Office Address</span>
+            <span class="identity-value">Kano Liaison Office, Gwarimpa Estate, 1st Avenue, Gwarimpa, Abuja, FCT</span>
+          </div>
+          <div class="identity-item">
+            <span class="identity-label">Contact Email</span>
+            <span class="identity-value">info.snoogums@gmail.com</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 7: CLOSING CTA
+  ============================================================ -->
+  <section class="cta-banner">
+    <div class="cta-banner-overlay"></div>
+    <div class="container">
+      <div class="cta-content reveal">
+        <h2>When You Give A Child The Right To Learn,</h2>
+        <p>You give them the power to change the world. Join us today.</p>
+        <div class="cta-buttons">
+          <a href="register.html" class="btn btn-gold btn-large">
+            <i class="fas fa-user-plus"></i> Register Now
+          </a>
+          <a href="contact.html" class="btn btn-outline-white btn-large">
+            <i class="fas fa-envelope"></i> Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER (identical structure to homepage)
+  ============================================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <img src="../images/logo.jpeg" alt="TSA Logo" class="footer-logo">
+          <p class="footer-tagline">Knowledge Without Barriers, Potential Without Limits.</p>
+          <div class="footer-socials">
+            <a href="https://wa.me/2349041251514" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com/@thesnoogumsacademy?si=I5cBnfzldprnh5yx" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=ksznhg3" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="team.html">Our Team</a></li>
+            <li><a href="careers.html">Careers</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>Students</h4>
+          <ul>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="#">Student Dashboard</a></li>
+            <li><a href="#">Payment Info</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h4>Contact Us</h4>
+          <p><i class="fas fa-map-marker-alt"></i> Gwarimpa Estate, 1st Avenue, Abuja, FCT</p>
+          <p><i class="fas fa-envelope"></i> info.snoogums@gmail.com</p>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 The Snoogums Academy. All rights reserved.</p>
+        <p>Built with ❤️ for learners everywhere.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

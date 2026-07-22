@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  THE SNOOGUMS ACADEMY - COURSES PAGE
+  File: pages/courses.html
+
+  PURPOSE:
+  Show all available courses at TSA.
+  Students can browse courses freely, but clicking "Enrol"
+  takes them to the registration page if not logged in.
+  After registration and payment confirmation by admin,
+  their dashboard unlocks access to enrolled courses.
+
+  KEY FEATURE — FILTER TABS:
+  JavaScript filters the course cards by category without
+  reloading the page. This is called "client-side filtering".
+  All cards are in the HTML; JS just hides/shows them
+  based on which tab is active.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Courses | The Snoogums Academy</title>
+  <meta name="description" content="Explore all courses at The Snoogums Academy — Coding, Mathematics, Science, English and more. Expert-led live classes and video lessons.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/about.css">
+  <link rel="stylesheet" href="../css/courses.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="../index.html" class="navbar-logo">
+        <img src="../images/logo.jpeg" alt="TSA Logo" class="logo-img">
+        <span class="logo-text">The Snoogums Academy</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Open navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="courses.html" class="nav-link active">Courses</a></li>
+        <li><a href="team.html" class="nav-link">Our Team</a></li>
+        <li><a href="careers.html" class="nav-link">Careers</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="register.html" class="nav-link btn btn-outline">Register</a></li>
+        <li><a href="login.html" class="nav-link btn btn-primary">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- PAGE HERO -->
+  <section class="page-hero courses-hero">
+    <div class="page-hero-shapes" aria-hidden="true">
+      <div class="phs phs-1"></div>
+      <div class="phs phs-2"></div>
+    </div>
+    <div class="container">
+      <div class="page-hero-content">
+        <p class="section-eyebrow" style="color: var(--color-gold);">
+          <i class="fas fa-book-open"></i> What We Teach
+        </p>
+        <h1 class="page-hero-title">Our Courses</h1>
+        <p class="page-hero-subtitle">
+          Expert-led programmes combining live classes, video lessons, and downloadable materials.
+          Learning that fits your schedule and your goals.
+        </p>
+        <!-- Live stats bar inside hero -->
+        <div class="courses-hero-stats">
+          <div class="ch-stat">
+            <strong>8</strong>
+            <span>Courses</span>
+          </div>
+          <div class="ch-divider"></div>
+          <div class="ch-stat">
+            <strong>Live</strong>
+            <span>Classes weekly</span>
+          </div>
+          <div class="ch-divider"></div>
+          <div class="ch-stat">
+            <strong>100+</strong>
+            <span>Students enrolled</span>
+          </div>
+          <div class="ch-divider"></div>
+          <div class="ch-stat">
+            <strong>Expert</strong>
+            <span>Instructors</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       ACCESS NOTICE BANNER
+       Appears at the top of the courses list.
+       Reminds visitors that payment confirmation is required.
+  ============================================================ -->
+  <div class="access-banner">
+    <div class="container">
+      <div class="access-banner-inner">
+        <div class="access-banner-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <div class="access-banner-text">
+          <strong>How to Access Courses:</strong>
+          <a href="register.html">Register</a> your account →
+          Complete your payment →
+          Admin confirms access →
+          Your dashboard unlocks
+        </div>
+        <a href="register.html" class="btn btn-primary btn-sm access-banner-btn">
+          Get Started
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       MAIN COURSES SECTION
+  ============================================================ -->
+  <section class="courses-page-section">
+    <div class="container">
+
+      <!-- --------------------------------------------------------
+           FILTER TABS
+           Clicking a tab filters cards by their data-category.
+           JavaScript handles the show/hide logic.
+           
+           ACCESSIBILITY NOTE:
+           role="tablist" and role="tab" are ARIA roles that tell
+           screen readers this is a tab interface, not just buttons.
+      -------------------------------------------------------- -->
+      <div class="courses-filter" role="tablist" aria-label="Filter courses by subject">
+
+        <button class="filter-tab active" data-filter="all" role="tab" aria-selected="true">
+          <i class="fas fa-th-large"></i> All Courses
+        </button>
+        <button class="filter-tab" data-filter="coding" role="tab" aria-selected="false">
+          <i class="fas fa-code"></i> Coding
+        </button>
+        <button class="filter-tab" data-filter="mathematics" role="tab" aria-selected="false">
+          <i class="fas fa-calculator"></i> Mathematics
+        </button>
+        <button class="filter-tab" data-filter="science" role="tab" aria-selected="false">
+          <i class="fas fa-flask"></i> Science
+        </button>
+        <button class="filter-tab" data-filter="english" role="tab" aria-selected="false">
+          <i class="fas fa-book"></i> English
+        </button>
+        <button class="filter-tab" data-filter="other" role="tab" aria-selected="false">
+          <i class="fas fa-star"></i> Other
+        </button>
+
+      </div>
+
+      <!-- Results count — JS updates this text -->
+      <p class="filter-results" id="filterResults">Showing all 8 courses</p>
+
+      <!-- --------------------------------------------------------
+           COURSES GRID
+           Each .course-card has a data-category attribute.
+           JS uses this to filter which cards are visible.
+           
+           data-category must match a filter-tab's data-filter value exactly.
+      -------------------------------------------------------- -->
+      <div class="courses-page-grid" id="coursesGrid">
+
+        <!-- ===== CARD 1: Introduction to Coding ===== -->
+        <article class="course-card-full reveal" data-category="coding">
+          <!--
+            <article> is a semantic HTML element for self-contained content.
+            Each course card is a standalone piece of content, so <article>
+            is more appropriate than <div> here.
+          -->
+          <div class="ccf-thumbnail">
+            <img src="../images/s13.jpg" alt="Introduction to Coding">
+            <div class="ccf-badge popular">
+              <i class="fas fa-fire"></i> Popular
+            </div>
+            <div class="ccf-category-tag">
+              <i class="fas fa-code"></i> Coding
+            </div>
+          </div>
+
+          <div class="ccf-body">
+            <div class="ccf-top">
+              <div class="ccf-level beginner">Beginner</div>
+              <div class="ccf-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <span>5.0</span>
+              </div>
+            </div>
+
+            <h2 class="ccf-title">Introduction to Coding</h2>
+            <p class="ccf-desc">
+              Learn the fundamentals of programming from scratch. Build real projects,
+              understand logic, and develop problem-solving skills that last a lifetime.
+            </p>
+
+            <div class="ccf-meta">
+              <span><i class="fas fa-play-circle"></i> 24 Lessons</span>
+              <span><i class="fas fa-clock"></i> 8 Weeks</span>
+              <span><i class="fas fa-video"></i> Live + Video</span>
+              <span><i class="fas fa-file-pdf"></i> Materials included</span>
+            </div>
+
+            <div class="ccf-instructor">
+              <div class="ccf-instructor-avatar ci1"></div>
+              <div>
+                <strong>Instructor</strong>
+                <span>TSA Coding Team</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ccf-footer">
+            <div class="ccf-access">
+              <i class="fas fa-lock"></i>
+              <span>Requires payment confirmation</span>
+            </div>
+            <a href="register.html" class="btn btn-primary btn-sm">
+              Enrol Now <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- ===== CARD 2: Mathematics Mastery ===== -->
+        <article class="course-card-full reveal" data-category="mathematics">
+          <div class="ccf-thumbnail">
+            <img src="../images/s10.jpg" alt="Mathematics Mastery">
+            <div class="ccf-category-tag">
+              <i class="fas fa-calculator"></i> Mathematics
+            </div>
+          </div>
+
+          <div class="ccf-body">
+            <div class="ccf-top">
+              <div class="ccf-level all-levels">All Levels</div>
+              <div class="ccf-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span>4.8</span>
+              </div>
+            </div>
+
+            <h2 class="ccf-title">Mathematics Mastery</h2>
+            <p class="ccf-desc">
+              From basic arithmetic to advanced algebra and beyond.
+              Structured modules, weekly quizzes, and live problem-solving sessions with expert tutors.
+            </p>
+
+            <div class="ccf-meta">
+              <span><i class="fas fa-play-circle"></i> 30 Lessons</span>
+              <span><i class="fas fa-clock"></i> 10 Weeks</span>
+              <span><i class="fas fa-video"></i> Live + Video</span>
+              <span><i class="fas fa-file-pdf"></i> Materials included</span>
+            </div>
+
+            <div class="ccf-instructor">
+              <div class="ccf-instructor-avatar ci2"></div>
+              <div>
+                <strong>Instructor</strong>
+                <span>TSA Mathematics Team</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ccf-footer">
+            <div class="ccf-access">
+              <i class="fas fa-lock"></i>
+              <span>Requires payment confirmation</span>
+            </div>
+            <a href="register.html" class="btn btn-primary btn-sm">
+              Enrol Now <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- ===== CARD 3: Science Explorers ===== -->
+        <article class="course-card-full reveal" data-category="science">
+          <div class="ccf-thumbnail">
+            <img src="../images/s15.jpg" alt="Science Explorers">
+            <div class="ccf-badge new-badge">
+              <i class="fas fa-sparkles"></i> New
+            </div>
+            <div class="ccf-category-tag">
+              <i class="fas fa-flask"></i> Science
+            </div>
+          </div>
+
+          <div class="ccf-body">
+            <div class="ccf-top">
+              <div class="ccf-level intermediate">Intermediate</div>
+              <div class="ccf-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <span>5.0</span>
+              </div>
+            </div>
+
+            <h2 class="ccf-title">Science Explorers</h2>
+            <p class="ccf-desc">
+              Discover biology, chemistry and physics through engaging video experiments
+              and live lab-style sessions. Science made visual, exciting, and memorable.
+            </p>
+
+            <div class="ccf-meta">
+              <span><i class="fas fa-play-circle"></i> 20 Lessons</span>
+              <span><i class="fas fa-clock"></i> 6 Weeks</span>
+              <span><i class="fas fa-video"></i> Live + Video</span>
+              <span><i class="fas fa-file-pdf"></i> Materials included</span>
+            </div>
+
+            <div class="ccf-instructor">
+              <div class="ccf-instructor-avatar ci3"></div>
+              <div>
+                <strong>Instructor</strong>
+                <span>TSA Science Team</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ccf-footer">
+            <div class="ccf-access">
+              <i class="fas fa-lock"></i>
+              <span>Requires payment confirmation</span>
+            </div>
+            <a href="register.html" class="btn btn-primary btn-sm">
+              Enrol Now <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- ===== CARD 4: English Language & Literature ===== -->
+        <article class="course-card-full reveal" data-category="english">
+          <div class="ccf-thumbnail">
+            <img src="../images/s17.jpg" alt="English Language and Literature">
+            <div class="ccf-category-tag">
+              <i class="fas fa-book"></i> English
+            </div>
+          </div>
+
+          <div class="ccf-body">
+            <div class="ccf-top">
+              <div class="ccf-level all-levels">All Levels</div>
+              <div class="ccf-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span>4.7</span>
+              </div>
+            </div>
+
+            <h2 class="ccf-title">English Language &amp; Literature</h2>
+            <p class="ccf-desc">
+              Build confidence in reading, writing, grammar and comprehension.
+              From essay writing to literature analysis — expert guidance every step of the way.
+            </p>
+
+            <div class="ccf-meta">
+              <span><i class="fas fa-play-circle"></i> 28 Lessons</span>
+              <span><i class="fas fa-clock"></i> 9 Weeks</span>
+              <span><i class="fas fa-video"></i> Live + Video</span>
+              <span><i class="fas fa-file-pdf"></i> Materials included</span>
+            </div>
+
+            <div class="ccf-instructor">
+              <div class="ccf-instructor-avatar ci4"></div>
+              <div>
+                <strong>Instructor</strong>
+                <span>TSA English Team</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ccf-footer">
+            <div class="ccf-access">
+              <i class="fas fa-lock"></i>
+              <span>Requires payment confirmation</span>
+            </div>
+            <a href="register.html" class="btn btn-primary btn-sm">
+              Enrol Now <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- ===== CARD 5: Advanced Coding ===== -->
+        <article class="course-card-full reveal" data-category="coding">
+          <div class="ccf-thumbnail">
+            <img src="../images/s14.jpg" alt="Advanced Web Development">
+            <div class="ccf-category-tag">
+              <i class="fas fa-code"></i> Coding
+            </div>
+          </div>
+
+          <div class="ccf-body">
+            <div class="ccf-top">
+              <div class="ccf-level advanced">Advanced</div>
+              <div class="ccf-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <span>4.9</span>
+              </div>
+            </div>
+
+            <h2 class="ccf-title">Advanced Web Development</h2>
+            <p class="ccf-desc">
+              Take your coding skills to the next level. HTML, CSS, JavaScript, and
+              an introduction to backend development. Build real web applications.
+            </p>
+
+            <div class="ccf-meta">
+              <span><i class="fas fa-play-circle"></i> 36 Lessons</span>
+              <span><i class="fas fa-clock"></i> 12 Weeks</span>
+              <span><i class="fas fa-video"></i> Live + Video</span>
+              <span><i class="fas fa-file-pdf"></i> Materials included</span>
+            </div>
+
+            <div class="ccf-instructor">
+              <div class="ccf-instructor-avatar ci1"></div>
+              <div>
+                <strong>Instructor</strong>
+                <span>TSA Coding Team</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ccf-footer">
+            <div class="ccf-access">
+              <i class="fas fa-lock"></i>
+              <span>Requires payment confirmation</span>
+            </div>
+            <a href="register.html" class="btn btn-primary btn-sm">
+              Enrol Now <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- ===== CARD 6: Junior Classroom (young learners) ===== -->
+        <article class="course-card-full reveal" data-category="other">
+          <div class="ccf-thumbnail">
+            <img src="../images/s9.jpg" alt="Junior Classroom">
+            <div class="ccf-badge popular">
+              <i class="fas fa-heart"></i> Favourite
+            </div>
+            <div class="ccf-category-tag">
+              <i class="fas fa-child"></i> Junior
+            </div>
+          </div>
+
+          <div class="ccf-body">
+            <div class="ccf-top">
+              <div class="ccf-level beginner">Ages 6–10</div>
+              <div class="ccf-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <span>5.0</span>
+              </div>
+            </div>
+
+            <h2 class="ccf-title">Junior Classroom</h2>
+            <p class="ccf-desc">
+              A nurturing learning environment for young learners aged 6–10.
+              Covers literacy, numeracy, and critical thinking through fun,
+              interactive activities and live teacher sessions.
+            </p>
+
+            <div class="ccf-meta">
+              <span><i class="fas fa-play-circle"></i> 20 Lessons</span>
+              <span><i class="fas fa-clock"></i> 8 Weeks</span>
+              <span><i class="fas fa-video"></i> Live + Video</span>
+              <span><i class="fas fa-file-pdf"></i> Materials included</span>
+            </div>
+
+            <div class="ccf-instructor">
+              <div class="ccf-instructor-avatar ci5"></div>
+              <div>
+                <strong>Instructor</strong>
+                <span>TSA Junior Team</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ccf-footer">
+            <div class="ccf-access">
+              <i class="fas fa-lock"></i>
+              <span>Requires payment confirmation</span>
+            </div>
+            <a href="register.html" class="btn btn-primary btn-sm">
+              Enrol Now <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- ===== CARD 7: General Studies ===== -->
+        <article class="course-card-full reveal" data-category="other">
+          <div class="ccf-thumbnail">
+            <img src="../images/s12.jpg" alt="General Studies">
+            <div class="ccf-category-tag">
+              <i class="fas fa-graduation-cap"></i> General
+            </div>
+          </div>
+
+          <div class="ccf-body">
+            <div class="ccf-top">
+              <div class="ccf-level all-levels">All Levels</div>
+              <div class="ccf-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span>4.6</span>
+              </div>
+            </div>
+
+            <h2 class="ccf-title">General Studies &amp; Exam Prep</h2>
+            <p class="ccf-desc">
+              Comprehensive exam preparation covering WAEC, NECO, and JAMB syllabi.
+              Past questions, timed mock exams, and live revision sessions.
+            </p>
+
+            <div class="ccf-meta">
+              <span><i class="fas fa-play-circle"></i> 32 Lessons</span>
+              <span><i class="fas fa-clock"></i> 10 Weeks</span>
+              <span><i class="fas fa-video"></i> Live + Video</span>
+              <span><i class="fas fa-file-pdf"></i> Materials included</span>
+            </div>
+
+            <div class="ccf-instructor">
+              <div class="ccf-instructor-avatar ci2"></div>
+              <div>
+                <strong>Instructor</strong>
+                <span>TSA Exam Prep Team</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ccf-footer">
+            <div class="ccf-access">
+              <i class="fas fa-lock"></i>
+              <span>Requires payment confirmation</span>
+            </div>
+            <a href="register.html" class="btn btn-primary btn-sm">
+              Enrol Now <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+        <!-- ===== CARD 8: Everyday English ===== -->
+        <article class="course-card-full reveal" data-category="english">
+          <div class="ccf-thumbnail">
+            <img src="../images/s12.jpg" alt="Spoken English and Communication">
+            <div class="ccf-badge new-badge">New</div>
+            <div class="ccf-category-tag">
+              <i class="fas fa-microphone"></i> English
+            </div>
+          </div>
+
+          <div class="ccf-body">
+            <div class="ccf-top">
+              <div class="ccf-level beginner">Beginner</div>
+              <div class="ccf-rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <span>5.0</span>
+              </div>
+            </div>
+
+            <h2 class="ccf-title">Spoken English &amp; Communication</h2>
+            <p class="ccf-desc">
+              Build confidence in everyday spoken English. Pronunciation, conversation
+              practice, and presentation skills — all in a supportive live environment.
+            </p>
+
+            <div class="ccf-meta">
+              <span><i class="fas fa-play-circle"></i> 16 Lessons</span>
+              <span><i class="fas fa-clock"></i> 6 Weeks</span>
+              <span><i class="fas fa-video"></i> Live Classes</span>
+              <span><i class="fas fa-file-pdf"></i> Materials included</span>
+            </div>
+
+            <div class="ccf-instructor">
+              <div class="ccf-instructor-avatar ci4"></div>
+              <div>
+                <strong>Instructor</strong>
+                <span>TSA English Team</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ccf-footer">
+            <div class="ccf-access">
+              <i class="fas fa-lock"></i>
+              <span>Requires payment confirmation</span>
+            </div>
+            <a href="register.html" class="btn btn-primary btn-sm">
+              Enrol Now <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </article>
+
+      </div><!-- end #coursesGrid -->
+
+      <!-- Empty state — shown when a filter has no results -->
+      <div class="no-results" id="noResults" style="display:none;">
+        <i class="fas fa-search"></i>
+        <h3>No courses found</h3>
+        <p>Try a different filter or check back soon — we're always adding new courses.</p>
+        <button class="btn btn-primary" onclick="resetFilter()">
+          <i class="fas fa-th-large"></i> View All Courses
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner">
+    <div class="cta-banner-overlay"></div>
+    <div class="container">
+      <div class="cta-content reveal">
+        <h2>Ready to Start Learning?</h2>
+        <p>Register today, confirm your payment, and unlock your full course dashboard.</p>
+        <div class="cta-buttons">
+          <a href="register.html" class="btn btn-gold btn-large">
+            <i class="fas fa-user-plus"></i> Register Now
+          </a>
+          <a href="login.html" class="btn btn-outline-white btn-large">
+            <i class="fas fa-sign-in-alt"></i> Already Registered? Login
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="../images/logo.jpeg" alt="TSA Logo" class="footer-logo">
+          <p class="footer-tagline">Knowledge Without Barriers, Potential Without Limits.</p>
+          <div class="footer-socials">
+            <a href="https://wa.me/2349041251514" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com/@thesnoogumsacademy?si=I5cBnfzldprnh5yx" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=ksznhg3" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="team.html">Our Team</a></li>
+            <li><a href="careers.html">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Students</h4>
+          <ul>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="#">Student Dashboard</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact Us</h4>
+          <p><i class="fas fa-map-marker-alt"></i> Gwarimpa Estate, 1st Avenue, Abuja, FCT</p>
+          <p><i class="fas fa-envelope"></i> info.snoogums@gmail.com</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 The Snoogums Academy. All rights reserved.</p>
+        <p>Built with ❤️ for learners everywhere.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/courses.js"></script>
+</body>
+</html>

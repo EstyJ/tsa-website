@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<!--
+  ============================================================
+  THE SNOOGUMS ACADEMY - CAREERS / APPLY TO TEACH PAGE
+  File: pages/careers.html
+
+  PURPOSE:
+  This page is how teachers join TSA.
+  Teachers do NOT self-register. They fill this form,
+  upload their CV, and submit an application.
+  
+  WHAT HAPPENS AFTER SUBMISSION:
+  1. Application is stored in the database (backend - later)
+  2. Admin reviews the application on the admin dashboard
+  3. If approved, admin manually creates a teacher account
+  4. Teacher receives their login credentials by email
+  5. Teacher logs in and can change their password
+
+  This page has NO login wall — it's public so anyone
+  can find and apply for a teaching position at TSA.
+  ============================================================
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Careers | Teach at The Snoogums Academy</title>
+  <meta name="description" content="Join our team of expert educators at The Snoogums Academy. Apply to teach and inspire students across Nigeria and beyond.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/about.css">
+  <link rel="stylesheet" href="../css/register.css">
+  <link rel="stylesheet" href="../css/careers.css">
+  <!--
+    We load about.css for the .page-hero styles (reused here),
+    and register.css for the shared form field styles
+    (.form-input, .form-label, .field-error, etc.).
+    careers.css adds only what's unique to this page.
+    This is the benefit of a modular CSS architecture —
+    we reuse what we already built instead of rewriting it.
+  -->
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="../index.html" class="navbar-logo">
+        <img src="../images/logo.jpeg" alt="TSA Logo" class="logo-img">
+        <span class="logo-text">The Snoogums Academy</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Open navigation menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="courses.html" class="nav-link">Courses</a></li>
+        <li><a href="team.html" class="nav-link">Our Team</a></li>
+        <li><a href="careers.html" class="nav-link active">Careers</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="register.html" class="nav-link btn btn-outline">Register</a></li>
+        <li><a href="login.html" class="nav-link btn btn-primary">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       PAGE HERO
+       Reuses .page-hero from about.css — consistent sub-page style
+  ============================================================ -->
+  <section class="page-hero careers-hero">
+    <div class="page-hero-shapes" aria-hidden="true">
+      <div class="phs phs-1"></div>
+      <div class="phs phs-2"></div>
+    </div>
+    <div class="container">
+      <div class="page-hero-content">
+        <p class="section-eyebrow" style="color: var(--color-gold);">
+          <i class="fas fa-chalkboard-teacher"></i> Join Our Team
+        </p>
+        <h1 class="page-hero-title">Teach. Inspire. Transform.</h1>
+        <p class="page-hero-subtitle">
+          Share your expertise with motivated learners across Nigeria and beyond.
+          Apply to become an instructor at The Snoogums Academy.
+        </p>
+        <!-- Scroll CTA -->
+        <a href="#apply" class="btn btn-gold btn-large hero-apply-btn">
+          <i class="fas fa-paper-plane"></i> Apply Now
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 1: WHY TEACH WITH US
+       Sell the opportunity to prospective teachers.
+  ============================================================ -->
+  <section class="why-teach-section">
+    <div class="container">
+
+      <div class="section-header reveal">
+        <p class="section-eyebrow">The TSA Advantage</p>
+        <h2 class="section-title">Why Teach With Us?</h2>
+        <p class="section-subtitle">We invest in our educators because great teaching is the foundation of everything we do</p>
+      </div>
+
+      <div class="why-grid">
+
+        <div class="why-card reveal">
+          <div class="why-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <h3>Reach Hundreds of Students</h3>
+          <p>Your lessons reach motivated learners across Nigeria and beyond. One session, lasting impact.</p>
+        </div>
+
+        <div class="why-card reveal">
+          <div class="why-icon">
+            <i class="fas fa-laptop-code"></i>
+          </div>
+          <h3>Modern Teaching Platform</h3>
+          <p>Teach live with Jitsi Meet built right into the platform. Upload videos, PDFs, and assignments with ease.</p>
+        </div>
+
+        <div class="why-card reveal">
+          <div class="why-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <h3>Flexible Scheduling</h3>
+          <p>Classes are scheduled around your availability. Teach from anywhere with a reliable internet connection.</p>
+        </div>
+
+        <div class="why-card reveal">
+          <div class="why-icon">
+            <i class="fas fa-award"></i>
+          </div>
+          <h3>Professional Growth</h3>
+          <p>Join a community of dedicated educators. Build your profile, reputation, and teaching portfolio.</p>
+        </div>
+
+        <div class="why-card reveal">
+          <div class="why-icon">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <h3>Supportive Management</h3>
+          <p>Our admin team handles all student enrollment, payments, and platform support — you focus on teaching.</p>
+        </div>
+
+        <div class="why-card reveal">
+          <div class="why-icon">
+            <i class="fas fa-globe-africa"></i>
+          </div>
+          <h3>Make A Real Difference</h3>
+          <p>Help bridge the education gap. Your expertise gives children access to quality learning they might not otherwise have.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 2: HOW THE PROCESS WORKS
+       Sets expectations BEFORE they fill the form.
+  ============================================================ -->
+  <section class="process-section">
+    <div class="container">
+
+      <div class="section-header reveal">
+        <p class="section-eyebrow">What To Expect</p>
+        <h2 class="section-title">The Application Process</h2>
+      </div>
+
+      <div class="process-steps">
+
+        <div class="process-step reveal">
+          <div class="process-num">1</div>
+          <div class="process-text">
+            <h4>Submit Your Application</h4>
+            <p>Fill in the form below and upload your CV. Takes about 5 minutes.</p>
+          </div>
+        </div>
+
+        <div class="process-arrow reveal"><i class="fas fa-arrow-right"></i></div>
+
+        <div class="process-step reveal">
+          <div class="process-num">2</div>
+          <div class="process-text">
+            <h4>Admin Reviews</h4>
+            <p>Our team reviews your application and CV, usually within 3–5 business days.</p>
+          </div>
+        </div>
+
+        <div class="process-arrow reveal"><i class="fas fa-arrow-right"></i></div>
+
+        <div class="process-step reveal">
+          <div class="process-num">3</div>
+          <div class="process-text">
+            <h4>Interview &amp; Onboarding</h4>
+            <p>Shortlisted applicants are contacted. If successful, admin creates your account.</p>
+          </div>
+        </div>
+
+        <div class="process-arrow reveal"><i class="fas fa-arrow-right"></i></div>
+
+        <div class="process-step reveal">
+          <div class="process-num">4</div>
+          <div class="process-text">
+            <h4>Start Teaching</h4>
+            <p>Log in, set up your profile, and start inspiring students!</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       SECTION 3: THE APPLICATION FORM
+       id="apply" — the hero "Apply Now" button scrolls here
+  ============================================================ -->
+  <section class="apply-section" id="apply">
+    <div class="container">
+
+      <div class="apply-wrapper">
+
+        <!-- Left: context panel -->
+        <div class="apply-context reveal">
+          <img src="../images/s4.jpg" alt="Professional educator" class="apply-img">
+
+          <div class="apply-note">
+            <i class="fas fa-info-circle"></i>
+            <div>
+              <strong>For Teachers Only</strong>
+              <p>This form is exclusively for teaching staff applicants. If you're a student, please <a href="register.html">register here</a>.</p>
+            </div>
+          </div>
+
+          <div class="apply-contact">
+            <h4>Questions?</h4>
+            <p><i class="fas fa-envelope"></i> info.snoogums@gmail.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> Gwarimpa, Abuja, FCT</p>
+          </div>
+        </div>
+
+        <!-- Right: the actual form -->
+        <div class="apply-form-wrap reveal">
+          <div class="apply-form-header">
+            <div class="apply-form-icon">
+              <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <h2>Teaching Position Application</h2>
+            <p>All fields marked <span class="required">*</span> are required</p>
+          </div>
+
+          <!--
+            THE APPLICATION FORM
+
+            action="/api/careers/apply" — the backend endpoint that
+            will receive this form. We'll build this route later.
+
+            enctype="multipart/form-data" — CRITICAL for file uploads!
+            The default enctype for forms is "application/x-www-form-urlencoded"
+            which only handles text. When you upload a file (the CV),
+            you MUST set enctype to "multipart/form-data" — otherwise
+            the file never reaches the server.
+          -->
+          <form
+            id="careerForm"
+            action="/api/careers/apply"
+            method="POST"
+            enctype="multipart/form-data"
+            novalidate
+          >
+
+            <!-- Row 1: Name -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cfFirstName" class="form-label">
+                  First Name <span class="required">*</span>
+                </label>
+                <div class="input-wrap">
+                  <span class="input-icon"><i class="fas fa-user"></i></span>
+                  <input type="text" id="cfFirstName" name="firstName"
+                    class="form-input" placeholder="e.g. Emeka" required>
+                </div>
+                <p class="field-error" id="cfFirstNameError"></p>
+              </div>
+              <div class="form-group">
+                <label for="cfLastName" class="form-label">
+                  Last Name <span class="required">*</span>
+                </label>
+                <div class="input-wrap">
+                  <span class="input-icon"><i class="fas fa-user"></i></span>
+                  <input type="text" id="cfLastName" name="lastName"
+                    class="form-input" placeholder="e.g. Nwachukwu" required>
+                </div>
+                <p class="field-error" id="cfLastNameError"></p>
+              </div>
+            </div>
+
+            <!-- Row 2: Email + Phone -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cfEmail" class="form-label">
+                  Email Address <span class="required">*</span>
+                </label>
+                <div class="input-wrap">
+                  <span class="input-icon"><i class="fas fa-envelope"></i></span>
+                  <input type="email" id="cfEmail" name="email"
+                    class="form-input" placeholder="your@email.com" required>
+                </div>
+                <p class="field-error" id="cfEmailError"></p>
+              </div>
+              <div class="form-group">
+                <label for="cfPhone" class="form-label">
+                  Phone Number <span class="required">*</span>
+                </label>
+                <div class="input-wrap">
+                  <span class="input-icon"><i class="fas fa-phone"></i></span>
+                  <input type="tel" id="cfPhone" name="phone"
+                    class="form-input" placeholder="e.g. 08012345678" required>
+                </div>
+                <p class="field-error" id="cfPhoneError"></p>
+              </div>
+            </div>
+
+            <!-- Subject & Experience -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="cfSubject" class="form-label">
+                  Subject / Area of Expertise <span class="required">*</span>
+                </label>
+                <div class="input-wrap">
+                  <span class="input-icon"><i class="fas fa-book"></i></span>
+                  <!--
+                    <select> is a dropdown menu.
+                    The <option> tags define the choices.
+                    value="" on the first option = empty/unselected default.
+                    We check this in JS validation (can't submit without selecting).
+                  -->
+                  <select id="cfSubject" name="subject" class="form-input form-select" required>
+                    <option value="">-- Select a subject --</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="english">English Language</option>
+                    <option value="science">Science (General)</option>
+                    <option value="biology">Biology</option>
+                    <option value="chemistry">Chemistry</option>
+                    <option value="physics">Physics</option>
+                    <option value="coding">Coding / Technology</option>
+                    <option value="history">History</option>
+                    <option value="geography">Geography</option>
+                    <option value="economics">Economics</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <p class="field-error" id="cfSubjectError"></p>
+              </div>
+
+              <div class="form-group">
+                <label for="cfExperience" class="form-label">
+                  Years of Teaching Experience <span class="required">*</span>
+                </label>
+                <div class="input-wrap">
+                  <span class="input-icon"><i class="fas fa-calendar-alt"></i></span>
+                  <select id="cfExperience" name="experience" class="form-input form-select" required>
+                    <option value="">-- Select experience --</option>
+                    <option value="0-1">Less than 1 year</option>
+                    <option value="1-3">1 – 3 years</option>
+                    <option value="3-5">3 – 5 years</option>
+                    <option value="5-10">5 – 10 years</option>
+                    <option value="10+">10+ years</option>
+                  </select>
+                </div>
+                <p class="field-error" id="cfExperienceError"></p>
+              </div>
+            </div>
+
+            <!-- Highest Qualification -->
+            <div class="form-group">
+              <label for="cfQualification" class="form-label">
+                Highest Academic Qualification <span class="required">*</span>
+              </label>
+              <div class="input-wrap">
+                <span class="input-icon"><i class="fas fa-graduation-cap"></i></span>
+                <select id="cfQualification" name="qualification" class="form-input form-select" required>
+                  <option value="">-- Select qualification --</option>
+                  <option value="waec">WAEC / SSCE</option>
+                  <option value="nd">National Diploma (ND)</option>
+                  <option value="hnd">Higher National Diploma (HND)</option>
+                  <option value="bsc">Bachelor's Degree (B.Sc / B.A / B.Ed)</option>
+                  <option value="pgd">Postgraduate Diploma (PGD)</option>
+                  <option value="msc">Master's Degree (M.Sc / M.A / M.Ed)</option>
+                  <option value="phd">Doctorate (PhD)</option>
+                </select>
+              </div>
+              <p class="field-error" id="cfQualificationError"></p>
+            </div>
+
+            <!-- Availability -->
+            <div class="form-group">
+              <label class="form-label">
+                Availability <span class="required">*</span>
+              </label>
+              <!--
+                Checkbox group for availability.
+                Unlike radio buttons (pick ONE), checkboxes let users pick MULTIPLE.
+                All four share the same name="availability[]"
+                The [] in the name is a convention that tells the backend
+                to treat this as an array of selected values.
+              -->
+              <div class="checkbox-options">
+                <label class="check-option">
+                  <input type="checkbox" name="availability[]" value="weekday-morning">
+                  <span class="check-option-box"></span>
+                  <span>Weekday Mornings</span>
+                </label>
+                <label class="check-option">
+                  <input type="checkbox" name="availability[]" value="weekday-afternoon">
+                  <span class="check-option-box"></span>
+                  <span>Weekday Afternoons</span>
+                </label>
+                <label class="check-option">
+                  <input type="checkbox" name="availability[]" value="weekday-evening">
+                  <span class="check-option-box"></span>
+                  <span>Weekday Evenings</span>
+                </label>
+                <label class="check-option">
+                  <input type="checkbox" name="availability[]" value="weekends">
+                  <span class="check-option-box"></span>
+                  <span>Weekends</span>
+                </label>
+              </div>
+              <p class="field-error" id="cfAvailabilityError"></p>
+            </div>
+
+            <!-- Cover Letter / Bio -->
+            <div class="form-group">
+              <label for="cfBio" class="form-label">
+                Brief Introduction / Cover Letter <span class="required">*</span>
+              </label>
+              <!--
+                <textarea> is a multi-line text input.
+                rows="5" suggests how tall the box should be (CSS can override).
+                resize="vertical" (set in CSS) lets users drag to make it taller.
+              -->
+              <textarea
+                id="cfBio"
+                name="bio"
+                class="form-input form-textarea"
+                placeholder="Tell us about yourself, your teaching philosophy, and why you want to join TSA... (minimum 100 characters)"
+                required
+                minlength="100"
+              ></textarea>
+              <div class="char-count">
+                <span id="charCount">0</span> / 100 minimum characters
+              </div>
+              <p class="field-error" id="cfBioError"></p>
+            </div>
+
+            <!-- CV Upload -->
+            <div class="form-group">
+              <label for="cfCV" class="form-label">
+                Upload Your CV <span class="required">*</span>
+              </label>
+              <p class="field-hint">Accepted formats: PDF, DOC, DOCX — Maximum size: 5MB</p>
+
+              <!--
+                FILE INPUT
+                type="file" shows a "Choose file" button.
+                accept=".pdf,.doc,.docx" — filters which files the user can pick.
+                Note: accept is just a HINT to the file browser — it doesn't block
+                other files. We MUST also validate the file type in JavaScript.
+              -->
+              <div class="file-upload-wrap" id="fileUploadWrap">
+                <input
+                  type="file"
+                  id="cfCV"
+                  name="cv"
+                  class="file-input"
+                  accept=".pdf,.doc,.docx"
+                  required
+                >
+                <!--
+                  We hide the default ugly browser file input and
+                  build a custom styled upload zone instead.
+                  The custom zone below is what the user SEES.
+                  Clicking it triggers the hidden file input via JavaScript.
+                -->
+                <div class="file-upload-ui" id="fileUploadUI">
+                  <div class="file-upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                  </div>
+                  <div class="file-upload-text">
+                    <p class="file-upload-main">Click to upload your CV</p>
+                    <p class="file-upload-sub">or drag and drop here</p>
+                  </div>
+                </div>
+
+                <!-- Shown AFTER a file is selected -->
+                <div class="file-selected" id="fileSelected" style="display:none;">
+                  <i class="fas fa-file-alt file-selected-icon"></i>
+                  <div class="file-selected-info">
+                    <p class="file-selected-name" id="fileSelectedName"></p>
+                    <p class="file-selected-size" id="fileSelectedSize"></p>
+                  </div>
+                  <button type="button" class="file-remove" id="fileRemove" aria-label="Remove file">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <p class="field-error" id="cfCVError"></p>
+            </div>
+
+            <!-- Terms -->
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="cfTerms" name="terms" required>
+                <span class="checkmark"></span>
+                <span class="checkbox-text">
+                  I confirm that all information provided is accurate and I consent
+                  to TSA storing my application data for recruitment purposes.
+                </span>
+              </label>
+              <p class="field-error" id="cfTermsError"></p>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-primary btn-full" id="careerSubmitBtn">
+              <span class="btn-text">
+                <i class="fas fa-paper-plane"></i> Submit Application
+              </span>
+              <span class="btn-loading" style="display:none;">
+                <i class="fas fa-spinner fa-spin"></i> Submitting...
+              </span>
+            </button>
+
+          </form>
+
+          <!-- ============================================================
+               SUCCESS MESSAGE
+          ============================================================ -->
+          <div class="success-message" id="careerSuccess" style="display:none;">
+            <div class="success-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Application Submitted!</h2>
+            <p>Thank you, <strong id="careerSuccessName"></strong>! Your application has been received.</p>
+            <div class="success-notice">
+              <i class="fas fa-clock"></i>
+              <div>
+                <strong>What happens next?</strong>
+                <p>Our admin team will review your application and CV. If shortlisted, we will contact you at the email provided within 3–5 business days.</p>
+              </div>
+            </div>
+            <div class="success-actions">
+              <a href="../index.html" class="btn btn-primary">
+                <i class="fas fa-home"></i> Back to Home
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="../images/logo.jpeg" alt="TSA Logo" class="footer-logo">
+          <p class="footer-tagline">Knowledge Without Barriers, Potential Without Limits.</p>
+          <div class="footer-socials">
+            <a href="https://wa.me/2349041251514" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://youtube.com/@thesnoogumsacademy?si=I5cBnfzldprnh5yx" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="https://www.instagram.com/invites/contact/?utm_source=ig_contact_invite&utm_medium=copy_link&utm_content=ksznhg3" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="team.html">Our Team</a></li>
+            <li><a href="careers.html">Careers</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Students</h4>
+          <ul>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="#">Student Dashboard</a></li>
+            <li><a href="#">Payment Info</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact Us</h4>
+          <p><i class="fas fa-map-marker-alt"></i> Gwarimpa Estate, 1st Avenue, Abuja, FCT</p>
+          <p><i class="fas fa-envelope"></i> info.snoogums@gmail.com</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 The Snoogums Academy. All rights reserved.</p>
+        <p>Built with ❤️ for learners everywhere.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/careers.js"></script>
+</body>
+</html>

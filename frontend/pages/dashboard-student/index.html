@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | The Snoogums Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="student.css">
+</head>
+<body>
+
+  <!-- Loading screen -->
+  <div class="auth-loading" id="authLoading">
+    <div class="auth-loading-inner">
+      <img src="../../images/logo.jpeg" alt="TSA Logo">
+      <div class="loading-spinner"></div>
+      <p>Loading your dashboard...</p>
+    </div>
+  </div>
+
+  <div class="dashboard-wrapper" id="dashboardWrapper" style="display:none;">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="../../images/logo.jpeg" alt="TSA Logo" class="sidebar-logo">
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-name">Snoogums</span>
+          <span class="sidebar-brand-role">Student Portal</span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar" id="sidebarAvatar">S</div>
+        <div class="sidebar-profile-info">
+          <strong id="sidebarName">Student</strong>
+          <span id="sidebarStatus">Checking status...</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <p class="sidebar-nav-label">My Learning</p>
+        <a href="#" class="sidebar-link active" data-section="overview">
+          <i class="fas fa-home"></i><span>Overview</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="courses">
+          <i class="fas fa-book"></i><span>My Courses</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="live">
+          <i class="fas fa-video"></i><span>Live Classes</span>
+          <span class="live-indicator" id="liveIndicator" style="display:none;">LIVE</span>
+        </a>
+        <p class="sidebar-nav-label">Account</p>
+        <a href="#" class="sidebar-link" data-section="payment">
+          <i class="fas fa-credit-card"></i><span>Payment</span>
+        </a>
+        <a href="#" class="sidebar-link" data-section="profile">
+          <i class="fas fa-user"></i><span>My Profile</span>
+        </a>
+        <a href="#" class="sidebar-link" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <button class="header-hamburger" id="headerHamburger"><i class="fas fa-bars"></i></button>
+          <span id="headerTitle">Overview</span>
+        </div>
+        <div class="header-right">
+          <div class="header-admin">
+            <div class="header-avatar" id="headerAvatar">S</div>
+            <span id="headerName">Student</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- OVERVIEW SECTION -->
+      <section class="dash-section active" id="section-overview">
+        <div class="section-header">
+          <h2 id="welcomeMsg">Welcome back!</h2>
+          <p>Here's your learning summary</p>
+        </div>
+
+        <!-- Payment pending notice -->
+        <div class="payment-notice" id="paymentNotice" style="display:none;">
+          <div class="payment-notice-icon"><i class="fas fa-lock"></i></div>
+          <div class="payment-notice-text">
+            <strong>Your account is pending payment confirmation</strong>
+            <p>Once our admin confirms your payment, your courses will be unlocked automatically.</p>
+          </div>
+          <a href="#" class="dash-btn dash-btn-primary" data-section="payment">
+            <i class="fas fa-credit-card"></i> Pay Now
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+          <div class="stat-card stat-pink">
+            <div class="stat-card-icon"><i class="fas fa-book"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statCourses">0</span>
+              <span class="stat-card-label">Enrolled Courses</span>
+            </div>
+          </div>
+          <div class="stat-card stat-gold">
+            <div class="stat-card-icon"><i class="fas fa-video"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statLive">0</span>
+              <span class="stat-card-label">Upcoming Classes</span>
+            </div>
+          </div>
+          <div class="stat-card stat-green">
+            <div class="stat-card-icon"><i class="fas fa-check-circle"></i></div>
+            <div class="stat-card-info">
+              <span class="stat-card-num" id="statStatus">—</span>
+              <span class="stat-card-label">Account Status</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upcoming live class card -->
+        <div class="dash-card" id="upcomingLiveCard" style="display:none;">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-video"></i> Next Live Class</h3>
+          </div>
+          <div class="dash-card-body" id="upcomingLiveBody"></div>
+        </div>
+
+        <!-- Quick course links -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-book"></i> My Courses</h3>
+            <a href="#" class="dash-card-link" data-section="courses">View all</a>
+          </div>
+          <div class="dash-card-body" id="overviewCourses">
+            <div class="loading-rows"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COURSES SECTION -->
+      <section class="dash-section" id="section-courses">
+        <div class="section-header">
+          <h2>My Courses</h2>
+          <p>Your enrolled courses at TSA</p>
+        </div>
+        <div class="courses-grid" id="studentCoursesGrid">
+          <div class="loading-rows"></div>
+        </div>
+      </section>
+
+      <!-- LIVE CLASSES SECTION -->
+      <section class="dash-section" id="section-live">
+        <div class="section-header">
+          <h2>Live Classes</h2>
+          <p>Join your scheduled live classes here</p>
+        </div>
+        <div class="live-classes-list" id="liveClassesList">
+          <div class="loading-rows"></div>
+        </div>
+      </section>
+
+      <!-- PAYMENT SECTION -->
+      <section class="dash-section" id="section-payment">
+        <div class="section-header">
+          <h2>Payment</h2>
+          <p>Make a payment or view your payment history</p>
+        </div>
+
+        <!-- Programme-based payment -->
+        <div class="dash-card" style="margin-bottom:1.5rem;">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-graduation-cap"></i> My Programmes</h3>
+          </div>
+          <div class="dash-card-body" id="myProgrammesBody">
+            <div class="loading-rows"></div>
+          </div>
+        </div>
+
+        <!-- Payment options -->
+        <div class="payment-options" id="paymentOptions">
+          <div class="payment-option-card" id="paystackCard">
+            <div class="payment-option-icon" style="background: linear-gradient(135deg, #00C3F7, #0070F3);">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <h3>Pay Online</h3>
+            <p>Pay instantly with card, bank transfer, or USSD via Paystack</p>
+            <div style="margin-bottom:1rem;">
+              <label style="font-size:0.8rem;font-weight:700;color:var(--text-light);display:block;margin-bottom:0.4rem;">Contacts per week</label>
+              <select id="contactsPerWeek" class="pay-input" onchange="calculateTotal()">
+                <option value="1">1 contact per week</option>
+                <option value="2">2 contacts per week</option>
+                <option value="3">3 contacts per week</option>
+                <option value="4">4 contacts per week</option>
+                <option value="5">5 contacts per week</option>
+              </select>
+            </div>
+            <div id="totalDisplay" style="display:none;margin-bottom:1rem;padding:0.75rem;background:rgba(208,0,111,0.08);border-radius:8px;border:1px solid rgba(208,0,111,0.2);">
+              <div style="font-size:0.8rem;color:var(--text-light);">Total per week</div>
+              <div id="totalAmount" style="font-size:1.4rem;font-weight:900;color:var(--pink);font-family:var(--font-head);">₦0</div>
+            </div>
+            <button class="dash-btn dash-btn-primary" id="paystackBtn" onclick="payWithPaystack()" style="width:100%;justify-content:center;">
+              <i class="fas fa-bolt"></i> Pay with Paystack
+            </button>
+          </div>
+
+          <div class="payment-option-card">
+            <div class="payment-option-icon" style="background: linear-gradient(135deg, #38A169, #276749);">
+              <i class="fas fa-university"></i>
+            </div>
+            <h3>Manual Bank Transfer</h3>
+            <p>Transfer to our bank account and submit your payment details below</p>
+
+            <!-- Bank details -->
+            <div class="bank-details">
+              <p><strong>Bank:</strong> First Bank Nigeria</p>
+              <p><strong>Account Name:</strong> The Snoogums Academy</p>
+              <p><strong>Account Number:</strong> 0123456789</p>
+            </div>
+
+            <!-- Manual payment form -->
+            <form id="manualPaymentForm" style="margin-top:1rem;">
+              <div class="pay-form-group">
+                <label>Amount Paid (₦)</label>
+                <input type="number" id="manualAmount" class="pay-input" placeholder="e.g. 25000" required>
+              </div>
+              <div class="pay-form-group">
+                <label>Your Bank Name</label>
+                <input type="text" id="manualBank" class="pay-input" placeholder="e.g. GTBank" required>
+              </div>
+              <div class="pay-form-group">
+                <label>Account Name Used</label>
+                <input type="text" id="manualAccount" class="pay-input" placeholder="Name on your account" required>
+              </div>
+              <div class="pay-form-group">
+                <label>Transfer Date</label>
+                <input type="date" id="manualDate" class="pay-input" required>
+              </div>
+              <p class="pay-msg" id="payMsg"></p>
+              <button type="submit" class="dash-btn dash-btn-primary" style="width:100%;justify-content:center;">
+                <i class="fas fa-paper-plane"></i> Submit Payment Details
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Payment history -->
+        <div class="dash-card" style="margin-top:1.5rem;">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-history"></i> Payment History</h3>
+          </div>
+          <div class="dash-card-body table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>Amount</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="paymentHistoryBody">
+                <tr><td colspan="4" class="table-loading">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROFILE SECTION -->
+      <section class="dash-section" id="section-profile">
+        <div class="section-header">
+          <h2>My Profile</h2>
+          <p>Manage your account details</p>
+        </div>
+
+        <div class="dash-card settings-card">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-user"></i> Account Information</h3>
+          </div>
+          <div class="dash-card-body" id="profileInfo">
+            <div class="loading-rows"></div>
+          </div>
+        </div>
+
+        <div class="dash-card settings-card" style="margin-top:1rem;">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-lock"></i> Change Password</h3>
+          </div>
+          <div class="dash-card-body">
+            <form id="changePasswordForm">
+              <div class="settings-form-group">
+                <label>Current Password</label>
+                <input type="password" id="currentPassword" class="settings-input" placeholder="Current password">
+              </div>
+              <div class="settings-form-group">
+                <label>New Password</label>
+                <input type="password" id="newPassword" class="settings-input" placeholder="New password (min 8 characters)">
+              </div>
+              <div class="settings-form-group">
+                <label>Confirm New Password</label>
+                <input type="password" id="confirmNewPassword" class="settings-input" placeholder="Repeat new password">
+              </div>
+              <p class="settings-msg" id="passwordMsg"></p>
+              <button type="submit" class="dash-btn dash-btn-primary">
+                <i class="fas fa-save"></i> Update Password
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- LIVE CLASS MODAL (Jitsi embed) -->
+  <div class="modal-overlay" id="jitsiModal">
+    <div class="modal-box jitsi-modal-box">
+      <div class="jitsi-header">
+        <h3 id="jitsiClassName">Live Class</h3>
+        <button class="modal-close" id="jitsiClose"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="jitsiContainer" class="jitsi-container"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle toast-icon" id="toastIcon"></i>
+    <span id="toastMessage"></span>
+  </div>
+
+  <script src="student.js"></script>
+</body>
+</html>
