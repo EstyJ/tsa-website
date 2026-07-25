@@ -373,9 +373,72 @@
 
         <div class="section-header">
           <h2>Course Management</h2>
-          <p>Manage all courses offered at TSA</p>
+          <p>Add and manage all courses offered at TSA</p>
         </div>
 
+        <!-- Add New Course Form -->
+        <div class="dash-card" style="margin-bottom:1.5rem;">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-plus-circle"></i> Add New Course</h3>
+            <button class="dash-btn dash-btn-info" onclick="toggleCourseForm()">
+              <i class="fas fa-chevron-down" id="courseFormToggleIcon"></i> Toggle Form
+            </button>
+          </div>
+          <div class="dash-card-body" id="courseFormBody" style="display:none;">
+            <form id="addCourseForm" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="settings-form-group" style="grid-column:1/-1;">
+                <label>Course Title <span style="color:var(--pink)">*</span></label>
+                <input type="text" id="cTitle" class="settings-input" placeholder="e.g. Mathematics Mastery">
+              </div>
+              <div class="settings-form-group">
+                <label>Category <span style="color:var(--pink)">*</span></label>
+                <select id="cCategory" class="settings-input">
+                  <option value="">-- Select Category --</option>
+                  <option value="coding">Coding</option>
+                  <option value="mathematics">Mathematics</option>
+                  <option value="science">Science</option>
+                  <option value="english">English</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="settings-form-group">
+                <label>Level</label>
+                <select id="cLevel" class="settings-input">
+                  <option value="all">All Levels</option>
+                  <option value="beginner">Beginner</option>
+                  <option value="intermediate">Intermediate</option>
+                  <option value="advanced">Advanced</option>
+                </select>
+              </div>
+              <div class="settings-form-group">
+                <label>Duration (weeks)</label>
+                <input type="number" id="cDuration" class="settings-input" placeholder="e.g. 8" min="1">
+              </div>
+              <div class="settings-form-group">
+                <label>Number of Lessons</label>
+                <input type="number" id="cLessons" class="settings-input" placeholder="e.g. 24" min="1">
+              </div>
+              <div class="settings-form-group">
+                <label>Assign Teacher</label>
+                <select id="cInstructor" class="settings-input">
+                  <option value="">-- Select Teacher (optional) --</option>
+                </select>
+              </div>
+              <div class="settings-form-group" style="grid-column:1/-1;">
+                <label>Description</label>
+                <textarea id="cDescription" class="settings-input" rows="3" placeholder="Brief course description..." style="resize:vertical;"></textarea>
+              </div>
+              <div style="grid-column:1/-1;">
+                <p class="settings-msg" id="courseMsg"></p>
+                <button type="submit" class="dash-btn dash-btn-primary">
+                  <i class="fas fa-plus"></i> Add Course
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Courses Table -->
         <div class="dash-card">
           <div class="dash-card-body table-wrap">
             <table class="dash-table">

@@ -5,7 +5,7 @@
   ============================================================
 */
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://tsa-website-8rqt.onrender.com/api';
 
 /* All TSA programmes by category */
 const PROGRAMMES = {
@@ -24,6 +24,10 @@ const PROGRAMMES = {
     { id: 10, name: 'WAEC/NECO 4 Subjects',     duration: '1.5 hrs', price: 9500 },
     { id: 11, name: 'WAEC/NECO 6 Subjects',     duration: '1.5 hrs', price: 9000 },
     { id: 12, name: 'JAMB Standard',             duration: '1.5 hrs', price: 9000 },
+    { id: 17, name: 'IGCSE',                     duration: '1 hr',    price: 8500 },
+    { id: 18, name: 'GCSE',                      duration: '1 hr',    price: 8500 },
+    { id: 19, name: 'IELTS',                     duration: '1 hr',    price: 8500 },
+    { id: 20, name: 'Checkpoint',                duration: '1 hr',    price: 8500 },
   ],
   international: [
     { id: 13, name: 'GCSE/IGCSE 1 Subject', duration: '1.5 hrs', price: 10000 },

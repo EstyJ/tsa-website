@@ -6,7 +6,7 @@
   ============================================================
 */
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://tsa-website-8rqt.onrender.com/api';
 
 const careerForm        = document.getElementById('careerForm');
 const fileInput         = document.getElementById('cfCV');

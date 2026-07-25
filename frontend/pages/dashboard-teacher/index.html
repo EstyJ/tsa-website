@@ -54,6 +54,9 @@
         <a href="#" class="sidebar-link" data-section="attendance">
           <i class="fas fa-clipboard-check"></i><span>Attendance</span>
         </a>
+        <a href="#" class="sidebar-link" data-section="content">
+          <i class="fas fa-upload"></i><span>Upload Content</span>
+        </a>
         <p class="sidebar-nav-label">Account</p>
         <a href="#" class="sidebar-link" data-section="profile">
           <i class="fas fa-user"></i><span>My Profile</span>
@@ -165,6 +168,77 @@
               </thead>
               <tbody id="attendanceBody">
                 <tr><td colspan="4" class="table-loading">Loading attendance...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTENT UPLOAD -->
+      <section class="dash-section" id="section-content">
+        <div class="section-header">
+          <h2>Upload Content</h2>
+          <p>Upload videos and slides for your students</p>
+        </div>
+
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-upload"></i> Upload New Content</h3>
+          </div>
+          <div class="dash-card-body">
+            <form id="uploadContentForm">
+              <div class="settings-form-group">
+                <label>Content Title</label>
+                <input type="text" id="contentTitle" class="settings-input" placeholder="e.g. Week 3 — Algebra Introduction">
+              </div>
+              <div class="settings-form-group">
+                <label>Content Type</label>
+                <select id="contentType" class="settings-input">
+                  <option value="video">Video</option>
+                  <option value="slides">Slides / Presentation</option>
+                  <option value="document">Document / PDF</option>
+                </select>
+              </div>
+              <div class="settings-form-group">
+                <label>Description (optional)</label>
+                <textarea id="contentDesc" class="settings-input" rows="3" placeholder="Brief description of this content..." style="resize:vertical;"></textarea>
+              </div>
+              <div class="settings-form-group">
+                <label>Upload File</label>
+                <div class="content-upload-area" id="contentUploadArea">
+                  <input type="file" id="contentFile" accept=".mp4,.mov,.avi,.pdf,.ppt,.pptx,.doc,.docx" style="display:none;">
+                  <div class="content-upload-ui" id="contentUploadUI" onclick="document.getElementById('contentFile').click()">
+                    <i class="fas fa-cloud-upload-alt" style="font-size:2rem;color:var(--purple);margin-bottom:0.5rem;display:block;"></i>
+                    <strong>Click to upload</strong>
+                    <p style="font-size:0.8rem;color:var(--text-light);margin-top:0.3rem;">MP4, MOV, PDF, PPT, PPTX, DOC — Max 100MB</p>
+                  </div>
+                  <div class="content-file-selected" id="contentFileSelected" style="display:none;">
+                    <i class="fas fa-file-check" style="color:var(--green);"></i>
+                    <span id="contentFileName"></span>
+                    <button type="button" onclick="clearContentFile()" style="background:none;border:none;color:var(--red);cursor:pointer;margin-left:auto;"><i class="fas fa-times"></i></button>
+                  </div>
+                </div>
+              </div>
+              <p class="settings-msg" id="contentMsg"></p>
+              <button type="submit" class="dash-btn dash-btn-primary">
+                <i class="fas fa-upload"></i> Upload Content
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Uploaded content list -->
+        <div class="dash-card" style="margin-top:1rem;">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-folder-open"></i> My Uploaded Content</h3>
+          </div>
+          <div class="dash-card-body table-wrap">
+            <table class="dash-table">
+              <thead>
+                <tr><th>Title</th><th>Type</th><th>Uploaded</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="contentTableBody">
+                <tr><td colspan="4" class="table-loading">No content uploaded yet</td></tr>
               </tbody>
             </table>
           </div>

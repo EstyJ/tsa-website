@@ -13,7 +13,7 @@
   ============================================================
 */
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = 'https://tsa-website-8rqt.onrender.com/api';
 
 function getAuthHeaders() {
   const token = localStorage.getItem('tsa_token');
@@ -84,7 +84,7 @@ function loadSection(name) {
   const titles = { overview: 'Overview', classes: 'My Live Classes', students: 'My Students', attendance: 'Attendance', profile: 'My Profile' };
   document.getElementById('headerTitle').textContent = titles[name] || name;
 
-  const loaders = { overview: loadOverview, classes: loadClasses, students: loadStudents, attendance: loadAttendance, profile: loadProfile };
+  const loaders = { overview: loadOverview, classes: loadClasses, students: loadStudents, attendance: loadAttendance, content: loadContent, profile: loadProfile };
   if (loaders[name]) loaders[name]();
 }
 
@@ -413,6 +413,114 @@ document.getElementById('changePasswordForm').addEventListener('submit', async f
 function formatDate(dateStr) {
   if (!dateStr) return '—';
   return new Date(dateStr).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+
+/* ============================================================
+   CONTENT UPLOAD
+============================================================ */
+document.getElementById('contentFile').addEventListener('change', function() {
+  if (this.files && this.files[0]) {
+    const file = this.files[0];
+    document.getElementById('contentUploadUI').style.display    = 'none';
+    document.getElementById('contentFileSelected').style.display = 'flex';
+    document.getElementById('contentFileName').textContent = `${file.name} (${(file.size/1024/1024).toFixed(1)}MB)`;
+  }
+});
+
+function clearContentFile() {
+  document.getElementById('contentFile').value = '';
+  document.getElementById('contentUploadUI').style.display    = 'flex';
+  document.getElementById('contentFileSelected').style.display = 'none';
+}
+
+window.clearContentFile = clearContentFile;
+
+document.getElementById('uploadContentForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const msg   = document.getElementById('contentMsg');
+  const title = document.getElementById('contentTitle').value.trim();
+  const type  = document.getElementById('contentType').value;
+  const file  = document.getElementById('contentFile').files[0];
+
+  if (!title) { msg.textContent = 'Please enter a title'; msg.className = 'settings-msg error'; return; }
+  if (!file)  { msg.textContent = 'Please select a file to upload'; msg.className = 'settings-msg error'; return; }
+
+  if (file.size > 100 * 1024 * 1024) {
+    msg.textContent = 'File too large. Maximum size is 100MB';
+    msg.className   = 'settings-msg error';
+    return;
+  }
+
+  msg.textContent = '⏳ Uploading... please wait';
+  msg.className   = 'settings-msg';
+
+  try {
+    const formData = new FormData();
+    formData.append('title',       title);
+    formData.append('type',        type);
+    formData.append('description', document.getElementById('contentDesc').value.trim());
+    formData.append('content',     file);
+
+    const token    = localStorage.getItem('tsa_token');
+    const response = await fetch(`${API_BASE}/teacher/content`, {
+      method:  'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body:    formData
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      msg.textContent = '✅ Content uploaded successfully!';
+      msg.className   = 'settings-msg success';
+      this.reset();
+      clearContentFile();
+      showToast('Content uploaded!');
+      loadContent();
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (error) {
+    msg.textContent = error.message;
+    msg.className   = 'settings-msg error';
+  }
+});
+
+async function loadContent() {
+  const tbody = document.getElementById('contentTableBody');
+  if (!tbody) return;
+
+  try {
+    const response = await fetch(`${API_BASE}/teacher/content`, { headers: getAuthHeaders() });
+
+    if (!response.ok) {
+      tbody.innerHTML = '<tr><td colspan="4" class="table-loading">No content uploaded yet</td></tr>';
+      return;
+    }
+
+    const result = await response.json();
+
+    if (!result.data || result.data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" class="table-loading">No content uploaded yet</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = result.data.map(item => `
+      <tr>
+        <td><strong>${item.title}</strong>${item.description ? `<div style="font-size:0.78rem;color:var(--text-light)">${item.description}</div>` : ''}</td>
+        <td><span class="pill pill-pending">${item.type}</span></td>
+        <td>${formatDate(item.created_at)}</td>
+        <td>
+          <a href="${API_BASE.replace('/api','')}/${item.file_path}" target="_blank" class="dash-btn dash-btn-info">
+            <i class="fas fa-download"></i> View
+          </a>
+        </td>
+      </tr>`).join('');
+
+  } catch (error) {
+    tbody.innerHTML = '<tr><td colspan="4" class="table-loading">Could not load content</td></tr>';
+  }
 }
 
 console.log('%c 📖 Teacher Dashboard Loaded ', 'background:#6B0FA8; color:white; padding:4px 8px; border-radius:4px;');
