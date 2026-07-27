@@ -934,4 +934,109 @@ if (scheduleForm) {
   });
 }
 
+
+/* ============================================================
+   COURSE MANAGEMENT
+============================================================ */
+function toggleCourseForm() {
+  const body = document.getElementById('courseFormBody');
+  const icon = document.getElementById('courseFormToggleIcon');
+  if (!body) return;
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  icon.className = isHidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+  if (isHidden) populateCourseTeachers();
+}
+
+window.toggleCourseForm = toggleCourseForm;
+
+async function populateCourseTeachers() {
+  try {
+    const res    = await fetch(`${API_BASE}/admin/users?role=teacher`, { headers: getAuthHeaders() });
+    const result = await res.json();
+    const sel    = document.getElementById('cInstructor');
+    if (sel && result.data) {
+      sel.innerHTML = '<option value="">-- Select Teacher (optional) --</option>' +
+        result.data.map(t => `<option value="${t.id}">${t.first_name} ${t.last_name}</option>`).join('');
+    }
+  } catch (e) { console.error('Load teachers error:', e); }
+}
+
+const addCourseForm = document.getElementById('addCourseForm');
+if (addCourseForm) {
+  addCourseForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const msg = document.getElementById('courseMsg');
+    const title      = document.getElementById('cTitle').value.trim();
+    const category   = document.getElementById('cCategory').value;
+    const level      = document.getElementById('cLevel').value;
+    const duration   = document.getElementById('cDuration').value;
+    const lessons    = document.getElementById('cLessons').value;
+    const instructor = document.getElementById('cInstructor').value;
+    const desc       = document.getElementById('cDescription').value.trim();
+
+    if (!title || !category) {
+      msg.textContent = 'Title and category are required';
+      msg.className   = 'settings-msg error';
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/admin/courses`, {
+        method:  'POST',
+        headers: getAuthHeaders(),
+        body:    JSON.stringify({
+          title, category, level, description: desc,
+          durationWeeks: parseInt(duration) || 0,
+          lessonCount:   parseInt(lessons)  || 0,
+          instructorId:  instructor || null
+        })
+      });
+      const result = await response.json();
+      if (result.success) {
+        msg.textContent = '✅ Course added successfully!';
+        msg.className   = 'settings-msg success';
+        addCourseForm.reset();
+        showToast('Course added!');
+        loadCourses();
+      } else { throw new Error(result.message); }
+    } catch (error) {
+      msg.textContent = error.message;
+      msg.className   = 'settings-msg error';
+    }
+  });
+}
+
+async function loadCourses() {
+  const tbody = document.getElementById('coursesTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="6" class="table-loading">Loading...</td></tr>';
+
+  try {
+    const response = await fetch(`${API_BASE}/admin/courses`, { headers: getAuthHeaders() });
+    const result   = await response.json();
+
+    if (!result.success || result.data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" class="table-loading">No courses yet. Add one above!</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = result.data.map(c => `
+      <tr>
+        <td><strong>${c.title}</strong></td>
+        <td>${c.category}</td>
+        <td>${c.level}</td>
+        <td>${c.first_name ? `${c.first_name} ${c.last_name}` : '—'}</td>
+        <td><span class="pill ${c.is_active ? 'pill-active' : 'pill-inactive'}">${c.is_active ? 'Active' : 'Inactive'}</span></td>
+        <td>
+          <button class="dash-btn dash-btn-info" onclick="toggleCourseForm()">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+        </td>
+      </tr>`).join('');
+  } catch (error) {
+    tbody.innerHTML = '<tr><td colspan="6" class="table-loading">Failed to load courses</td></tr>';
+  }
+}
+
 console.log('%c 🛡️ Admin Dashboard Loaded ', 'background:#D0006F; color:white; padding:4px 8px; border-radius:4px;');
