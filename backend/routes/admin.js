@@ -20,9 +20,14 @@ const {
   getMessages,
   markMessageRead,
   getCourses,
+  createCourse,
   createTeacherAccount,
   scheduleLiveClass,
-  getLiveClasses
+  getLiveClasses,
+  createStudentAccount,
+  getStudentProgrammes,
+  postAnnouncement,
+  getAnnouncements
 } = require('../controllers/adminController');
 
 // All admin routes require login + admin role
@@ -39,7 +44,12 @@ router.patch('/applications/:id',       updateApplication);
 router.get('/messages',                 getMessages);
 router.patch('/messages/:id/read',      markMessageRead);
 router.get('/courses',                  getCourses);
+router.post('/courses',                 createCourse);
 router.post('/applications/:applicationId/create-teacher', createTeacherAccount);
+router.post('/students/create',             createStudentAccount);
+router.get('/students/:id/programmes',      getStudentProgrammes);
+router.post('/announcements',               postAnnouncement);
+router.get('/announcements',                getAnnouncements);
 router.get('/live-classes',   getLiveClasses);
 router.post('/live-classes',  scheduleLiveClass);
 

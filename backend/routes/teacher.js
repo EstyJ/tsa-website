@@ -11,7 +11,10 @@ const {
   getClasses,
   clockIn,
   getStudents,
-  getAttendance
+  getAttendance,
+  uploadContent,
+  getContent,
+  postAnnouncement
 } = require('../controllers/teacherController');
 
 router.use(protect, restrictTo('teacher'));
@@ -20,5 +23,8 @@ router.get('/classes',                    getClasses);
 router.patch('/classes/:id/clockin',      clockIn);
 router.get('/students',                   getStudents);
 router.get('/attendance',                 getAttendance);
+router.post('/content',                   require('../middleware/upload').uploadContent, uploadContent);
+router.get('/content',                    getContent);
+router.post('/announcements',             postAnnouncement);
 
 module.exports = router;

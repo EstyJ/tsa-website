@@ -105,3 +105,55 @@ exports.uploadCV = (req, res, next) => {
     next();
   });
 };
+
+
+/* Content upload (videos, slides, documents) for teachers */
+const contentStorage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    const dir = path.join(__dirname, '../uploads/content');
+    fs.mkdirSync(dir, { recursive: true });
+    callback(null, dir);
+  },
+  filename: (req, file, callback) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const extension = path.extname(file.originalname).toLowerCase();
+    callback(null, `content-${uniqueSuffix}${extension}`);
+  }
+});
+
+const contentFileFilter = (req, file, callback) => {
+  const allowedMimes = [
+    'video/mp4', 'video/quicktime', 'video/x-msvideo',
+    'application/pdf',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+  if (allowedMimes.includes(file.mimetype)) {
+    callback(null, true);
+  } else {
+    callback(new Error('Only video, PDF, PPT, and Word files are allowed'), false);
+  }
+};
+
+const uploadContentMulter = multer({
+  storage: contentStorage,
+  fileFilter: contentFileFilter,
+  limits: { fileSize: 100 * 1024 * 1024 } // 100MB
+});
+
+exports.uploadContent = (req, res, next) => {
+  uploadContentMulter.single('content')(req, res, (error) => {
+    if (error instanceof multer.MulterError) {
+      if (error.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ success: false, message: 'File too large. Maximum size is 100MB.' });
+      }
+      return res.status(400).json({ success: false, message: `Upload error: ${error.message}` });
+    }
+    if (error) {
+      return res.status(400).json({ success: false, message: error.message });
+    }
+    next();
+  });
+};

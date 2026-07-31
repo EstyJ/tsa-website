@@ -486,3 +486,166 @@ exports.scheduleLiveClass = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
+
+/* ============================================================
+   CREATE COURSE
+   Admin adds a new course from the dashboard.
+============================================================ */
+exports.createCourse = async (req, res) => {
+  try {
+    const { title, description, category, level, durationWeeks, lessonCount, instructorId } = req.body;
+
+    if (!title || !category) {
+      return res.status(400).json({ success: false, message: 'Title and category are required' });
+    }
+
+    // Generate slug from title
+    const slug = title.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') +
+      '-' + Date.now();
+
+    const [result] = await pool.query(
+      `INSERT INTO courses
+        (title, slug, description, category, level, duration_weeks, lesson_count, instructor_id, is_active)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, TRUE)`,
+      [
+        title.trim(),
+        slug,
+        description || null,
+        category,
+        level || 'all',
+        durationWeeks || 0,
+        lessonCount || 0,
+        instructorId || null
+      ]
+    );
+
+    res.status(201).json({
+      success: true,
+      message: 'Course created successfully!',
+      data: { courseId: result.insertId }
+    });
+
+  } catch (error) {
+    console.error('Create course error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+
+/* ============================================================
+   CREATE STUDENT ACCOUNT (admin creates for student)
+============================================================ */
+exports.createStudentAccount = async (req, res) => {
+  try {
+    const { firstName, lastName, email, phone, password, category, programmes } = req.body;
+
+    if (!firstName || !lastName || !email || !password) {
+      return res.status(400).json({ success: false, message: 'Name, email and password are required' });
+    }
+
+    const bcrypt = require('bcryptjs');
+    const normalEmail  = email.toLowerCase().trim();
+
+    const [existing] = await pool.query('SELECT id FROM users WHERE email = ?', [normalEmail]);
+    if (existing.length > 0) {
+      return res.status(409).json({ success: false, message: 'An account with this email already exists' });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12);
+    const [result] = await pool.query(
+      `INSERT INTO users (first_name, last_name, email, phone, password_hash, role, is_active)
+       VALUES (?, ?, ?, ?, ?, 'student', TRUE)`,
+      [firstName.trim(), lastName.trim(), normalEmail, phone || null, passwordHash]
+    );
+
+    const newUserId = result.insertId;
+
+    // Save programmes if provided
+    if (programmes && programmes.length > 0) {
+      for (const prog of programmes) {
+        await pool.query(
+          `INSERT IGNORE INTO student_programmes (student_id, programme_id, status)
+           VALUES (?, ?, 'active')`,
+          [newUserId, prog.id]
+        );
+      }
+    }
+
+    res.status(201).json({
+      success: true,
+      message: `Student account created for ${firstName} ${lastName}`,
+      data: { studentId: newUserId }
+    });
+  } catch (error) {
+    console.error('Create student account error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/* ============================================================
+   GET STUDENT PROGRAMMES (what category + programmes a student has)
+============================================================ */
+exports.getStudentProgrammes = async (req, res) => {
+  try {
+    const [programmes] = await pool.query(
+      `SELECT sp.id, sp.status, sp.enrolled_at,
+              p.name, p.category, p.duration_per_contact, p.price_per_contact
+       FROM student_programmes sp
+       JOIN programmes p ON sp.programme_id = p.id
+       WHERE sp.student_id = ?`,
+      [req.params.id]
+    );
+    res.status(200).json({ success: true, data: programmes });
+  } catch (error) {
+    console.error('Get student programmes error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/* ============================================================
+   POST ANNOUNCEMENT
+   Admin posts to all, teachers post to their category
+============================================================ */
+exports.postAnnouncement = async (req, res) => {
+  try {
+    const { title, body, target } = req.body;
+
+    if (!title || !body) {
+      return res.status(400).json({ success: false, message: 'Title and message body are required' });
+    }
+
+    await pool.query(
+      `INSERT INTO announcements (title, body, posted_by, target)
+       VALUES (?, ?, ?, ?)`,
+      [title.trim(), body.trim(), req.user.id, target || 'all']
+    );
+
+    res.status(201).json({ success: true, message: 'Announcement posted! It will expire in 24 hours.' });
+  } catch (error) {
+    console.error('Post announcement error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/* ============================================================
+   GET ANNOUNCEMENTS (only non-expired ones)
+============================================================ */
+exports.getAnnouncements = async (req, res) => {
+  try {
+    const [announcements] = await pool.query(
+      `SELECT a.id, a.title, a.body, a.target, a.expires_at, a.created_at,
+              u.first_name, u.last_name, u.role
+       FROM announcements a
+       JOIN users u ON a.posted_by = u.id
+       WHERE a.expires_at > NOW()
+       ORDER BY a.created_at DESC`
+    );
+    res.status(200).json({ success: true, data: announcements });
+  } catch (error) {
+    console.error('Get announcements error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

@@ -94,7 +94,7 @@ app.use(helmet({
   else are still blocked.
 */
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://127.0.0.1:5500',
+  origin: ['https://thesnoogumsacademy.com', 'https://www.thesnoogumsacademy.com', 'https://tourmaline-lokum-1443ac.netlify.app', 'http://127.0.0.1:5500', process.env.FRONTEND_URL],
   credentials: true,
   /*
     credentials: true — allows the browser to send cookies and

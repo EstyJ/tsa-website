@@ -101,7 +101,7 @@ function loadSection(name) {
   const titles = { overview: 'Overview', courses: 'My Courses', live: 'Live Classes', payment: 'Payment', profile: 'My Profile' };
   document.getElementById('headerTitle').textContent = titles[name] || name;
 
-  const loaders = { overview: loadOverview, courses: loadCourses, live: loadLiveClasses, payment: loadPaymentSection, profile: loadProfile };
+  const loaders = { overview: loadOverview, courses: loadCourses, live: loadLiveClasses, announcements: loadAnnouncements, payment: loadPaymentSection, profile: loadProfile };
   if (loaders[name]) loaders[name]();
 }
 
@@ -646,6 +646,44 @@ window.calculateTotal  = calculateTotal;
 async function loadPaymentSection() {
   await loadMyProgrammes();
   await loadPaymentHistory();
+}
+
+
+/* ── ANNOUNCEMENTS ──────────────────────────────────────── */
+async function loadAnnouncements() {
+  const list = document.getElementById('studentAnnounceList');
+  if (!list) return;
+  list.innerHTML = '<div class="loading-rows"></div>';
+
+  try {
+    const response = await fetch(`${API_BASE}/student/announcements`, { headers: getAuthHeaders() });
+    const result   = response.ok ? await response.json() : { data: [] };
+    const items    = result.data || [];
+
+    if (items.length === 0) {
+      list.innerHTML = '<div class="dash-card"><div class="dash-card-body" style="text-align:center;padding:2rem;"><i class="fas fa-bullhorn" style="font-size:2rem;color:var(--border);display:block;margin-bottom:1rem;"></i><p style="color:var(--text-light);">No announcements at the moment. Check back soon!</p></div></div>';
+      return;
+    }
+
+    // Show badge
+    const badge = document.getElementById('announceBadge');
+    if (badge) badge.style.display = 'inline-block';
+
+    list.innerHTML = items.map(a => `
+      <div class="dash-card" style="margin-bottom:0.75rem;border-left:4px solid var(--gold);">
+        <div class="dash-card-body">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem;">
+            <strong style="font-family:var(--font-head);color:var(--text);font-size:0.95rem;">${a.title}</strong>
+            <span class="pill pill-pending" style="font-size:0.65rem;">${a.target === 'all' ? 'All Students' : a.target}</span>
+          </div>
+          <p style="font-size:0.875rem;color:var(--text);line-height:1.7;margin-bottom:0.5rem;">${a.body}</p>
+          <span style="font-size:0.75rem;color:var(--text-light);">From <strong>${a.posted_by}</strong> (${a.poster_role}) · ${formatDate(a.created_at)}</span>
+        </div>
+      </div>`).join('');
+
+  } catch (error) {
+    list.innerHTML = '<p style="color:var(--text-light);padding:1rem;">Could not load announcements</p>';
+  }
 }
 
 console.log('%c 🎓 Student Dashboard Loaded ', 'background:#FFC200; color:#0D0D1A; padding:4px 8px; border-radius:4px;');

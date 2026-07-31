@@ -65,3 +65,36 @@ exports.getMyProgrammes = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
+
+/* Get announcements for this student (based on their category) */
+exports.getAnnouncements = async (req, res) => {
+  try {
+    // Get student's categories
+    const [progs] = await pool.query(
+      `SELECT DISTINCT p.category FROM student_programmes sp
+       JOIN programmes p ON sp.programme_id = p.id
+       WHERE sp.student_id = ?`,
+      [req.user.id]
+    );
+
+    const categories = progs.map(p => p.category);
+
+    const [announcements] = await pool.query(
+      `SELECT a.id, a.title, a.body, a.target, a.created_at,
+              CONCAT(u.first_name, ' ', u.last_name) AS posted_by,
+              u.role AS poster_role
+       FROM announcements a
+       JOIN users u ON a.posted_by = u.id
+       WHERE a.expires_at > NOW()
+         AND (a.target = 'all' ${categories.length > 0 ? `OR a.target IN (${categories.map(() => '?').join(',')})` : ''})
+       ORDER BY a.created_at DESC`,
+      categories.length > 0 ? categories : []
+    );
+
+    res.status(200).json({ success: true, data: announcements });
+  } catch (error) {
+    console.error('Get student announcements error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

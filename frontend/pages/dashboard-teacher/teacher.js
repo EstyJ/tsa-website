@@ -84,7 +84,7 @@ function loadSection(name) {
   const titles = { overview: 'Overview', classes: 'My Live Classes', students: 'My Students', attendance: 'Attendance', profile: 'My Profile' };
   document.getElementById('headerTitle').textContent = titles[name] || name;
 
-  const loaders = { overview: loadOverview, classes: loadClasses, students: loadStudents, attendance: loadAttendance, content: loadContent, profile: loadProfile };
+  const loaders = { overview: loadOverview, classes: loadClasses, students: loadStudents, attendance: loadAttendance, content: loadContent, announce: loadTeacherAnnouncements, profile: loadProfile };
   if (loaders[name]) loaders[name]();
 }
 
@@ -521,6 +521,37 @@ async function loadContent() {
   } catch (error) {
     tbody.innerHTML = '<tr><td colspan="4" class="table-loading">Could not load content</td></tr>';
   }
+}
+
+
+/* ── TEACHER ANNOUNCEMENTS ──────────────────────────────── */
+async function loadTeacherAnnouncements() {
+  const form = document.getElementById('teacherAnnounceForm');
+  if (!form) return;
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const msg    = document.getElementById('tAnnMsg');
+    const title  = document.getElementById('tAnnTitle').value.trim();
+    const body   = document.getElementById('tAnnBody').value.trim();
+    const target = document.getElementById('tAnnTarget').value;
+
+    if (!title || !body) { msg.textContent = 'Title and message required'; msg.className = 'settings-msg error'; return; }
+
+    try {
+      const response = await fetch(`${API_BASE}/teacher/announcements`, {
+        method: 'POST', headers: getAuthHeaders(),
+        body: JSON.stringify({ title, body, target })
+      });
+      const result = await response.json();
+      if (result.success) {
+        msg.textContent = '✅ ' + result.message;
+        msg.className   = 'settings-msg success';
+        this.reset();
+        showToast('Announcement posted!');
+      } else { throw new Error(result.message); }
+    } catch (error) { msg.textContent = error.message; msg.className = 'settings-msg error'; }
+  }, { once: true }); // once: true prevents duplicate listeners
 }
 
 console.log('%c 📖 Teacher Dashboard Loaded ', 'background:#6B0FA8; color:white; padding:4px 8px; border-radius:4px;');

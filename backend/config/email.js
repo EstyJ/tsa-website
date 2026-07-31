@@ -205,7 +205,7 @@ async function sendPaymentConfirmedEmail({ firstName, email, amount, method }) {
     <p>
       Log in to your student dashboard to start learning:
     </p>
-    <a href="http://127.0.0.1:5500/pages/login.html" class="btn">🚀 Go to My Dashboard</a>
+    <a href="https://tourmaline-lokum-1443ac.netlify.app/pages/login.html" class="btn">🚀 Go to My Dashboard</a>
     <hr class="divider">
     <p style="font-size:0.85rem;">
       Your dashboard gives you access to all enrolled courses, live class schedules,
@@ -284,7 +284,7 @@ async function sendTeacherAccountCreatedEmail({ firstName, email, tempPassword }
     <p>
       ⚠️ <strong>Important:</strong> Please log in and change your password immediately.
     </p>
-    <a href="http://127.0.0.1:5500/pages/login.html" class="btn">🔐 Log In Now</a>
+    <a href="https://tourmaline-lokum-1443ac.netlify.app/pages/login.html" class="btn">🔐 Log In Now</a>
     <hr class="divider">
     <p style="font-size:0.85rem;">
       Select the <strong>Teacher</strong> tab on the login page and use the
@@ -332,7 +332,7 @@ async function sendLiveClassReminderEmail({ firstName, email, className, schedul
     <p>
       Log in to your dashboard to join the class when it goes live:
     </p>
-    <a href="http://127.0.0.1:5500/pages/login.html" class="btn">🎥 Go to Live Class</a>
+    <a href="https://tourmaline-lokum-1443ac.netlify.app/pages/login.html" class="btn">🎥 Go to Live Class</a>
     <hr class="divider">
     <p style="font-size:0.85rem;">
       The class will appear as <strong>"LIVE NOW"</strong> on your dashboard
@@ -388,7 +388,7 @@ async function sendAdminNewStudentEmail({ studentName, email, category, programm
       <tbody>${programmeRows}</tbody>
     </table>
     <p>Please log in to the admin dashboard to review and activate this student's account.</p>
-    <a href="http://127.0.0.1:5500/pages/dashboard-admin/index.html" class="btn">
+    <a href="https://tourmaline-lokum-1443ac.netlify.app/pages/dashboard-admin/index.html" class="btn">
       🛡️ Go to Admin Dashboard
     </a>
   `);

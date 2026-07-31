@@ -37,7 +37,9 @@ const PROGRAMMES = {
     { id: 15, name: 'Python Programming', duration: '1.5 hrs', price: 8500 },
   ],
   summer: [
-    { id: 16, name: 'Summer Holiday Lessons', duration: '1.5 hrs', price: 8500 },
+    { id: 17, name: 'AI Fundamentals & Digital Productivity', duration: '1.5 hrs', price: 25000 },
+    { id: 18, name: 'Coding & Robotics',                      duration: '1.5 hrs', price: 25000 },
+    { id: 19, name: 'Digital Design & Content Creation',      duration: '1.5 hrs', price: 25000 },
   ]
 };
 
@@ -277,5 +279,104 @@ registerForm.addEventListener('submit', async function(e) {
     errDiv.innerHTML = `<div class="notice-icon"><i class="fas fa-exclamation-triangle" style="color:#FF4D6D;"></i></div><div class="notice-text"><strong style="color:#FF4D6D;">Registration Failed</strong> ${error.message}</div>`;
     registerForm.parentNode.insertBefore(errDiv, registerForm);
     setTimeout(() => errDiv.remove(), 8000);
+  }
+});
+
+
+/* ============================================================
+   PAYMENT AFTER REGISTRATION
+   Shown immediately after successful registration
+============================================================ */
+let _regToken   = null;
+let _regProgs   = [];
+let _regUserId  = null;
+
+function showPaymentSection(token, programmes, userId) {
+  _regToken  = token;
+  _regProgs  = programmes;
+  _regUserId = userId;
+
+  const section = document.getElementById('paymentSection');
+  if (!section) return;
+  section.style.display = 'block';
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Show programme summary
+  const summary = document.getElementById('payProgrammeSummary');
+  summary.innerHTML = programmes.map(p => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+      <span style="font-size:0.875rem;color:rgba(255,255,255,0.7);">${p.name}</span>
+      <strong style="color:var(--color-gold);font-size:0.9rem;">₦${Number(p.price).toLocaleString()}</strong>
+    </div>`).join('');
+
+  // Calculate total
+  const count    = programmes.length;
+  const isSummer = programmes[0]?.price === 25000;
+  let total = programmes.reduce((sum, p) => sum + Number(p.price), 0);
+
+  if (isSummer && count === 3) {
+    total = 70000;
+    document.getElementById('payDiscountNote').style.display = 'block';
+  }
+
+  document.getElementById('payTotalAmount').textContent = `₦${total.toLocaleString()}`;
+  window._regTotal = total;
+}
+
+async function payWithPaystackReg() {
+  if (!_regToken) { alert('Please register first'); return; }
+  try {
+    const response = await fetch(`${API_BASE}/payment/paystack/initialize`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_regToken}` },
+      body: JSON.stringify({ amount: window._regTotal || 25000 })
+    });
+    const result = await response.json();
+    if (result.success) {
+      // Save token before redirect
+      localStorage.setItem('tsa_token', _regToken);
+      window.location.href = result.data.authorizationUrl;
+    } else {
+      alert(result.message || 'Payment failed');
+    }
+  } catch (e) {
+    alert('Payment initialization failed. Please try again.');
+  }
+}
+
+window.payWithPaystackReg = payWithPaystackReg;
+
+document.getElementById('manualRegPayForm')?.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const msg     = document.getElementById('regManualMsg');
+  const amount  = document.getElementById('regManualAmount').value;
+  const bank    = document.getElementById('regManualBank').value;
+  const account = document.getElementById('regManualAccount').value;
+  const date    = document.getElementById('regManualDate').value;
+
+  if (!amount || !bank || !account || !date) {
+    msg.textContent = 'Please fill in all fields';
+    msg.style.color = '#FF4D6D';
+    return;
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/payment/manual`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_regToken}` },
+      body: JSON.stringify({ amount: parseFloat(amount), bankName: bank, accountName: account, transferDate: date })
+    });
+    const result = await response.json();
+    if (result.success) {
+      msg.textContent = '✅ Payment details submitted! Admin will confirm within 24 hours. You can now log in.';
+      msg.style.color = '#4CAF50';
+      this.reset();
+      setTimeout(() => { window.location.href = 'login.html'; }, 3000);
+    } else {
+      throw new Error(result.message);
+    }
+  } catch (error) {
+    msg.textContent = error.message;
+    msg.style.color = '#FF4D6D';
   }
 });

@@ -85,7 +85,7 @@ exports.initializePaystack = async (req, res) => {
         email:        student.email,
         amount:       Math.round(amount * 100), // Convert to kobo
         reference:    reference,
-        callback_url: `http://127.0.0.1:5500/pages/payment-success.html`,
+        callback_url: `https://tourmaline-lokum-1443ac.netlify.app/pages/payment-success.html`,
         metadata: {
           studentId:   req.user.id,
           studentName: student.first_name,

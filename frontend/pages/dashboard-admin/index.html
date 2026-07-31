@@ -117,6 +117,10 @@
           <i class="fas fa-video"></i>
           <span>Live Classes</span>
         </a>
+        <a href="#" class="sidebar-link" data-section="announcements">
+          <i class="fas fa-bullhorn"></i>
+          <span>Announcements</span>
+        </a>
 
         <p class="sidebar-nav-label">Account</p>
 
@@ -533,6 +537,63 @@
                 <tr><td colspan="6" class="table-loading">Loading...</td></tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ======================================================
+           SECTION: ANNOUNCEMENTS
+      ====================================================== -->
+      <section class="dash-section" id="section-announcements">
+        <div class="section-header">
+          <h2>Announcement Board</h2>
+          <p>Post announcements to all students or a specific category</p>
+        </div>
+
+        <!-- Post new announcement -->
+        <div class="dash-card" style="margin-bottom:1.5rem;">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-plus-circle"></i> Post New Announcement</h3>
+          </div>
+          <div class="dash-card-body">
+            <form id="announceForm">
+              <div class="settings-form-group">
+                <label>Title <span style="color:var(--pink)">*</span></label>
+                <input type="text" id="aTitle" class="settings-input" placeholder="e.g. Class schedule change">
+              </div>
+              <div class="settings-form-group">
+                <label>Message <span style="color:var(--pink)">*</span></label>
+                <textarea id="aBody" class="settings-input" rows="4" placeholder="Write your announcement here..." style="resize:vertical;"></textarea>
+              </div>
+              <div class="settings-form-group">
+                <label>Target Audience</label>
+                <select id="aTarget" class="settings-input">
+                  <option value="all">All Students</option>
+                  <option value="academic">Academic Students</option>
+                  <option value="exam">Exam Prep Students</option>
+                  <option value="international">International Students</option>
+                  <option value="skills">Skills Students</option>
+                  <option value="summer">Summer Tech Camp Students</option>
+                </select>
+              </div>
+              <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:0.75rem;">⏰ Announcements automatically expire after 24 hours</p>
+              <p class="settings-msg" id="announceMsg"></p>
+              <button type="submit" class="dash-btn dash-btn-primary">
+                <i class="fas fa-bullhorn"></i> Post Announcement
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Active announcements -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-list"></i> Active Announcements</h3>
+            <button class="dash-btn dash-btn-info" onclick="loadAnnouncements()"><i class="fas fa-sync"></i> Refresh</button>
+          </div>
+          <div class="dash-card-body" id="announceList">
+            <div class="table-loading">Loading...</div>
           </div>
         </div>
       </section>

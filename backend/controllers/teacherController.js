@@ -102,3 +102,66 @@ exports.getAttendance = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
+
+/* Upload course content (videos, slides, documents) */
+exports.uploadContent = async (req, res) => {
+  try {
+    const { title, type, description } = req.body;
+    const filePath = req.file ? req.file.path : null;
+
+    if (!title || !filePath) {
+      return res.status(400).json({ success: false, message: 'Title and file are required' });
+    }
+
+    await pool.query(
+      `INSERT INTO course_content (teacher_id, title, type, description, file_path)
+       VALUES (?, ?, ?, ?, ?)`,
+      [req.user.id, title.trim(), type || 'document', description || null, filePath]
+    );
+
+    res.status(201).json({ success: true, message: 'Content uploaded successfully!' });
+  } catch (error) {
+    console.error('Upload content error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/* Get teacher's uploaded content */
+exports.getContent = async (req, res) => {
+  try {
+    const [content] = await pool.query(
+      `SELECT id, title, type, description, file_path, created_at
+       FROM course_content WHERE teacher_id = ?
+       ORDER BY created_at DESC`,
+      [req.user.id]
+    );
+    res.status(200).json({ success: true, data: content });
+  } catch (error) {
+    console.error('Get content error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+
+/* Teacher posts announcement to their category students */
+exports.postAnnouncement = async (req, res) => {
+  try {
+    const { title, body, target } = req.body;
+
+    if (!title || !body) {
+      return res.status(400).json({ success: false, message: 'Title and message are required' });
+    }
+
+    await pool.query(
+      `INSERT INTO announcements (title, body, posted_by, target)
+       VALUES (?, ?, ?, ?)`,
+      [title.trim(), body.trim(), req.user.id, target || 'all']
+    );
+
+    res.status(201).json({ success: true, message: 'Announcement posted! It will expire in 24 hours.' });
+  } catch (error) {
+    console.error('Teacher post announcement error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

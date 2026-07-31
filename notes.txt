@@ -8,7 +8,7 @@ $2a$12$0igykO.LRSTmljwGCh2ud.Ji8ZJC79bvezRCFyhH145vgIQA//5n2
 FIRST OFF HE SAID THE AUDIO FILE THAT WAS SENT WAS SUPPOSED TO BE PLAYED IMMEDIATELY THE SITE LOAD. IT CAN HAVE CONTROL'S TO PAUSE, AND PLAY.
 SECONDLY, THE WHOLE PROGRAM IT'S SELF IS NOT FOR JUST SUMMER PROGRAM, IT IS A PROGRAM FOR THE WHOLE YEAR THAT HAS SUMMER PROGRAM AS A PART OF IT.
 
-UPON REGISTRATION, USERS WILL TELL US THEIR Category and Programme 
+UPON REGISTRATION, USERS WILL TELL US THEIR Category 
 
 
 Category   
@@ -82,7 +82,7 @@ GCSE/IGCSE 1 Subject
 1.5 hrs
 10000
 
-International 
+International
 IELTS
 1.5 hrs
 12500
@@ -98,14 +98,10 @@ Holiday
 8500
 
 
-once they select the Category and Programme the admi will recieve an email ntification then activate the student account.
-
-on the dashboard the student will see the amount for their Programme per contanct and how many hours the class is. before payment the student can select how many contact they want per week, add the total money for each contact and payment button will be displayed that will be 
 
 
 
-I will send thenwhoe file with the audio  in it that i forgot to add. make changes. 
 
-so is it possible
+
 
 

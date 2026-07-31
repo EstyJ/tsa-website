@@ -393,3 +393,48 @@ CREATE TABLE IF NOT EXISTS student_programmes (
   FOREIGN KEY (student_id)   REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (programme_id) REFERENCES programmes(id) ON DELETE CASCADE
 );
+
+-- Additional exam programmes added by partner request
+INSERT IGNORE INTO programmes (id, category, name, duration_per_contact, price_per_contact) VALUES
+(17, 'exam', 'IGCSE',      '1 hr', 8500.00),
+(18, 'exam', 'GCSE',       '1 hr', 8500.00),
+(19, 'exam', 'IELTS',      '1 hr', 8500.00),
+(20, 'exam', 'Checkpoint',  '1 hr', 8500.00);
+
+-- TABLE: COURSE CONTENT (videos, slides, documents uploaded by teachers)
+CREATE TABLE IF NOT EXISTS course_content (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  teacher_id  INT NOT NULL,
+  course_id   INT,
+  title       VARCHAR(255) NOT NULL,
+  type        ENUM('video', 'slides', 'document') DEFAULT 'document',
+  description TEXT,
+  file_path   VARCHAR(500) NOT NULL,
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (course_id)  REFERENCES courses(id) ON DELETE SET NULL
+);
+
+-- TABLE: ANNOUNCEMENTS
+-- Admin posts to all students, teachers post to students in their category
+-- Messages expire after 24 hours automatically
+CREATE TABLE IF NOT EXISTS announcements (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  title       VARCHAR(255) NOT NULL,
+  body        TEXT NOT NULL,
+  posted_by   INT NOT NULL,
+  target      ENUM('all', 'academic', 'exam', 'international', 'skills', 'summer') DEFAULT 'all',
+  expires_at  TIMESTAMP NOT NULL DEFAULT (CURRENT_TIMESTAMP + INTERVAL 24 HOUR),
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (posted_by) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_expires (expires_at)
+);
+
+-- Insert summer tech camp programmes
+INSERT IGNORE INTO programmes (id, category, name, duration_per_contact, price_per_contact) VALUES
+(17, 'summer', 'AI Fundamentals & Digital Productivity', '1.5 hrs', 25000.00),
+(18, 'summer', 'Coding & Robotics',                      '1.5 hrs', 25000.00),
+(19, 'summer', 'Digital Design & Content Creation',      '1.5 hrs', 25000.00);
+
+-- Update old summer holiday lessons
+UPDATE programmes SET name = 'Summer Holiday Lessons (Legacy)', is_active = FALSE WHERE id = 16;

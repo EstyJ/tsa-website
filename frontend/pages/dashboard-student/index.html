@@ -55,6 +55,10 @@
           <span class="live-indicator" id="liveIndicator" style="display:none;">LIVE</span>
         </a>
         <p class="sidebar-nav-label">Account</p>
+        <a href="#" class="sidebar-link" data-section="announcements">
+          <i class="fas fa-bullhorn"></i><span>Announcements</span>
+          <span class="live-indicator" id="announceBadge" style="display:none;">NEW</span>
+        </a>
         <a href="#" class="sidebar-link" data-section="payment">
           <i class="fas fa-credit-card"></i><span>Payment</span>
         </a>
@@ -164,6 +168,17 @@
           <p>Join your scheduled live classes here</p>
         </div>
         <div class="live-classes-list" id="liveClassesList">
+          <div class="loading-rows"></div>
+        </div>
+      </section>
+
+      <!-- ANNOUNCEMENTS SECTION -->
+      <section class="dash-section" id="section-announcements">
+        <div class="section-header">
+          <h2>Announcements</h2>
+          <p>Updates from your instructors and admin</p>
+        </div>
+        <div id="studentAnnounceList">
           <div class="loading-rows"></div>
         </div>
       </section>

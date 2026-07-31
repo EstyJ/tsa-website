@@ -147,7 +147,7 @@
                 <option value="exam">Exam Preparation</option>
                 <option value="international">International</option>
                 <option value="skills">Skills</option>
-                <option value="summer">Summer Lessons</option>
+                <option value="summer">Summer Tech Camp</option>
               </select>
             </div>
             <p class="field-error" id="categoryError"></p>
@@ -219,21 +219,65 @@
 
         <p class="auth-switch">Already have an account? <a href="login.html" class="form-link">Sign In</a></p>
 
-        <!-- Success Message -->
+        <!-- Success + Payment Section -->
         <div class="success-message" id="successMessage" style="display:none;">
           <div class="success-icon"><i class="fas fa-check-circle"></i></div>
-          <h2>Account Created!</h2>
-          <p>Welcome to The Snoogums Academy, <strong id="successName"></strong>!</p>
-          <div class="success-notice">
-            <i class="fas fa-clock"></i>
-            <div>
-              <strong>What happens next?</strong>
-              <p>Our admin team has been notified of your registration and selected programme. Once your account is activated, you will receive an email. You can then log in, choose your preferred number of contacts per week, and make payment to begin your classes.</p>
+          <h2>Account Created! 🎉</h2>
+          <p>Welcome, <strong id="successName"></strong>! Complete your payment below to activate your account.</p>
+        </div>
+
+        <!-- PAYMENT SECTION (shown after registration) -->
+        <div id="paymentSection" style="display:none;">
+          <div class="notice-box" style="border-color:rgba(255,194,0,0.3);background:rgba(255,194,0,0.05);margin-bottom:1.5rem;">
+            <div class="notice-icon"><i class="fas fa-credit-card" style="color:var(--color-gold);"></i></div>
+            <div class="notice-text">
+              <strong style="color:var(--color-gold);">Complete Payment to Activate Account</strong>
+              Your account will be activated immediately after payment is confirmed.
             </div>
           </div>
-          <div class="success-actions">
-            <a href="login.html" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Go to Login</a>
-            <a href="../index.html" class="btn btn-outline"><i class="fas fa-home"></i> Back to Home</a>
+
+          <!-- Programme Summary -->
+          <div id="payProgrammeSummary" style="margin-bottom:1.5rem;"></div>
+
+          <!-- Total -->
+          <div id="payTotalBox" style="background:rgba(208,0,111,0.08);border:1px solid rgba(208,0,111,0.2);border-radius:12px;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+            <div>
+              <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);margin-bottom:0.2rem;">Total Amount</div>
+              <div id="payDiscountNote" style="font-size:0.78rem;color:#4CAF50;display:none;">🎉 Bundle discount applied — saving ₦5,000!</div>
+            </div>
+            <div id="payTotalAmount" style="font-family:var(--font-heading);font-size:1.6rem;font-weight:900;color:var(--color-pink);">₦0</div>
+          </div>
+
+          <!-- Payment Options -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <button onclick="payWithPaystackReg()" class="btn btn-primary" style="justify-content:center;">
+              <i class="fas fa-bolt"></i> Pay with Paystack
+            </button>
+            <button onclick="document.getElementById('manualPayReg').style.display=document.getElementById('manualPayReg').style.display==='none'?'block':'none'" class="btn btn-outline" style="justify-content:center;">
+              <i class="fas fa-university"></i> Bank Transfer
+            </button>
+          </div>
+
+          <!-- Manual payment form -->
+          <div id="manualPayReg" style="display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:1.25rem;margin-bottom:1rem;">
+            <div style="font-size:0.85rem;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:0.75rem;">Bank Transfer Details</div>
+            <div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:0.75rem;margin-bottom:1rem;font-size:0.85rem;">
+              <p style="margin-bottom:0.3rem;"><strong style="color:rgba(255,255,255,0.5);">Bank:</strong> GTB (Guaranty Trust Bank)</p>
+              <p style="margin-bottom:0.3rem;"><strong style="color:rgba(255,255,255,0.5);">Account Name:</strong> The Snoogums Limited</p>
+              <p><strong style="color:rgba(255,255,255,0.5);">Account Number:</strong> 3004524258</p>
+            </div>
+            <form id="manualRegPayForm">
+              <div class="form-group"><label class="form-label" style="font-size:0.8rem;">Amount Paid (₦)</label><input type="number" id="regManualAmount" class="form-input" placeholder="Enter amount" required></div>
+              <div class="form-group"><label class="form-label" style="font-size:0.8rem;">Your Bank Name</label><input type="text" id="regManualBank" class="form-input" placeholder="e.g. GTBank" required></div>
+              <div class="form-group"><label class="form-label" style="font-size:0.8rem;">Account Name Used</label><input type="text" id="regManualAccount" class="form-input" placeholder="Name on your account" required></div>
+              <div class="form-group"><label class="form-label" style="font-size:0.8rem;">Transfer Date</label><input type="date" id="regManualDate" class="form-input" required></div>
+              <p id="regManualMsg" style="font-size:0.82rem;min-height:1em;margin-bottom:0.5rem;"></p>
+              <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;"><i class="fas fa-paper-plane"></i> Submit Payment Details</button>
+            </form>
+          </div>
+
+          <div style="text-align:center;margin-top:1rem;">
+            <a href="login.html" style="font-size:0.82rem;color:rgba(255,255,255,0.4);">Skip for now and log in later</a>
           </div>
         </div>
 

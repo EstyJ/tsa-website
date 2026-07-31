@@ -57,6 +57,9 @@
         <a href="#" class="sidebar-link" data-section="content">
           <i class="fas fa-upload"></i><span>Upload Content</span>
         </a>
+        <a href="#" class="sidebar-link" data-section="announce">
+          <i class="fas fa-bullhorn"></i><span>Announcements</span>
+        </a>
         <p class="sidebar-nav-label">Account</p>
         <a href="#" class="sidebar-link" data-section="profile">
           <i class="fas fa-user"></i><span>My Profile</span>
@@ -241,6 +244,44 @@
                 <tr><td colspan="4" class="table-loading">No content uploaded yet</td></tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ANNOUNCEMENTS -->
+      <section class="dash-section" id="section-announce">
+        <div class="section-header">
+          <h2>Post Announcement</h2>
+          <p>Send a message to students in your category — expires in 24 hours</p>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-body">
+            <form id="teacherAnnounceForm">
+              <div class="settings-form-group">
+                <label>Title *</label>
+                <input type="text" id="tAnnTitle" class="settings-input" placeholder="e.g. Homework for next class">
+              </div>
+              <div class="settings-form-group">
+                <label>Message *</label>
+                <textarea id="tAnnBody" class="settings-input" rows="5" placeholder="Write your message here..." style="resize:vertical;"></textarea>
+              </div>
+              <div class="settings-form-group">
+                <label>Target</label>
+                <select id="tAnnTarget" class="settings-input">
+                  <option value="all">All Students</option>
+                  <option value="academic">Academic Students</option>
+                  <option value="exam">Exam Prep Students</option>
+                  <option value="international">International Students</option>
+                  <option value="skills">Skills Students</option>
+                  <option value="summer">Summer Tech Camp Students</option>
+                </select>
+              </div>
+              <p style="font-size:0.78rem;color:var(--text-light);margin-bottom:0.75rem;">⏰ Message expires automatically after 24 hours</p>
+              <p class="settings-msg" id="tAnnMsg"></p>
+              <button type="submit" class="dash-btn dash-btn-primary">
+                <i class="fas fa-bullhorn"></i> Post Announcement
+              </button>
+            </form>
           </div>
         </div>
       </section>
