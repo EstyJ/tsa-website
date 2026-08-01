@@ -264,7 +264,15 @@ registerForm.addEventListener('submit', async function(e) {
       document.querySelector('.notice-box').style.display = 'none';
       document.querySelector('.auth-switch').style.display = 'none';
       successMessage.style.display = 'block';
-      document.querySelector('.auth-form-container').scrollIntoView({ behavior:'smooth', block:'start' });
+
+      // Show payment section for summer tech camp
+      const isSummer = categorySelect.value === 'summer';
+      if (isSummer && selectedProgrammes.length > 0) {
+        showPaymentSection(result.token, selectedProgrammes, result.data.id);
+      } else {
+        // Regular academic — admin activates, scroll to success message
+        document.querySelector('.auth-form-container').scrollIntoView({ behavior:'smooth', block:'start' });
+      }
     } else {
       throw new Error(result.message || 'Registration failed');
     }

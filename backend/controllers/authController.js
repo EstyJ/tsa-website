@@ -197,10 +197,17 @@ exports.register = async (req, res) => {
       admin confirms payment. They can't log in and do anything yet.
       (Login will succeed but dashboard will show "pending payment".)
     */
+    // For summer tech camp — return a JWT token so student can pay immediately
+    const { category } = req.body;
+    const isSummer = category === 'summer';
+    const token = isSummer ? generateToken(newUserId, 'student') : null;
+
     res.status(201).json({
-      // 201 Created = request succeeded and a resource was created
       success: true,
-      message: 'Account created successfully! Please contact us to complete your payment. Access will be granted once confirmed.',
+      message: isSummer
+        ? 'Account created! Complete payment below to activate your account.'
+        : 'Account created successfully! Our admin team will review and activate your account.',
+      token,
       data: {
         id: newUserId,
         firstName: firstName.trim(),
