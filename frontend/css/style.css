@@ -1914,3 +1914,17 @@ img {
   .anthem-player { bottom: 1rem; left: 1rem; }
   .anthem-info { min-width: 90px; }
 }
+
+/* ── Dropdown option text fix ── */
+select option {
+  color: #000000 !important;
+  background: #ffffff !important;
+}
+select option:hover,
+select option:checked {
+  background: #FFC200 !important;
+  color: #000000 !important;
+}
+select:focus option:hover {
+  background: #FFC200 !important;
+}

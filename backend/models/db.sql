@@ -439,3 +439,8 @@ INSERT IGNORE INTO programmes (id, category, name, duration_per_contact, price_p
 
 -- Update old summer holiday lessons
 UPDATE programmes SET name = 'Summer Holiday Lessons (Legacy)', is_active = FALSE WHERE id = 16;
+
+-- Add target fields to course_content if not exists
+ALTER TABLE course_content
+  ADD COLUMN IF NOT EXISTS target_category ENUM('all','academic','exam','international','skills','summer') DEFAULT 'all',
+  ADD COLUMN IF NOT EXISTS target_programme VARCHAR(255) DEFAULT NULL;

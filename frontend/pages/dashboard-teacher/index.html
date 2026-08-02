@@ -203,6 +203,21 @@
                 </select>
               </div>
               <div class="settings-form-group">
+                <label>Who Can See This? (Category)</label>
+                <select id="contentCategory" class="settings-input">
+                  <option value="all">All Students</option>
+                  <option value="academic">Academic</option>
+                  <option value="exam">Exam Preparation</option>
+                  <option value="international">International</option>
+                  <option value="skills">Skills</option>
+                  <option value="summer">Summer Tech Camp</option>
+                </select>
+              </div>
+              <div class="settings-form-group">
+                <label>Programme (optional — leave blank for all in category)</label>
+                <input type="text" id="contentProgramme" class="settings-input" placeholder="e.g. WAEC/NECO Single Subject">
+              </div>
+              <div class="settings-form-group">
                 <label>Description (optional)</label>
                 <textarea id="contentDesc" class="settings-input" rows="3" placeholder="Brief description of this content..." style="resize:vertical;"></textarea>
               </div>

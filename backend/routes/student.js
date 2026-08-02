@@ -7,13 +7,15 @@
 const express = require('express');
 const router  = express.Router();
 const { protect, restrictTo } = require('../middleware/auth');
-const { getLiveClasses, getCourses, getMyProgrammes, getAnnouncements } = require('../controllers/studentController');
+const { getLiveClasses, getCourses, getMyProgrammes, getAnnouncements, addProgrammes, getContentByProgramme } = require('../controllers/studentController');
 
 router.use(protect, restrictTo('student'));
 
 router.get('/courses',      getCourses);
 router.get('/live-classes', getLiveClasses);
 router.get('/programmes',   getMyProgrammes);
-router.get('/announcements', getAnnouncements);
+router.get('/announcements',     getAnnouncements);
+router.post('/add-programmes',    addProgrammes);
+router.get('/content/:progId',    getContentByProgramme);
 
 module.exports = router;

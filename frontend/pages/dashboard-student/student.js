@@ -686,4 +686,161 @@ async function loadAnnouncements() {
   }
 }
 
+
+/* ============================================================
+   ALL PROGRAMMES DATA
+============================================================ */
+const ALL_PROGRAMMES = {"academic": [{"id": 1, "name": "Primary Key Subject (Maths, English or Science)", "price": 8500}, {"id": 2, "name": "Primary Other Subject", "price": 7500}, {"id": 3, "name": "Primary Combo (2 Subjects)", "price": 7500}, {"id": 4, "name": "Primary Combo (3 Subjects)", "price": 7000}, {"id": 5, "name": "Secondary Key Subject", "price": 10000}, {"id": 6, "name": "Secondary Other Subject", "price": 8500}, {"id": 7, "name": "Secondary Combo (2 Subjects)", "price": 9000}, {"id": 8, "name": "Science Combo (3 Subjects)", "price": 9000}], "exam": [{"id": 9, "name": "WAEC/NECO Single Subject", "price": 10000}, {"id": 10, "name": "WAEC/NECO 4 Subjects", "price": 9500}, {"id": 11, "name": "WAEC/NECO 6 Subjects", "price": 9000}, {"id": 12, "name": "JAMB Standard", "price": 9000}, {"id": 17, "name": "IGCSE", "price": 8500}, {"id": 18, "name": "GCSE", "price": 8500}, {"id": 19, "name": "IELTS", "price": 8500}, {"id": 20, "name": "Checkpoint", "price": 8500}], "international": [{"id": 13, "name": "GCSE/IGCSE 1 Subject", "price": 10000}, {"id": 14, "name": "IELTS", "price": 12500}], "skills": [{"id": 15, "name": "Python Programming", "price": 8500}], "summer": [{"id": 17, "name": "AI Fundamentals & Digital Productivity", "price": 25000}, {"id": 18, "name": "Coding & Robotics", "price": 25000}, {"id": 19, "name": "Digital Design & Content Creation", "price": 25000}]};
+
+/* ============================================================
+   ADD ANOTHER PROGRAMME
+============================================================ */
+function toggleAddProgramme() {
+  const body = document.getElementById('addProgrammeBody');
+  const icon = document.getElementById('addProgToggleIcon');
+  if (!body) return;
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  icon.className = isHidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+}
+window.toggleAddProgramme = toggleAddProgramme;
+
+function loadAddProgOptions() {
+  const cat     = document.getElementById('addProgCategory').value;
+  const wrap    = document.getElementById('addProgOptionsWrap');
+  const options = document.getElementById('addProgOptions');
+  const btn     = document.getElementById('addProgBtn');
+
+  if (!cat) { wrap.style.display = 'none'; btn.style.display = 'none'; return; }
+
+  const progs = ALL_PROGRAMMES[cat] || [];
+  wrap.style.display = 'block';
+  btn.style.display  = 'inline-flex';
+
+  options.innerHTML = progs.map(p => `
+    <label style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.9rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.2s;">
+      <input type="checkbox" name="addProg[]" value="${p.id}" data-name="${p.name}" data-price="${p.price}" style="accent-color:var(--pink);">
+      <span style="flex:1;font-size:0.875rem;font-weight:600;color:var(--text);">${p.name}</span>
+      <strong style="color:var(--pink);font-size:0.85rem;">₦${p.price.toLocaleString()}</strong>
+    </label>`).join('');
+}
+window.loadAddProgOptions = loadAddProgOptions;
+
+async function submitAddProgramme() {
+  const msg     = document.getElementById('addProgMsg');
+  const checked = document.querySelectorAll('input[name="addProg[]"]:checked');
+
+  if (checked.length === 0) {
+    msg.textContent = 'Please select at least one programme';
+    msg.className   = 'settings-msg error';
+    return;
+  }
+
+  const programmes = Array.from(checked).map(cb => ({
+    id: parseInt(cb.value), name: cb.dataset.name, price: parseFloat(cb.dataset.price)
+  }));
+
+  try {
+    const response = await fetch(`${API_BASE}/student/add-programmes`, {
+      method: 'POST', headers: getAuthHeaders(),
+      body: JSON.stringify({ programmes })
+    });
+    const result = await response.json();
+    if (result.success) {
+      msg.textContent = '✅ Programme(s) added! Contact admin to activate.';
+      msg.className   = 'settings-msg success';
+      document.getElementById('addProgCategory').value = '';
+      document.getElementById('addProgOptionsWrap').style.display = 'none';
+      document.getElementById('addProgBtn').style.display = 'none';
+      showToast('Programme(s) added successfully!');
+      loadMyProgrammes();
+    } else { throw new Error(result.message); }
+  } catch (error) {
+    msg.textContent = error.message;
+    msg.className   = 'settings-msg error';
+  }
+}
+window.submitAddProgramme = submitAddProgramme;
+
+/* ============================================================
+   LOAD COURSES WITH CONTENT
+============================================================ */
+async function loadCourses() {
+  const grid = document.getElementById('studentCoursesGrid');
+  grid.innerHTML = '<div class="loading-rows"></div>';
+
+  try {
+    const res    = await fetch(`${API_BASE}/student/programmes`, { headers: getAuthHeaders() });
+    const result = res.ok ? await res.json() : { data: [] };
+    const progs  = result.data || [];
+
+    if (progs.length === 0) {
+      grid.innerHTML = '<p style="color:var(--text-light);padding:1rem;">No programmes enrolled yet. Contact admin.</p>';
+      return;
+    }
+
+    const icons = ['fa-brain','fa-robot','fa-book','fa-calculator','fa-flask','fa-laptop-code','fa-paint-brush','fa-globe'];
+
+    grid.innerHTML = progs.map((p, i) => `
+      <div class="student-course-card" style="cursor:pointer;" onclick="viewProgrammeContent(${p.programme_id || p.id}, '${p.name}')">
+        <div class="scc-thumbnail" style="background:linear-gradient(135deg,#0D0D1A,#1A1A2E);display:flex;align-items:center;justify-content:center;">
+          <i class="fas ${icons[i % icons.length]}" style="font-size:3rem;color:var(--gold);"></i>
+          ${p.status !== 'active' ? '<div class="scc-locked-overlay"><i class="fas fa-lock"></i><span>Pending Activation</span></div>' : ''}
+        </div>
+        <div class="scc-body">
+          <div class="scc-category"><i class="fas fa-tag"></i> ${p.category}</div>
+          <div class="scc-title">${p.name}</div>
+          <div class="scc-meta">
+            <span><i class="fas fa-clock"></i> ${p.duration_per_contact}</span>
+            <span><i class="fas fa-naira-sign"></i> ₦${Number(p.price_per_contact).toLocaleString()}/contact</span>
+          </div>
+          <button class="dash-btn dash-btn-primary" style="margin-top:0.75rem;width:100%;justify-content:center;">
+            <i class="fas fa-folder-open"></i> View Resources
+          </button>
+        </div>
+      </div>`).join('');
+
+  } catch (error) {
+    grid.innerHTML = '<p style="color:var(--text-light);padding:1rem;">Could not load programmes.</p>';
+  }
+}
+
+async function viewProgrammeContent(programmeId, programmeName) {
+  const viewer = document.getElementById('contentViewer');
+  const title  = document.getElementById('contentViewerTitle');
+  const tbody  = document.getElementById('contentViewerBody');
+
+  viewer.style.display = 'block';
+  title.innerHTML = `<i class="fas fa-folder-open"></i> ${programmeName} — Resources`;
+  tbody.innerHTML  = '<tr><td colspan="4" class="table-loading">Loading...</td></tr>';
+  viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  try {
+    const res    = await fetch(`${API_BASE}/student/content/${programmeId}`, { headers: getAuthHeaders() });
+    const result = res.ok ? await res.json() : { data: [] };
+    const items  = result.data || [];
+
+    if (items.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" class="table-loading" style="color:var(--text-light);padding:2rem;">📚 Content in Progress — Check back soon!</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = items.map(item => `
+      <tr>
+        <td><strong>${item.title}</strong></td>
+        <td><span class="pill pill-pending">${item.type}</span></td>
+        <td>${formatDate(item.created_at)}</td>
+        <td>
+          <a href="${API_BASE.replace('/api','')}/uploads/content/${item.file_path.split('/').pop()}" target="_blank" class="dash-btn dash-btn-info">
+            <i class="fas fa-download"></i> Open
+          </a>
+        </td>
+      </tr>`).join('');
+
+  } catch (error) {
+    tbody.innerHTML = '<tr><td colspan="4" class="table-loading">Could not load content</td></tr>';
+  }
+}
+window.viewProgrammeContent = viewProgrammeContent;
+
 console.log('%c 🎓 Student Dashboard Loaded ', 'background:#FFC200; color:#0D0D1A; padding:4px 8px; border-radius:4px;');

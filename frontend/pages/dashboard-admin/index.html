@@ -247,6 +247,61 @@
           <p>View and manage all students and teachers</p>
         </div>
 
+        <!-- Create Student Account -->
+        <div class="dash-card" style="margin-bottom:1.5rem;">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-user-plus"></i> Create Student Account</h3>
+            <button class="dash-btn dash-btn-info" onclick="toggleCreateStudent()">
+              <i class="fas fa-chevron-down" id="createStudentToggleIcon"></i> Create
+            </button>
+          </div>
+          <div id="createStudentBody" style="display:none;" class="dash-card-body">
+            <form id="createStudentForm" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+              <div class="settings-form-group">
+                <label>First Name *</label>
+                <input type="text" id="csFirstName" class="settings-input" placeholder="e.g. Amaka">
+              </div>
+              <div class="settings-form-group">
+                <label>Last Name *</label>
+                <input type="text" id="csLastName" class="settings-input" placeholder="e.g. Okafor">
+              </div>
+              <div class="settings-form-group">
+                <label>Email *</label>
+                <input type="email" id="csEmail" class="settings-input" placeholder="e.g. amaka@gmail.com">
+              </div>
+              <div class="settings-form-group">
+                <label>Phone</label>
+                <input type="tel" id="csPhone" class="settings-input" placeholder="e.g. 08012345678">
+              </div>
+              <div class="settings-form-group">
+                <label>Password *</label>
+                <input type="password" id="csPassword" class="settings-input" placeholder="Minimum 8 characters">
+              </div>
+              <div class="settings-form-group">
+                <label>Category</label>
+                <select id="csCategory" class="settings-input" onchange="loadCreateStudentProgrammes()">
+                  <option value="">-- Select Category --</option>
+                  <option value="academic">Academic</option>
+                  <option value="exam">Exam Preparation</option>
+                  <option value="international">International</option>
+                  <option value="skills">Skills</option>
+                  <option value="summer">Summer Tech Camp</option>
+                </select>
+              </div>
+              <div class="settings-form-group" id="csProgrammeWrap" style="grid-column:1/-1;display:none;">
+                <label>Programme(s)</label>
+                <div id="csProgrammeOptions" style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem;"></div>
+              </div>
+              <div style="grid-column:1/-1;">
+                <p class="settings-msg" id="createStudentMsg"></p>
+                <button type="submit" class="dash-btn dash-btn-primary">
+                  <i class="fas fa-user-plus"></i> Create Student Account
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
         <!-- Filter tabs -->
         <div class="filter-row">
           <button class="filter-btn active" data-role="all">All Users</button>

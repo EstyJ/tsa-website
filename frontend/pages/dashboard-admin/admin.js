@@ -1035,4 +1035,80 @@ async function viewStudentProgrammes(studentId, studentName) {
 
 window.viewStudentProgrammes = viewStudentProgrammes;
 
+
+/* ============================================================
+   CREATE STUDENT ACCOUNT
+============================================================ */
+const ALL_PROGRAMMES_ADMIN = {"academic": [{"id": 1, "name": "Primary Key Subject (Maths, English or Science)", "price": 8500}, {"id": 2, "name": "Primary Other Subject", "price": 7500}, {"id": 3, "name": "Primary Combo (2 Subjects)", "price": 7500}, {"id": 4, "name": "Primary Combo (3 Subjects)", "price": 7000}, {"id": 5, "name": "Secondary Key Subject", "price": 10000}, {"id": 6, "name": "Secondary Other Subject", "price": 8500}, {"id": 7, "name": "Secondary Combo (2 Subjects)", "price": 9000}, {"id": 8, "name": "Science Combo (3 Subjects)", "price": 9000}], "exam": [{"id": 9, "name": "WAEC/NECO Single Subject", "price": 10000}, {"id": 10, "name": "WAEC/NECO 4 Subjects", "price": 9500}, {"id": 11, "name": "WAEC/NECO 6 Subjects", "price": 9000}, {"id": 12, "name": "JAMB Standard", "price": 9000}, {"id": 17, "name": "IGCSE", "price": 8500}, {"id": 18, "name": "GCSE", "price": 8500}, {"id": 19, "name": "IELTS", "price": 8500}, {"id": 20, "name": "Checkpoint", "price": 8500}], "international": [{"id": 13, "name": "GCSE/IGCSE 1 Subject", "price": 10000}, {"id": 14, "name": "IELTS", "price": 12500}], "skills": [{"id": 15, "name": "Python Programming", "price": 8500}], "summer": [{"id": 17, "name": "AI Fundamentals & Digital Productivity", "price": 25000}, {"id": 18, "name": "Coding & Robotics", "price": 25000}, {"id": 19, "name": "Digital Design & Content Creation", "price": 25000}]};
+
+function toggleCreateStudent() {
+  const body = document.getElementById('createStudentBody');
+  const icon = document.getElementById('createStudentToggleIcon');
+  if (!body) return;
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  icon.className = isHidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+}
+window.toggleCreateStudent = toggleCreateStudent;
+
+function loadCreateStudentProgrammes() {
+  const cat  = document.getElementById('csCategory').value;
+  const wrap = document.getElementById('csProgrammeWrap');
+  const opts = document.getElementById('csProgrammeOptions');
+  if (!cat) { wrap.style.display = 'none'; return; }
+  const progs = ALL_PROGRAMMES_ADMIN[cat] || [];
+  wrap.style.display = 'block';
+  opts.innerHTML = progs.map(p => `
+    <label style="display:flex;align-items:center;gap:0.75rem;padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;">
+      <input type="checkbox" name="csProg[]" value="${p.id}" data-name="${p.name}" style="accent-color:var(--pink);">
+      <span style="flex:1;font-size:0.875rem;">${p.name}</span>
+      <strong style="color:var(--pink);">₦${p.price.toLocaleString()}</strong>
+    </label>`).join('');
+}
+window.loadCreateStudentProgrammes = loadCreateStudentProgrammes;
+
+const createStudentForm = document.getElementById('createStudentForm');
+if (createStudentForm) {
+  createStudentForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const msg       = document.getElementById('createStudentMsg');
+    const firstName = document.getElementById('csFirstName').value.trim();
+    const lastName  = document.getElementById('csLastName').value.trim();
+    const email     = document.getElementById('csEmail').value.trim();
+    const phone     = document.getElementById('csPhone').value.trim();
+    const password  = document.getElementById('csPassword').value;
+    const category  = document.getElementById('csCategory').value;
+    const checked   = document.querySelectorAll('input[name="csProg[]"]:checked');
+    const programmes = Array.from(checked).map(cb => ({ id: parseInt(cb.value), name: cb.dataset.name }));
+
+    if (!firstName || !lastName || !email || !password) {
+      msg.textContent = 'Name, email and password are required';
+      msg.className   = 'settings-msg error'; return;
+    }
+    if (password.length < 8) {
+      msg.textContent = 'Password must be at least 8 characters';
+      msg.className   = 'settings-msg error'; return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/admin/students/create`, {
+        method: 'POST', headers: getAuthHeaders(),
+        body: JSON.stringify({ firstName, lastName, email, phone, password, category, programmes })
+      });
+      const result = await response.json();
+      if (result.success) {
+        msg.textContent = '✅ ' + result.message;
+        msg.className   = 'settings-msg success';
+        createStudentForm.reset();
+        document.getElementById('csProgrammeWrap').style.display = 'none';
+        showToast('Student account created!');
+        loadUsers('student');
+      } else { throw new Error(result.message); }
+    } catch (error) {
+      msg.textContent = error.message;
+      msg.className   = 'settings-msg error';
+    }
+  });
+}
+
 console.log('%c 🛡️ Admin Dashboard Loaded ', 'background:#D0006F; color:white; padding:4px 8px; border-radius:4px;');

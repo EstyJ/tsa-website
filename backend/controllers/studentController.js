@@ -98,3 +98,64 @@ exports.getAnnouncements = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
+
+/* Add more programmes to student account */
+exports.addProgrammes = async (req, res) => {
+  try {
+    const { programmes } = req.body;
+    if (!programmes || programmes.length === 0) {
+      return res.status(400).json({ success: false, message: 'No programmes selected' });
+    }
+    for (const prog of programmes) {
+      await pool.query(
+        `INSERT IGNORE INTO student_programmes (student_id, programme_id, status)
+         VALUES (?, ?, 'pending')`,
+        [req.user.id, prog.id]
+      );
+    }
+    res.status(201).json({
+      success: true,
+      message: `${programmes.length} programme(s) added successfully! Admin will activate them.`
+    });
+  } catch (error) {
+    console.error('Add programmes error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/* Get content uploaded for a specific programme */
+exports.getContentByProgramme = async (req, res) => {
+  try {
+    const { progId } = req.params;
+
+    // Get the programme details to find its category
+    const [progs] = await pool.query(
+      'SELECT category, name FROM programmes WHERE id = ?', [progId]
+    );
+
+    if (progs.length === 0) {
+      return res.status(404).json({ success: false, message: 'Programme not found' });
+    }
+
+    const category = progs[0].category;
+    const progName = progs[0].name;
+
+    // Get content matching this programme or category
+    const [content] = await pool.query(
+      `SELECT cc.id, cc.title, cc.type, cc.description, cc.file_path, cc.created_at,
+              CONCAT(u.first_name, ' ', u.last_name) AS uploaded_by
+       FROM course_content cc
+       JOIN users u ON cc.teacher_id = u.id
+       WHERE cc.target_category = ? OR cc.target_category = 'all'
+         OR cc.target_programme = ?
+       ORDER BY cc.created_at DESC`,
+      [category, progName]
+    );
+
+    res.status(200).json({ success: true, data: content });
+  } catch (error) {
+    console.error('Get content by programme error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

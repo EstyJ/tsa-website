@@ -114,10 +114,13 @@ exports.uploadContent = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Title and file are required' });
     }
 
+    const targetCategory  = req.body.targetCategory  || 'all';
+    const targetProgramme = req.body.targetProgramme || null;
+
     await pool.query(
-      `INSERT INTO course_content (teacher_id, title, type, description, file_path)
-       VALUES (?, ?, ?, ?, ?)`,
-      [req.user.id, title.trim(), type || 'document', description || null, filePath]
+      `INSERT INTO course_content (teacher_id, title, type, description, file_path, target_category, target_programme)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [req.user.id, title.trim(), type || 'document', description || null, filePath, targetCategory, targetProgramme || null]
     );
 
     res.status(201).json({ success: true, message: 'Content uploaded successfully!' });

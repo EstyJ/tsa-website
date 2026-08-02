@@ -680,3 +680,17 @@ button { cursor: pointer; font-family: var(--font-body); }
   .dash-section { padding: 1rem; }
   .dash-table th, .dash-table td { padding: 0.6rem 0.75rem; }
 }
+
+/* ── Dropdown option text fix ── */
+select option {
+  color: #000000 !important;
+  background: #ffffff !important;
+}
+select option:hover,
+select option:checked {
+  background: #FFC200 !important;
+  color: #000000 !important;
+}
+select:focus option:hover {
+  background: #FFC200 !important;
+}

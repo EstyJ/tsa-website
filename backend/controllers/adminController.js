@@ -6,7 +6,7 @@
   ============================================================
 */
 const pool = require('../config/db');
-const { sendPaymentConfirmedEmail, sendTeacherAccountCreatedEmail } = require('../config/email');
+const { sendPaymentConfirmedEmail, sendTeacherAccountCreatedEmail, sendLiveClassScheduledEmail } = require('../config/email');
 const bcrypt = require('bcryptjs');
 
 /* ============================================================
@@ -475,9 +475,46 @@ exports.scheduleLiveClass = async (req, res) => {
       [title, courseId, teacherId, jitsiRoom, scheduledAt, durationMins || 60]
     );
 
+    // Send email to teacher
+    const [teachers] = await pool.query(
+      'SELECT first_name, email FROM users WHERE id = ?', [teacherId]
+    );
+    if (teachers.length > 0) {
+      sendLiveClassScheduledEmail({
+        name: teachers[0].first_name,
+        email: teachers[0].email,
+        className: title,
+        scheduledAt,
+        durationMins: durationMins || 60,
+        jitsiRoom,
+        courseName: title
+      });
+    }
+
+    // Send email to all enrolled students
+    const [students] = await pool.query(
+      `SELECT DISTINCT u.first_name, u.email
+       FROM users u
+       JOIN enrollments e ON u.id = e.student_id
+       WHERE e.course_id = ? AND u.role = 'student'`,
+      [courseId]
+    );
+
+    for (const student of students) {
+      sendLiveClassScheduledEmail({
+        name: student.first_name,
+        email: student.email,
+        className: title,
+        scheduledAt,
+        durationMins: durationMins || 60,
+        jitsiRoom,
+        courseName: title
+      });
+    }
+
     res.status(201).json({
       success: true,
-      message: 'Live class scheduled successfully!',
+      message: `Live class scheduled! Emails sent to teacher${students.length > 0 ? ` and ${students.length} student(s)` : ''}.`,
       data: { classId: result.insertId, jitsiRoom }
     });
 

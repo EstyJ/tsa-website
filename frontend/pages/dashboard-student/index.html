@@ -153,11 +153,30 @@
       <!-- COURSES SECTION -->
       <section class="dash-section" id="section-courses">
         <div class="section-header">
-          <h2>My Courses</h2>
-          <p>Your enrolled courses at TSA</p>
+          <h2>My Programmes & Content</h2>
+          <p>Click on a programme to access uploaded resources</p>
         </div>
         <div class="courses-grid" id="studentCoursesGrid">
           <div class="loading-rows"></div>
+        </div>
+        <!-- Content viewer -->
+        <div id="contentViewer" style="display:none;margin-top:1.5rem;">
+          <div class="dash-card">
+            <div class="dash-card-header">
+              <h3 id="contentViewerTitle"><i class="fas fa-folder-open"></i> Programme Resources</h3>
+              <button class="dash-btn dash-btn-info" onclick="document.getElementById('contentViewer').style.display='none'">
+                <i class="fas fa-times"></i> Close
+              </button>
+            </div>
+            <div class="dash-card-body table-wrap">
+              <table class="dash-table">
+                <thead><tr><th>Title</th><th>Type</th><th>Uploaded</th><th>Action</th></tr></thead>
+                <tbody id="contentViewerBody">
+                  <tr><td colspan="4" class="table-loading">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -264,6 +283,39 @@
                 <i class="fas fa-paper-plane"></i> Submit Payment Details
               </button>
             </form>
+          </div>
+        </div>
+
+        <!-- Add another category/programme -->
+        <div class="dash-card" style="margin-bottom:1.5rem;">
+          <div class="dash-card-header">
+            <h3><i class="fas fa-plus-circle"></i> Add Another Programme</h3>
+            <button class="dash-btn dash-btn-info" onclick="toggleAddProgramme()">
+              <i class="fas fa-chevron-down" id="addProgToggleIcon"></i> Add
+            </button>
+          </div>
+          <div id="addProgrammeBody" style="display:none;" class="dash-card-body">
+            <div class="settings-form-group">
+              <label>Select Category</label>
+              <select id="addProgCategory" class="settings-input" onchange="loadAddProgOptions()">
+                <option value="">-- Select Category --</option>
+                <option value="academic">Academic</option>
+                <option value="exam">Exam Preparation</option>
+                <option value="international">International</option>
+                <option value="skills">Skills</option>
+                <option value="summer">Summer Tech Camp</option>
+              </select>
+            </div>
+            <div id="addProgOptionsWrap" style="display:none;">
+              <label class="settings-form-group" style="display:block;margin-bottom:0.5rem;">
+                Select Programme(s)
+              </label>
+              <div id="addProgOptions" style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;"></div>
+            </div>
+            <p class="settings-msg" id="addProgMsg"></p>
+            <button class="dash-btn dash-btn-primary" onclick="submitAddProgramme()" id="addProgBtn" style="display:none;">
+              <i class="fas fa-plus"></i> Add Selected Programme(s)
+            </button>
           </div>
         </div>
 

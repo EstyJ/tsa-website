@@ -401,11 +401,77 @@ async function sendAdminNewStudentEmail({ studentName, email, category, programm
   });
 }
 
+
+/*
+  ============================================================
+  EMAIL 7: LIVE CLASS SCHEDULED
+  Sent to teacher and all students in the programme
+  when admin schedules a new live class.
+  Includes a Google Calendar link for one-click reminder.
+  ============================================================
+*/
+async function sendLiveClassScheduledEmail({ name, email, className, scheduledAt, durationMins, jitsiRoom, courseName }) {
+
+  const startDate = new Date(scheduledAt);
+  const endDate   = new Date(startDate.getTime() + durationMins * 60000);
+
+  // Format dates for Google Calendar URL
+  // Format: YYYYMMDDTHHMMSSZ
+  function toGCal(date) {
+    return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  }
+
+  const gcalStart   = toGCal(startDate);
+  const gcalEnd     = toGCal(endDate);
+  const gcalTitle   = encodeURIComponent(`TSA Live Class: ${className}`);
+  const gcalDetails = encodeURIComponent(`Join at: https://meet.jit.si/${jitsiRoom}\n\nCourse: ${courseName}\nDuration: ${durationMins} minutes`);
+  const gcalLocation = encodeURIComponent(`https://meet.jit.si/${jitsiRoom}`);
+
+  const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${gcalTitle}&dates=${gcalStart}/${gcalEnd}&details=${gcalDetails}&location=${gcalLocation}`;
+
+  const displayDate = startDate.toLocaleDateString('en-GB', {
+    weekday: 'long', day: 'numeric', month: 'long',
+    year: 'numeric', hour: '2-digit', minute: '2-digit'
+  });
+
+  const html = baseTemplate(`
+    <div class="badge">🔴 Live Class Scheduled</div>
+    <h2>New Live Class Scheduled, ${name}!</h2>
+    <p>A live class has been scheduled for you at The Snoogums Academy.</p>
+    <div class="info-box">
+      <p>📚 <strong>Class:</strong> ${className}</p>
+      <p>🎓 <strong>Course:</strong> ${courseName}</p>
+      <p>📅 <strong>Date & Time:</strong> ${displayDate}</p>
+      <p>⏱️ <strong>Duration:</strong> ${durationMins} minutes</p>
+      <p>🎥 <strong>Platform:</strong> Jitsi Meet (in your dashboard)</p>
+    </div>
+    <p>Click below to <strong>add this class to your Google Calendar</strong> as a reminder:</p>
+    <a href="${googleCalendarUrl}" target="_blank" class="btn" style="background:linear-gradient(135deg,#4285F4,#34A853);">
+      📅 Add to Google Calendar
+    </a>
+    <hr style="margin:1.5rem 0;border-color:#E8ECF0;">
+    <p>You can also join the class directly from your dashboard when it goes live:</p>
+    <a href="https://thesnoogumsacademy.com/pages/login.html" class="btn">
+      🎥 Go to My Dashboard
+    </a>
+    <p style="font-size:0.82rem;color:#A0AEC0;margin-top:1rem;">
+      The class will show as <strong>"LIVE NOW"</strong> on your dashboard once the teacher clocks in.
+    </p>
+  `);
+
+  return sendEmail({
+    to:      email,
+    subject: `📅 New Live Class: "${className}" — ${displayDate}`,
+    html
+  });
+}
+
 module.exports = {
   sendWelcomeEmail,
   sendPaymentConfirmedEmail,
   sendApplicationReceivedEmail,
   sendTeacherAccountCreatedEmail,
   sendLiveClassReminderEmail,
-  sendAdminNewStudentEmail
+  sendAdminNewStudentEmail,
+  sendLiveClassScheduledEmail
 };

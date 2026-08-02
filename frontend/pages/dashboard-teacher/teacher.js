@@ -457,10 +457,12 @@ document.getElementById('uploadContentForm').addEventListener('submit', async fu
 
   try {
     const formData = new FormData();
-    formData.append('title',       title);
-    formData.append('type',        type);
-    formData.append('description', document.getElementById('contentDesc').value.trim());
-    formData.append('content',     file);
+    formData.append('title',           title);
+    formData.append('type',            type);
+    formData.append('description',     document.getElementById('contentDesc').value.trim());
+    formData.append('targetCategory',  document.getElementById('contentCategory')?.value || 'all');
+    formData.append('targetProgramme', document.getElementById('contentProgramme')?.value || '');
+    formData.append('content',         file);
 
     const token    = localStorage.getItem('tsa_token');
     const response = await fetch(`${API_BASE}/teacher/content`, {
