@@ -341,6 +341,7 @@ async function loadUsers(role = currentRoleFilter) {
         <td>${formatDate(u.created_at)}</td>
         <td>
           <div class="btn-group">
+            ${u.role === 'student' ? `<button class="dash-btn dash-btn-info" onclick="viewStudentProgrammes(${u.id}, '${u.first_name} ${u.last_name}')"><i class="fas fa-book"></i> Programmes</button>` : ''}
             <button class="dash-btn ${u.is_active ? 'dash-btn-danger' : 'dash-btn-success'}"
               onclick="toggleUserStatus(${u.id}, ${u.is_active})">
               <i class="fas fa-${u.is_active ? 'ban' : 'check'}"></i>
