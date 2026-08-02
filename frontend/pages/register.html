@@ -136,6 +136,21 @@
             <p class="field-error" id="phoneError"></p>
           </div>
 
+          <!-- Payment Frequency -->
+          <div class="form-group">
+            <label for="paymentFrequency" class="form-label">Payment Preference <span class="required">*</span></label>
+            <div class="input-wrap">
+              <span class="input-icon"><i class="fas fa-calendar-alt"></i></span>
+              <select id="paymentFrequency" name="paymentFrequency" class="form-input form-select" required>
+                <option value="">-- How would you like to pay? --</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+            <p class="field-error" id="paymentFrequencyError"></p>
+          </div>
+
           <!-- Category -->
           <div class="form-group">
             <label for="category" class="form-label">Category <span class="required">*</span></label>
@@ -223,7 +238,11 @@
         <div class="success-message" id="successMessage" style="display:none;">
           <div class="success-icon"><i class="fas fa-check-circle"></i></div>
           <h2>Account Created! 🎉</h2>
-          <p>Welcome, <strong id="successName"></strong>! Complete your payment below to activate your account.</p>
+          <p>Welcome, <strong id="successName"></strong>!</p>
+          <p style="font-size:0.875rem;color:rgba(255,255,255,0.6);margin-top:0.5rem;">
+            <i class="fas fa-arrow-down" style="color:var(--color-gold);"></i>
+            Complete your payment below to activate your account.
+          </p>
         </div>
 
         <!-- PAYMENT SECTION (shown after registration) -->
@@ -253,7 +272,7 @@
             <button onclick="payWithPaystackReg()" class="btn btn-primary" style="justify-content:center;">
               <i class="fas fa-bolt"></i> Pay with Paystack
             </button>
-            <button onclick="document.getElementById('manualPayReg').style.display=document.getElementById('manualPayReg').style.display==='none'?'block':'none'" class="btn btn-outline" style="justify-content:center;">
+            <button onclick="toggleManualPay()" class="btn btn-outline" style="justify-content:center;">
               <i class="fas fa-university"></i> Bank Transfer
             </button>
           </div>

@@ -1021,7 +1021,8 @@ async function viewStudentProgrammes(studentId, studentName) {
     const content = result.data.map(p => `
       <p><strong>${p.name}</strong></p>
       <p style="font-size:0.85rem;color:var(--text-light);margin-bottom:0.75rem;">
-        Category: ${p.category} · ${p.duration_per_contact} · ₦${Number(p.price_per_contact).toLocaleString()}/contact
+        Category: ${p.category} · ${p.duration_per_contact} · ₦${Number(p.price_per_contact).toLocaleString()}/contact<br>
+        Payment: <strong style="color:var(--pink);">${p.payment_frequency || 'weekly'}</strong>
         · Status: <span style="color:${p.status === 'active' ? 'var(--green)' : 'var(--gold)'};">${p.status}</span>
       </p>`).join('<hr style="border-color:var(--border);margin:0.5rem 0;">');
 

@@ -179,6 +179,16 @@ function validateConfirmPassword() {
   showSuccess('confirmPassword'); return true;
 }
 
+function validateFrequency() {
+  const val = document.getElementById('paymentFrequency').value;
+  if (!val) {
+    document.getElementById('paymentFrequencyError').innerHTML = '<i class="fas fa-exclamation-circle"></i> Please select a payment preference';
+    return false;
+  }
+  document.getElementById('paymentFrequencyError').innerHTML = '';
+  return true;
+}
+
 function validateTerms() {
   if (!agreeTerms.checked) {
     document.getElementById('termsError').innerHTML = '<i class="fas fa-exclamation-circle"></i> You must agree to the Terms & Conditions';
@@ -215,6 +225,7 @@ registerForm.addEventListener('submit', async function(e) {
     validateName('firstName','First name'),
     validateName('lastName','Last name'),
     validateEmail(), validatePhone(),
+    validateFrequency(),
     validateCategory(), validateProgramme(),
     validatePassword().valid,
     validateConfirmPassword(), validateTerms()
@@ -265,12 +276,10 @@ registerForm.addEventListener('submit', async function(e) {
       document.querySelector('.auth-switch').style.display = 'none';
       successMessage.style.display = 'block';
 
-      // Show payment section for summer tech camp
-      const isSummer = categorySelect.value === 'summer';
-      if (isSummer && selectedProgrammes.length > 0) {
-        showPaymentSection(result.token, selectedProgrammes, result.data.id);
+      // Show payment section for ALL students
+      if (result.token && selectedProgrammes.length > 0) {
+        showPaymentSection(result.token, selectedProgrammes, categorySelect.value);
       } else {
-        // Regular academic — admin activates, scroll to success message
         document.querySelector('.auth-form-container').scrollIntoView({ behavior:'smooth', block:'start' });
       }
     } else {
@@ -291,61 +300,72 @@ registerForm.addEventListener('submit', async function(e) {
 });
 
 
-/* ============================================================
-   PAYMENT AFTER REGISTRATION
-   Shown immediately after successful registration
-============================================================ */
-let _regToken   = null;
-let _regProgs   = [];
-let _regUserId  = null;
 
-function showPaymentSection(token, programmes, userId) {
-  _regToken  = token;
-  _regProgs  = programmes;
-  _regUserId = userId;
+
+/* ============================================================
+   PAYMENT AFTER REGISTRATION — CLEAN VERSION
+============================================================ */
+let _regToken  = null;
+let _regTotal  = 0;
+
+function showPaymentSection(token, programmes, category) {
+  // Store token
+  _regToken = token;
+  if (token) {
+    localStorage.setItem('tsa_token', token);
+  }
 
   const section = document.getElementById('paymentSection');
-  if (!section) return;
+  if (!section) { console.error('paymentSection not found'); return; }
+
   section.style.display = 'block';
-  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
 
   // Show programme summary
   const summary = document.getElementById('payProgrammeSummary');
-  summary.innerHTML = programmes.map(p => `
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid rgba(255,255,255,0.06);">
-      <span style="font-size:0.875rem;color:rgba(255,255,255,0.7);">${p.name}</span>
-      <strong style="color:var(--color-gold);font-size:0.9rem;">₦${Number(p.price).toLocaleString()}</strong>
-    </div>`).join('');
+  if (summary && programmes.length > 0) {
+    summary.innerHTML = programmes.map(p => `
+      <div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+        <span style="font-size:0.875rem;color:rgba(255,255,255,0.7);">${p.name}</span>
+        <strong style="color:var(--color-gold);">₦${Number(p.price).toLocaleString()}</strong>
+      </div>`).join('');
+  }
 
   // Calculate total
   const count    = programmes.length;
-  const isSummer = programmes[0]?.price === 25000;
-  let total = programmes.reduce((sum, p) => sum + Number(p.price), 0);
+  const isSummer = category === 'summer';
+  let total      = programmes.reduce((sum, p) => sum + Number(p.price), 0);
 
   if (isSummer && count === 3) {
     total = 70000;
-    document.getElementById('payDiscountNote').style.display = 'block';
+    const discountEl = document.getElementById('payDiscountNote');
+    if (discountEl) discountEl.style.display = 'block';
   }
 
-  document.getElementById('payTotalAmount').textContent = `₦${total.toLocaleString()}`;
-  window._regTotal = total;
+  _regTotal = total;
+  const totalEl = document.getElementById('payTotalAmount');
+  if (totalEl) totalEl.textContent = `₦${total.toLocaleString()}`;
 }
 
 async function payWithPaystackReg() {
-  if (!_regToken) { alert('Please register first'); return; }
+  const token = localStorage.getItem('tsa_token');
+  if (!token) {
+    alert('Session expired. Please register again.');
+    return;
+  }
+
   try {
+    const freq = document.getElementById('paymentFrequency')?.value || 'monthly';
     const response = await fetch(`${API_BASE}/payment/paystack/initialize`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_regToken}` },
-      body: JSON.stringify({ amount: window._regTotal || 25000 })
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body:    JSON.stringify({ amount: _regTotal, paymentFrequency: freq })
     });
     const result = await response.json();
     if (result.success) {
-      // Save token before redirect
-      localStorage.setItem('tsa_token', _regToken);
       window.location.href = result.data.authorizationUrl;
     } else {
-      alert(result.message || 'Payment failed');
+      alert(result.message || 'Payment failed. Please try again.');
     }
   } catch (e) {
     alert('Payment initialization failed. Please try again.');
@@ -354,37 +374,48 @@ async function payWithPaystackReg() {
 
 window.payWithPaystackReg = payWithPaystackReg;
 
-document.getElementById('manualRegPayForm')?.addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const msg     = document.getElementById('regManualMsg');
-  const amount  = document.getElementById('regManualAmount').value;
-  const bank    = document.getElementById('regManualBank').value;
-  const account = document.getElementById('regManualAccount').value;
-  const date    = document.getElementById('regManualDate').value;
+function toggleManualPay() {
+  const div = document.getElementById('manualPayReg');
+  if (!div) return;
+  div.style.display = div.style.display === 'none' ? 'block' : 'none';
+}
 
-  if (!amount || !bank || !account || !date) {
-    msg.textContent = 'Please fill in all fields';
-    msg.style.color = '#FF4D6D';
-    return;
-  }
+window.toggleManualPay = toggleManualPay;
 
-  try {
-    const response = await fetch(`${API_BASE}/payment/manual`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${_regToken}` },
-      body: JSON.stringify({ amount: parseFloat(amount), bankName: bank, accountName: account, transferDate: date })
-    });
-    const result = await response.json();
-    if (result.success) {
-      msg.textContent = '✅ Payment details submitted! Admin will confirm within 24 hours. You can now log in.';
-      msg.style.color = '#4CAF50';
-      this.reset();
-      setTimeout(() => { window.location.href = 'login.html'; }, 3000);
-    } else {
-      throw new Error(result.message);
+document.addEventListener('DOMContentLoaded', function() {
+  const manualForm = document.getElementById('manualRegPayForm');
+  if (!manualForm) return;
+
+  manualForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const msg     = document.getElementById('regManualMsg');
+    const token   = localStorage.getItem('tsa_token');
+    const amount  = document.getElementById('regManualAmount').value;
+    const bank    = document.getElementById('regManualBank').value;
+    const account = document.getElementById('regManualAccount').value;
+    const date    = document.getElementById('regManualDate').value;
+
+    if (!token) { msg.textContent = 'Session expired. Please register again.'; msg.style.color = '#FF4D6D'; return; }
+    if (!amount || !bank || !account || !date) { msg.textContent = 'Please fill in all fields'; msg.style.color = '#FF4D6D'; return; }
+
+    try {
+      const response = await fetch(`${API_BASE}/payment/manual`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body:    JSON.stringify({ amount: parseFloat(amount), bankName: bank, accountName: account, transferDate: date })
+      });
+      const result = await response.json();
+      if (result.success) {
+        msg.textContent = '✅ Payment details submitted! Admin will confirm within 24 hours. Redirecting to login...';
+        msg.style.color = '#4CAF50';
+        this.reset();
+        setTimeout(() => { window.location.href = 'login.html'; }, 3000);
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      msg.textContent = error.message;
+      msg.style.color = '#FF4D6D';
     }
-  } catch (error) {
-    msg.textContent = error.message;
-    msg.style.color = '#FF4D6D';
-  }
+  });
 });

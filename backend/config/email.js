@@ -358,7 +358,7 @@ async function sendLiveClassReminderEmail({ firstName, email, className, schedul
   selected category and programmes.
   ============================================================
 */
-async function sendAdminNewStudentEmail({ studentName, email, category, programmes }) {
+async function sendAdminNewStudentEmail({ studentName, email, category, programmes, paymentFrequency }) {
   const programmeRows = programmes.map(p =>
     `<tr>
       <td style="padding:0.5rem 0.75rem;border-bottom:1px solid #E8ECF0;">${p.name}</td>
@@ -375,6 +375,7 @@ async function sendAdminNewStudentEmail({ studentName, email, category, programm
       <p>👤 <strong>Name:</strong> ${studentName}</p>
       <p>📧 <strong>Email:</strong> ${email}</p>
       <p>📚 <strong>Category:</strong> ${category}</p>
+      <p>💳 <strong>Payment Preference:</strong> ${paymentFrequency || 'Not specified'}</p>
     </div>
     <p><strong>Selected Programme(s):</strong></p>
     <table style="width:100%;border-collapse:collapse;font-size:0.875rem;margin-bottom:1rem;">

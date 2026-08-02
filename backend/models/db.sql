@@ -383,12 +383,13 @@ ON DUPLICATE KEY UPDATE id = id;
 -- Which programmes a student is enrolled in
 -- =============================================================
 CREATE TABLE IF NOT EXISTS student_programmes (
-  id             INT AUTO_INCREMENT PRIMARY KEY,
-  student_id     INT NOT NULL,
-  programme_id   INT NOT NULL,
+  id                INT AUTO_INCREMENT PRIMARY KEY,
+  student_id        INT NOT NULL,
+  programme_id      INT NOT NULL,
   contacts_per_week INT DEFAULT 1,
-  status         ENUM('pending', 'active', 'completed') DEFAULT 'pending',
-  enrolled_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  payment_frequency ENUM('weekly', 'monthly') DEFAULT 'weekly',
+  status            ENUM('pending', 'active', 'completed') DEFAULT 'pending',
+  enrolled_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY unique_student_programme (student_id, programme_id),
   FOREIGN KEY (student_id)   REFERENCES users(id) ON DELETE CASCADE,
   FOREIGN KEY (programme_id) REFERENCES programmes(id) ON DELETE CASCADE

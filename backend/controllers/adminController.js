@@ -591,7 +591,7 @@ exports.createStudentAccount = async (req, res) => {
 exports.getStudentProgrammes = async (req, res) => {
   try {
     const [programmes] = await pool.query(
-      `SELECT sp.id, sp.status, sp.enrolled_at,
+      `SELECT sp.id, sp.status, sp.enrolled_at, sp.payment_frequency,
               p.name, p.category, p.duration_per_contact, p.price_per_contact
        FROM student_programmes sp
        JOIN programmes p ON sp.programme_id = p.id
