@@ -1111,4 +1111,60 @@ if (createStudentForm) {
   });
 }
 
+
+async function assignTeacher(courseId, courseTitle) {
+  try {
+    const res    = await fetch(`${API_BASE}/admin/users?role=teacher`, { headers: getAuthHeaders() });
+    const result = await res.json();
+    const teachers = result.data || [];
+
+    if (teachers.length === 0) {
+      openModal('Assign Teacher', '<p style="color:var(--text-light);">No teachers found. Create a teacher account first.</p>');
+      return;
+    }
+
+    const options = teachers.map(t => `
+      <label style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:0.5rem;">
+        <input type="radio" name="assignTeacher" value="${t.id}" style="accent-color:var(--pink);">
+        <span>${t.first_name} ${t.last_name} — ${t.email}</span>
+      </label>`).join('');
+
+    const content = `
+      ${options}
+      <button class="dash-btn dash-btn-primary" style="margin-top:1rem;" onclick="submitAssignTeacher(${courseId})">
+        <i class="fas fa-save"></i> Assign Teacher
+      </button>
+      <p class="settings-msg" id="assignTeacherMsg" style="margin-top:0.5rem;"></p>`;
+
+    openModal(`Assign Teacher — ${courseTitle}`, content);
+  } catch (error) {
+    showToast('Could not load teachers', 'error');
+  }
+}
+
+window.assignTeacher = assignTeacher;
+
+async function submitAssignTeacher(courseId) {
+  const selected = document.querySelector('input[name="assignTeacher"]:checked');
+  const msg      = document.getElementById('assignTeacherMsg');
+  if (!selected) { msg.textContent = 'Please select a teacher'; msg.style.color = 'var(--red)'; return; }
+
+  try {
+    const response = await fetch(`${API_BASE}/admin/courses/${courseId}/assign-teacher`, {
+      method: 'PATCH', headers: getAuthHeaders(),
+      body: JSON.stringify({ teacherId: parseInt(selected.value) })
+    });
+    const result = await response.json();
+    if (result.success) {
+      showToast('Teacher assigned!');
+      closeModal();
+      loadCourses();
+    } else { throw new Error(result.message); }
+  } catch (error) {
+    if (msg) { msg.textContent = error.message; msg.style.color = 'var(--red)'; }
+  }
+}
+
+window.submitAssignTeacher = submitAssignTeacher;
+
 console.log('%c 🛡️ Admin Dashboard Loaded ', 'background:#D0006F; color:white; padding:4px 8px; border-radius:4px;');

@@ -326,7 +326,9 @@ exports.getCourses = async (req, res) => {
   try {
     const [courses] = await pool.query(
       `SELECT c.id, c.title, c.category, c.level, c.is_active, c.created_at,
-              u.first_name, u.last_name
+              c.instructor_id,
+              u.first_name, u.last_name,
+              (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.id) AS student_count
        FROM courses c
        LEFT JOIN users u ON c.instructor_id = u.id
        ORDER BY c.created_at DESC`
@@ -559,10 +561,30 @@ exports.createCourse = async (req, res) => {
       ]
     );
 
+    const courseId = result.insertId;
+
+    // Auto-enroll students who have this programme registered
+    // Match by category
+    const [students] = await pool.query(
+      `SELECT DISTINCT sp.student_id
+       FROM student_programmes sp
+       JOIN programmes p ON sp.programme_id = p.id
+       WHERE p.category = ?`,
+      [category]
+    );
+
+    for (const student of students) {
+      await pool.query(
+        `INSERT IGNORE INTO enrollments (student_id, course_id, is_active)
+         VALUES (?, ?, TRUE)`,
+        [student.student_id, courseId]
+      );
+    }
+
     res.status(201).json({
       success: true,
-      message: 'Course created successfully!',
-      data: { courseId: result.insertId }
+      message: `Course created! ${students.length} student(s) auto-enrolled.`,
+      data: { courseId }
     });
 
   } catch (error) {
@@ -683,6 +705,29 @@ exports.getAnnouncements = async (req, res) => {
     res.status(200).json({ success: true, data: announcements });
   } catch (error) {
     console.error('Get announcements error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+
+/* Assign teacher to a course */
+exports.assignTeacher = async (req, res) => {
+  try {
+    const { id }        = req.params;
+    const { teacherId } = req.body;
+
+    if (!teacherId) {
+      return res.status(400).json({ success: false, message: 'Teacher ID is required' });
+    }
+
+    await pool.query(
+      'UPDATE courses SET instructor_id = ? WHERE id = ?',
+      [teacherId, id]
+    );
+
+    res.status(200).json({ success: true, message: 'Teacher assigned successfully!' });
+  } catch (error) {
+    console.error('Assign teacher error:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };

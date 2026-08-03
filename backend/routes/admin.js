@@ -21,6 +21,7 @@ const {
   markMessageRead,
   getCourses,
   createCourse,
+  assignTeacher,
   createTeacherAccount,
   scheduleLiveClass,
   getLiveClasses,
@@ -45,6 +46,7 @@ router.get('/messages',                 getMessages);
 router.patch('/messages/:id/read',      markMessageRead);
 router.get('/courses',                  getCourses);
 router.post('/courses',                 createCourse);
+router.patch('/courses/:id/assign-teacher', assignTeacher);
 router.post('/applications/:applicationId/create-teacher', createTeacherAccount);
 router.post('/students/create',             createStudentAccount);
 router.get('/students/:id/programmes',      getStudentProgrammes);
