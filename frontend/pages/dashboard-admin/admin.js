@@ -1167,4 +1167,155 @@ async function submitAssignTeacher(courseId) {
 
 window.submitAssignTeacher = submitAssignTeacher;
 
+
+/* ============================================================
+   COURSE MANAGEMENT
+============================================================ */
+function toggleCourseForm() {
+  const body = document.getElementById('courseFormBody');
+  const icon = document.getElementById('courseFormToggleIcon');
+  if (!body) return;
+  const isHidden = body.style.display === 'none';
+  body.style.display = isHidden ? 'block' : 'none';
+  if (icon) icon.className = isHidden ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+  if (isHidden) populateCourseTeachers();
+}
+window.toggleCourseForm = toggleCourseForm;
+
+async function populateCourseTeachers() {
+  try {
+    const res    = await fetch(`${API_BASE}/admin/users?role=teacher`, { headers: getAuthHeaders() });
+    const result = await res.json();
+    const sel    = document.getElementById('cInstructor');
+    if (sel && result.data) {
+      sel.innerHTML = '<option value="">-- Select Teacher (optional) --</option>' +
+        result.data.map(t => `<option value="${t.id}">${t.first_name} ${t.last_name}</option>`).join('');
+    }
+  } catch (e) { console.error('Load teachers for course error:', e); }
+}
+
+// Add course form
+const addCourseForm = document.getElementById('addCourseForm');
+if (addCourseForm) {
+  addCourseForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const msg        = document.getElementById('courseMsg');
+    const title      = document.getElementById('cTitle').value.trim();
+    const category   = document.getElementById('cCategory').value;
+    const level      = document.getElementById('cLevel').value;
+    const duration   = document.getElementById('cDuration').value;
+    const lessons    = document.getElementById('cLessons').value;
+    const instructor = document.getElementById('cInstructor').value;
+    const desc       = document.getElementById('cDescription').value.trim();
+
+    if (!title || !category) {
+      msg.textContent = 'Title and category are required';
+      msg.className   = 'settings-msg error'; return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE}/admin/courses`, {
+        method: 'POST', headers: getAuthHeaders(),
+        body: JSON.stringify({
+          title, category, level, description: desc,
+          durationWeeks: parseInt(duration) || 0,
+          lessonCount:   parseInt(lessons)  || 0,
+          instructorId:  instructor || null
+        })
+      });
+      const result = await response.json();
+      if (result.success) {
+        msg.textContent = '✅ ' + result.message;
+        msg.className   = 'settings-msg success';
+        addCourseForm.reset();
+        showToast('Course created!');
+        loadCourses();
+      } else { throw new Error(result.message); }
+    } catch (error) {
+      msg.textContent = error.message;
+      msg.className   = 'settings-msg error';
+    }
+  });
+}
+
+async function loadCourses() {
+  const tbody = document.getElementById('coursesTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="7" class="table-loading">Loading...</td></tr>';
+
+  try {
+    const response = await fetch(`${API_BASE}/admin/courses`, { headers: getAuthHeaders() });
+    const result   = await response.json();
+
+    if (!result.success || result.data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" class="table-loading">No courses yet. Add one using the form above!</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = result.data.map(c => `
+      <tr>
+        <td><strong>${c.title}</strong></td>
+        <td>${c.category}</td>
+        <td>${c.level}</td>
+        <td>${c.first_name ? `${c.first_name} ${c.last_name}` : '<span style="color:var(--text-light)">No teacher</span>'}</td>
+        <td><span class="pill pill-confirmed">${c.student_count || 0} students</span></td>
+        <td><span class="pill ${c.is_active ? 'pill-active' : 'pill-inactive'}">${c.is_active ? 'Active' : 'Inactive'}</span></td>
+        <td>
+          <button class="dash-btn dash-btn-info" onclick="assignTeacher(${c.id}, '${c.title.replace(/'/g, "\'")}')">
+            <i class="fas fa-chalkboard-teacher"></i> Assign Teacher
+          </button>
+        </td>
+      </tr>`).join('');
+  } catch (error) {
+    tbody.innerHTML = '<tr><td colspan="7" class="table-loading">Failed to load courses</td></tr>';
+  }
+}
+
+async function assignTeacher(courseId, courseTitle) {
+  try {
+    const res    = await fetch(`${API_BASE}/admin/users?role=teacher`, { headers: getAuthHeaders() });
+    const result = await res.json();
+    const teachers = result.data || [];
+
+    if (teachers.length === 0) {
+      openModal('Assign Teacher', '<p style="color:var(--text-light);">No teachers found. Create a teacher account first from the Applications section.</p>');
+      return;
+    }
+
+    const options = teachers.map(t => `
+      <label style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem;border:1px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:0.5rem;">
+        <input type="radio" name="assignTeacher" value="${t.id}" style="accent-color:var(--pink);">
+        <span>${t.first_name} ${t.last_name} — ${t.email}</span>
+      </label>`).join('');
+
+    openModal(`Assign Teacher — ${courseTitle}`, `
+      ${options}
+      <button class="dash-btn dash-btn-primary" style="margin-top:1rem;width:100%;justify-content:center;" onclick="submitAssignTeacher(${courseId})">
+        <i class="fas fa-save"></i> Assign Teacher
+      </button>
+      <p id="assignTeacherMsg" style="font-size:0.82rem;margin-top:0.5rem;min-height:1em;"></p>`);
+  } catch (error) {
+    showToast('Could not load teachers', 'error');
+  }
+}
+window.assignTeacher = assignTeacher;
+
+async function submitAssignTeacher(courseId) {
+  const selected = document.querySelector('input[name="assignTeacher"]:checked');
+  const msg      = document.getElementById('assignTeacherMsg');
+  if (!selected) { if(msg) { msg.textContent = 'Please select a teacher'; msg.style.color = 'var(--red)'; } return; }
+  try {
+    const response = await fetch(`${API_BASE}/admin/courses/${courseId}/assign-teacher`, {
+      method: 'PATCH', headers: getAuthHeaders(),
+      body: JSON.stringify({ teacherId: parseInt(selected.value) })
+    });
+    const result = await response.json();
+    if (result.success) { showToast('Teacher assigned!'); closeModal(); loadCourses(); }
+    else { throw new Error(result.message); }
+  } catch (error) {
+    if(msg) { msg.textContent = error.message; msg.style.color = 'var(--red)'; }
+  }
+}
+window.submitAssignTeacher = submitAssignTeacher;
+
 console.log('%c 🛡️ Admin Dashboard Loaded ', 'background:#D0006F; color:white; padding:4px 8px; border-radius:4px;');
