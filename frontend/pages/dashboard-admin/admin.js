@@ -905,6 +905,7 @@ if (scheduleForm) {
     const teacherId   = document.getElementById('lcTeacher').value;
     const scheduledAt = document.getElementById('lcDateTime').value;
     const duration    = document.getElementById('lcDuration').value;
+    const days        = Array.from(document.querySelectorAll('input[name="lcDays"]:checked')).map(d => d.value);
 
     if (!title || !courseId || !teacherId || !scheduledAt) {
       msg.textContent = 'Please fill in all required fields';
@@ -916,7 +917,7 @@ if (scheduleForm) {
       const response = await fetch(`${API_BASE}/admin/live-classes`, {
         method:  'POST',
         headers: getAuthHeaders(),
-        body:    JSON.stringify({ title, courseId, teacherId, scheduledAt, durationMins: parseInt(duration) })
+        body:    JSON.stringify({ title, courseId, teacherId, scheduledAt, durationMins: parseInt(duration), days })
       });
 
       const result = await response.json();
