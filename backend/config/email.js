@@ -410,7 +410,7 @@ async function sendAdminNewStudentEmail({ studentName, email, category, programm
   Includes a Google Calendar link for one-click reminder.
   ============================================================
 */
-async function sendLiveClassScheduledEmail({ name, email, className, scheduledAt, durationMins, jitsiRoom, courseName }) {
+async function sendLiveClassScheduledEmail({ name, email, className, scheduledAt, durationMins, jitsiRoom, courseName, days }) {
 
   const startDate = new Date(scheduledAt);
   const endDate   = new Date(startDate.getTime() + durationMins * 60000);
@@ -442,6 +442,7 @@ async function sendLiveClassScheduledEmail({ name, email, className, scheduledAt
       <p>📚 <strong>Class:</strong> ${className}</p>
       <p>🎓 <strong>Course:</strong> ${courseName}</p>
       <p>📅 <strong>Date & Time:</strong> ${displayDate}</p>
+      <p>📆 <strong>Day(s):</strong> ${days && days.length > 0 ? days.join(', ') : 'See schedule'}</p>
       <p>⏱️ <strong>Duration:</strong> ${durationMins} minutes</p>
       <p>🎥 <strong>Platform:</strong> Jitsi Meet (in your dashboard)</p>
     </div>

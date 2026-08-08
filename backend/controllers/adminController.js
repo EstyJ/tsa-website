@@ -453,7 +453,7 @@ exports.getLiveClasses = async (req, res) => {
 ============================================================ */
 exports.scheduleLiveClass = async (req, res) => {
   try {
-    const { title, courseId, teacherId, scheduledAt, durationMins } = req.body;
+    const { title, courseId, teacherId, scheduledAt, durationMins, days } = req.body;
 
     if (!title || !courseId || !teacherId || !scheduledAt) {
       return res.status(400).json({
@@ -489,18 +489,42 @@ exports.scheduleLiveClass = async (req, res) => {
         scheduledAt,
         durationMins: durationMins || 60,
         jitsiRoom,
-        courseName: title
+        courseName: title,
+        days: days || []
       });
     }
 
-    // Send email to all enrolled students
-    const [students] = await pool.query(
+    // Send email to all students in this course's category
+    const [courseInfo] = await pool.query('SELECT category FROM courses WHERE id = ?', [courseId]);
+    const category = courseInfo.length > 0 ? courseInfo[0].category : null;
+
+    let students = [];
+    if (category) {
+      const [byCategory] = await pool.query(
+        `SELECT DISTINCT u.first_name, u.email
+         FROM users u
+         JOIN student_programmes sp ON u.id = sp.student_id
+         JOIN programmes p ON sp.programme_id = p.id
+         WHERE p.category = ? AND u.role = 'student' AND u.is_active = TRUE`,
+        [category]
+      );
+      students = byCategory;
+    }
+
+    // Also get directly enrolled students
+    const [enrolled] = await pool.query(
       `SELECT DISTINCT u.first_name, u.email
        FROM users u
        JOIN enrollments e ON u.id = e.student_id
        WHERE e.course_id = ? AND u.role = 'student'`,
       [courseId]
     );
+
+    // Merge
+    const emailSet = new Set(students.map(s => s.email));
+    for (const s of enrolled) {
+      if (!emailSet.has(s.email)) students.push(s);
+    }
 
     for (const student of students) {
       sendLiveClassScheduledEmail({
@@ -510,7 +534,8 @@ exports.scheduleLiveClass = async (req, res) => {
         scheduledAt,
         durationMins: durationMins || 60,
         jitsiRoom,
-        courseName: title
+        courseName: title,
+        days: days || []
       });
     }
 

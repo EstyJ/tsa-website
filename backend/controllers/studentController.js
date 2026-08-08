@@ -25,11 +25,44 @@ exports.getCourses = async (req, res) => {
 
 exports.getLiveClasses = async (req, res) => {
   try {
-    const [classes] = await pool.query(
-      `SELECT lc.id, lc.title, lc.jitsi_room, lc.scheduled_at,
+    // Get student's categories
+    const [progs] = await pool.query(
+      `SELECT DISTINCT p.category FROM student_programmes sp
+       JOIN programmes p ON sp.programme_id = p.id
+       WHERE sp.student_id = ?`,
+      [req.user.id]
+    );
+    const categories = progs.map(p => p.category);
+
+    // Get live classes from courses matching student's categories
+    // OR directly assigned to this student
+    let classes = [];
+
+    if (categories.length > 0) {
+      const placeholders = categories.map(() => '?').join(',');
+      const [rows] = await pool.query(
+        `SELECT DISTINCT lc.id, lc.title, lc.jitsi_room, lc.scheduled_at,
+                lc.duration_mins, lc.status, lc.clocked_in_at,
+                u.first_name AS teacher_first, u.last_name AS teacher_last,
+                c.title AS course_title, c.category
+         FROM live_classes lc
+         JOIN courses c ON lc.course_id = c.id
+         JOIN users u ON lc.teacher_id = u.id
+         WHERE c.category IN (${placeholders})
+           AND lc.status IN ('scheduled', 'live')
+           AND lc.scheduled_at >= NOW() - INTERVAL 2 HOUR
+         ORDER BY lc.scheduled_at ASC`,
+        categories
+      );
+      classes = rows;
+    }
+
+    // Also get classes from enrollments
+    const [enrolled] = await pool.query(
+      `SELECT DISTINCT lc.id, lc.title, lc.jitsi_room, lc.scheduled_at,
               lc.duration_mins, lc.status, lc.clocked_in_at,
               u.first_name AS teacher_first, u.last_name AS teacher_last,
-              c.title AS course_title
+              c.title AS course_title, c.category
        FROM live_classes lc
        JOIN courses c ON lc.course_id = c.id
        JOIN users u ON lc.teacher_id = u.id
@@ -40,6 +73,13 @@ exports.getLiveClasses = async (req, res) => {
        ORDER BY lc.scheduled_at ASC`,
       [req.user.id]
     );
+
+    // Merge and deduplicate
+    const allIds = new Set(classes.map(c => c.id));
+    for (const row of enrolled) {
+      if (!allIds.has(row.id)) classes.push(row);
+    }
+
     res.status(200).json({ success: true, data: classes });
   } catch (error) {
     console.error('Get live classes error:', error);
