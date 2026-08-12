@@ -9,6 +9,14 @@ const pool = require('../config/db');
 /* Get teacher's scheduled classes */
 exports.getClasses = async (req, res) => {
   try {
+    // Auto-mark classes as completed if their time + duration has passed
+    await pool.query(
+      `UPDATE live_classes
+       SET status = 'completed'
+       WHERE status IN ('scheduled','live')
+         AND DATE_ADD(scheduled_at, INTERVAL duration_mins MINUTE) < NOW()`
+    );
+
     const [classes] = await pool.query(
       `SELECT lc.id, lc.title, lc.jitsi_room, lc.scheduled_at,
               lc.duration_mins, lc.status, lc.clocked_in_at,
@@ -16,7 +24,7 @@ exports.getClasses = async (req, res) => {
        FROM live_classes lc
        JOIN courses c ON lc.course_id = c.id
        WHERE lc.teacher_id = ?
-       ORDER BY lc.scheduled_at ASC`,
+       ORDER BY lc.scheduled_at DESC`,
       [req.user.id]
     );
     res.status(200).json({ success: true, data: classes });
@@ -66,9 +74,11 @@ exports.clockIn = async (req, res) => {
 /* Get students enrolled in teacher's courses */
 exports.getStudents = async (req, res) => {
   try {
-    const [students] = await pool.query(
-      `SELECT u.id, u.first_name, u.last_name, u.email, u.is_active,
-              c.title AS course_title
+    // Get students enrolled in teacher's courses
+    const [enrolled] = await pool.query(
+      `SELECT DISTINCT u.id, u.first_name, u.last_name, u.email, u.is_active,
+              c.title AS course_title, c.category,
+              'enrolled' AS source
        FROM users u
        JOIN enrollments e ON u.id = e.student_id
        JOIN courses c ON e.course_id = c.id
@@ -76,6 +86,28 @@ exports.getStudents = async (req, res) => {
        ORDER BY u.first_name ASC`,
       [req.user.id]
     );
+
+    // Also get students who registered for same category as teacher's courses
+    const [byCategory] = await pool.query(
+      `SELECT DISTINCT u.id, u.first_name, u.last_name, u.email, u.is_active,
+              p.name AS course_title, p.category,
+              'registered' AS source
+       FROM users u
+       JOIN student_programmes sp ON u.id = sp.student_id
+       JOIN programmes p ON sp.programme_id = p.id
+       JOIN courses c ON c.category = p.category
+       WHERE c.instructor_id = ? AND u.role = 'student'
+       ORDER BY u.first_name ASC`,
+      [req.user.id]
+    );
+
+    // Merge and deduplicate by student ID
+    const seen = new Set();
+    const students = [];
+    for (const s of [...enrolled, ...byCategory]) {
+      if (!seen.has(s.id)) { seen.add(s.id); students.push(s); }
+    }
+
     res.status(200).json({ success: true, data: students });
   } catch (error) {
     console.error('Get teacher students error:', error);

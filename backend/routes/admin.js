@@ -28,7 +28,9 @@ const {
   createStudentAccount,
   getStudentProgrammes,
   postAnnouncement,
-  getAnnouncements
+  getAnnouncements,
+  deleteLiveClass,
+  resetApplication
 } = require('../controllers/adminController');
 
 // All admin routes require login + admin role
@@ -52,7 +54,9 @@ router.post('/students/create',             createStudentAccount);
 router.get('/students/:id/programmes',      getStudentProgrammes);
 router.post('/announcements',               postAnnouncement);
 router.get('/announcements',                getAnnouncements);
-router.get('/live-classes',   getLiveClasses);
-router.post('/live-classes',  scheduleLiveClass);
+router.get('/live-classes',        getLiveClasses);
+router.post('/live-classes',       scheduleLiveClass);
+router.delete('/live-classes/:id',  deleteLiveClass);
+router.patch('/applications/:id/reset', resetApplication);
 
 module.exports = router;

@@ -756,3 +756,40 @@ exports.assignTeacher = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+
+
+/* Delete a scheduled live class */
+exports.deleteLiveClass = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [classes] = await pool.query('SELECT id, status FROM live_classes WHERE id = ?', [id]);
+    if (classes.length === 0) {
+      return res.status(404).json({ success: false, message: 'Class not found' });
+    }
+    await pool.query('DELETE FROM live_classes WHERE id = ?', [id]);
+    res.status(200).json({ success: true, message: 'Live class deleted successfully' });
+  } catch (error) {
+    console.error('Delete live class error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+/* Reset a hired application so teacher can reapply with same email */
+exports.resetApplication = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [apps] = await pool.query('SELECT email FROM career_applications WHERE id = ?', [id]);
+    if (apps.length === 0) {
+      return res.status(404).json({ success: false, message: 'Application not found' });
+    }
+    // Delete the application so they can reapply fresh
+    await pool.query('DELETE FROM career_applications WHERE id = ?', [id]);
+    res.status(200).json({
+      success: true,
+      message: 'Application removed. The teacher can now reapply with their email.'
+    });
+  } catch (error) {
+    console.error('Reset application error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};

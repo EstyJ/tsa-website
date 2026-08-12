@@ -552,6 +552,11 @@ async function loadApplications() {
                 <i class="fas fa-times"></i> Reject
               </button>
             ` : ''}
+            ${a.status === 'hired' ? `
+              <button class="dash-btn dash-btn-danger" onclick="resetApplication(${a.id}, '${a.first_name} ${a.last_name}')">
+                <i class="fas fa-redo"></i> Reset & Allow Reapply
+              </button>
+            ` : ''}
           </div>
         </td>
       </tr>`).join('');
@@ -861,7 +866,13 @@ async function loadLiveClasses() {
         <td>${lc.teacher_first} ${lc.teacher_last}</td>
         <td>${formatDate(lc.scheduled_at)}</td>
         <td>${lc.duration_mins} mins</td>
-        <td><span class="pill pill-${lc.status === 'live' ? 'confirmed' : lc.status === 'completed' ? 'inactive' : 'pending'}">${lc.status}</span></td>
+        <td><span class="pill pill-${lc.status === 'live' ? 'confirmed' : lc.status === 'completed' ? 'inactive' : 'pending'}">${lc.status === 'completed' ? '✅ Ended' : lc.status}</span></td>
+        <td>
+          ${lc.status === 'scheduled' ? `
+          <button class="dash-btn dash-btn-danger" onclick="deleteLiveClass(${lc.id}, '${lc.title.replace(/'/g,"\'")}')">
+            <i class="fas fa-trash"></i> Delete
+          </button>` : '—'}
+        </td>
       </tr>`).join('');
 
   } catch (error) {
@@ -1319,4 +1330,30 @@ async function submitAssignTeacher(courseId) {
 }
 window.submitAssignTeacher = submitAssignTeacher;
 
+
+async function deleteLiveClass(classId, className) {
+  if (!confirm(`Delete "${className}"? This cannot be undone.`)) return;
+  try {
+    const response = await fetch(`${API_BASE}/admin/live-classes/${classId}`, {
+      method: 'DELETE', headers: getAuthHeaders()
+    });
+    const result = await response.json();
+    if (result.success) { showToast('Live class deleted!'); loadLiveClasses(); }
+    else { throw new Error(result.message); }
+  } catch (error) { showToast(error.message, 'error'); }
+}
+window.deleteLiveClass = deleteLiveClass;
+
+async function resetApplication(appId, appName) {
+  if (!confirm(`Remove ${appName}'s application? They will be able to reapply with the same email.`)) return;
+  try {
+    const response = await fetch(`${API_BASE}/admin/applications/${appId}/reset`, {
+      method: 'PATCH', headers: getAuthHeaders()
+    });
+    const result = await response.json();
+    if (result.success) { showToast(result.message); loadApplications(); }
+    else { throw new Error(result.message); }
+  } catch (error) { showToast(error.message, 'error'); }
+}
+window.resetApplication = resetApplication;
 console.log('%c 🛡️ Admin Dashboard Loaded ', 'background:#D0006F; color:white; padding:4px 8px; border-radius:4px;');
