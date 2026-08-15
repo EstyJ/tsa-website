@@ -248,8 +248,10 @@ async function loadClasses() {
     }
 
     list.innerHTML = classes.map(c => {
-      const isLive      = c.status === 'live';
-      const isCompleted = c.status === 'completed';
+      const now         = new Date();
+      const classEnd    = new Date(new Date(c.scheduled_at).getTime() + c.duration_mins * 60000);
+      const hasEnded    = now > classEnd || c.status === 'completed';
+      const isLive      = c.status === 'live' && !hasEnded;
       const date        = new Date(c.scheduled_at).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
       return `
@@ -261,7 +263,7 @@ async function loadClasses() {
             <div class="lcc-title">${c.title}</div>
             <div class="lcc-meta">${c.course_title} · ${date} · ${c.duration_mins} mins</div>
             ${isLive ? '<div class="lcc-status-live">🔴 LIVE NOW</div>' : ''}
-            ${isCompleted ? '<div style="color:var(--green);font-size:0.8rem;font-weight:700;">✅ Completed</div>' : ''}
+            ${hasEnded ? '<div style="color:var(--text-light);font-size:0.8rem;font-weight:700;">✅ Class Ended</div>' : ''}
           </div>
           <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
             ${c.status === 'scheduled' ? `

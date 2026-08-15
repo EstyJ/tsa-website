@@ -243,7 +243,7 @@ async function loadCourses() {
       <div class="scc-thumbnail">
         <img src="${images[c.category] || images.other}" alt="${c.title}">
         ${!isActive ? `
-          <div class="scc-locked-overlay">
+          <div class="scc-pending-overlay">
             <i class="fas fa-lock"></i>
             <span>Pay to Unlock</span>
           </div>` : ''}
@@ -783,9 +783,9 @@ async function loadCourses() {
 
     grid.innerHTML = progs.map((p, i) => `
       <div class="student-course-card" style="cursor:pointer;" onclick="viewProgrammeContent(${p.programme_id || p.id}, '${p.name}')">
-        <div class="scc-thumbnail" style="background:linear-gradient(135deg,#0D0D1A,#1A1A2E);display:flex;align-items:center;justify-content:center;">
+        <div class="scc-thumbnail" style="background:linear-gradient(135deg,#0D0D1A,#1A1A2E);display:flex;align-items:center;justify-content:center;height:160px;">
           <i class="fas ${icons[i % icons.length]}" style="font-size:3rem;color:var(--gold);"></i>
-          ${p.status !== 'active' ? '<div class="scc-locked-overlay"><i class="fas fa-lock"></i><span>Pending Activation</span></div>' : ''}
+          ${p.status !== 'active' ? '' : ''}
         </div>
         <div class="scc-body">
           <div class="scc-category"><i class="fas fa-tag"></i> ${p.category}</div>
