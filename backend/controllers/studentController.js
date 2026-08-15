@@ -49,7 +49,7 @@ exports.getLiveClasses = async (req, res) => {
          JOIN courses c ON lc.course_id = c.id
          JOIN users u ON lc.teacher_id = u.id
          WHERE c.category IN (${placeholders})
-           AND lc.scheduled_at >= NOW() - INTERVAL 24 HOUR
+           AND lc.scheduled_at >= NOW() - INTERVAL 7 DAY
          ORDER BY lc.scheduled_at ASC`,
         categories
       );
@@ -67,7 +67,7 @@ exports.getLiveClasses = async (req, res) => {
        JOIN users u ON lc.teacher_id = u.id
        JOIN enrollments e ON c.id = e.course_id
        WHERE e.student_id = ?
-         AND lc.scheduled_at >= NOW() - INTERVAL 24 HOUR
+         AND lc.scheduled_at >= NOW() - INTERVAL 7 DAY
        ORDER BY lc.scheduled_at ASC`,
       [req.user.id]
     );

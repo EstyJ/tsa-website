@@ -181,7 +181,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
    All routes defined in payment.js will start with /api/payment/
 ============================================================ */
 
-app.use('/api/auth',    authLimiter, authRoutes);
+app.use('/api/auth',    authRoutes); // Rate limiter disabled until 50+ students
 // authLimiter applied specifically to auth routes (stricter limit)
 
 app.use('/api/careers', careersRoutes);

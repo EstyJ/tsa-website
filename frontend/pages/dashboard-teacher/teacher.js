@@ -202,7 +202,7 @@ function openClass(roomName, className) {
   document.getElementById('jitsiModal').classList.add('active');
   document.getElementById('jitsiContainer').innerHTML = `
     <iframe
-      src="https://meet.jit.si/${roomName}"
+      src="https://8x8.vc/tsa-snoogums/${roomName}"
       allow="camera; microphone; fullscreen; display-capture"
       style="width:100%;height:100%;border:none;">
     </iframe>`;

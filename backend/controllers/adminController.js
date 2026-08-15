@@ -477,6 +477,7 @@ exports.scheduleLiveClass = async (req, res) => {
       [title, courseId, teacherId, jitsiRoom, scheduledAt, durationMins || 60]
     );
 
+    console.log('Sending live class emails...');
     // Send email to teacher
     const [teachers] = await pool.query(
       'SELECT first_name, email FROM users WHERE id = ?', [teacherId]
