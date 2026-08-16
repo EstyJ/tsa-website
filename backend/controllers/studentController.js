@@ -25,58 +25,23 @@ exports.getCourses = async (req, res) => {
 
 exports.getLiveClasses = async (req, res) => {
   try {
-    // Get student's categories
-    const [progs] = await pool.query(
-      `SELECT DISTINCT p.category FROM student_programmes sp
-       JOIN programmes p ON sp.programme_id = p.id
-       WHERE sp.student_id = ?`,
-      [req.user.id]
-    );
-    const categories = progs.map(p => p.category);
-
-    // Get live classes from courses matching student's categories
-    // OR directly assigned to this student
-    let classes = [];
-
-    if (categories.length > 0) {
-      const placeholders = categories.map(() => '?').join(',');
-      const [rows] = await pool.query(
-        `SELECT DISTINCT lc.id, lc.title, lc.jitsi_room, lc.scheduled_at,
-                lc.duration_mins, lc.status, lc.clocked_in_at,
-                u.first_name AS teacher_first, u.last_name AS teacher_last,
-                c.title AS course_title, c.category
-         FROM live_classes lc
-         JOIN courses c ON lc.course_id = c.id
-         JOIN users u ON lc.teacher_id = u.id
-         WHERE c.category IN (${placeholders})
-           AND lc.scheduled_at >= NOW() - INTERVAL 7 DAY
-         ORDER BY lc.scheduled_at ASC`,
-        categories
-      );
-      classes = rows;
-    }
-
-    // Also get classes from enrollments
-    const [enrolled] = await pool.query(
-      `SELECT DISTINCT lc.id, lc.title, lc.jitsi_room, lc.scheduled_at,
+    /*
+      Show ALL scheduled and live classes to ALL active students.
+      For a small school like TSA, every student should see all classes.
+      Admin controls who attends by scheduling for the right teacher/course.
+    */
+    const [classes] = await pool.query(
+      `SELECT lc.id, lc.title, lc.jitsi_room, lc.scheduled_at,
               lc.duration_mins, lc.status, lc.clocked_in_at,
               u.first_name AS teacher_first, u.last_name AS teacher_last,
               c.title AS course_title, c.category
        FROM live_classes lc
        JOIN courses c ON lc.course_id = c.id
        JOIN users u ON lc.teacher_id = u.id
-       JOIN enrollments e ON c.id = e.course_id
-       WHERE e.student_id = ?
-         AND lc.scheduled_at >= NOW() - INTERVAL 7 DAY
-       ORDER BY lc.scheduled_at ASC`,
-      [req.user.id]
+       WHERE lc.status IN ('scheduled', 'live')
+          OR (lc.status = 'completed' AND lc.scheduled_at >= NOW() - INTERVAL 2 DAY)
+       ORDER BY lc.scheduled_at ASC`
     );
-
-    // Merge and deduplicate
-    const allIds = new Set(classes.map(c => c.id));
-    for (const row of enrolled) {
-      if (!allIds.has(row.id)) classes.push(row);
-    }
 
     res.status(200).json({ success: true, data: classes });
   } catch (error) {
