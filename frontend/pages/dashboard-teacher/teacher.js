@@ -200,19 +200,55 @@ window.clockIn = clockIn;
 function openClass(roomName, className) {
   document.getElementById('jitsiClassName').textContent = className;
   document.getElementById('jitsiModal').classList.add('active');
-  document.getElementById('jitsiContainer').innerHTML = `
-    <iframe
-      src="https://8x8.vc/tsa-snoogums/${roomName}"
-      allow="camera; microphone; fullscreen; display-capture"
-      style="width:100%;height:100%;border:none;">
-    </iframe>`;
+  document.body.style.overflow = 'hidden';
+
+  const container = document.getElementById('jitsiContainer');
+  container.innerHTML = '';
+
+  // Use Jitsi External API - no login required, no 5 min limit warning
+  const script = document.createElement('script');
+  script.src = 'https://meet.jit.si/external_api.js';
+  script.onload = function() {
+    const domain = 'meet.jit.si';
+    const options = {
+      roomName: 'TSA-' + roomName,
+      width: '100%',
+      height: '100%',
+      parentNode: container,
+      userInfo: {
+        displayName: localStorage.getItem('tsa_user')
+          ? JSON.parse(localStorage.getItem('tsa_user')).firstName + ' ' + JSON.parse(localStorage.getItem('tsa_user')).lastName
+          : JSON.parse(localStorage.getItem('tsa_user')).firstName + ' ' + JSON.parse(localStorage.getItem('tsa_user')).lastName + ' (Teacher)'
+      },
+      configOverwrite: {
+        startWithAudioMuted: false,
+        startWithVideoMuted: false,
+        disableDeepLinking: true,
+        prejoinPageEnabled: false,
+        disableInviteFunctions: true,
+      },
+      interfaceConfigOverwrite: {
+        SHOW_JITSI_WATERMARK: false,
+        SHOW_WATERMARK_FOR_GUESTS: false,
+        TOOLBAR_BUTTONS: [
+          'microphone', 'camera', 'closedcaptions', 'desktop',
+          'fullscreen', 'fodeviceselection', 'hangup', 'chat',
+          'raisehand', 'videoquality', 'filmstrip', 'tileview'
+        ],
+      }
+    };
+    window._jitsiApi = new JitsiMeetExternalAPI(domain, options);
+  };
+  document.head.appendChild(script);
 }
 
 window.openClass = openClass;
 
 document.getElementById('jitsiClose').addEventListener('click', function () {
+  if (window._jitsiApi) { window._jitsiApi.dispose(); window._jitsiApi = null; }
   document.getElementById('jitsiModal').classList.remove('active');
   document.getElementById('jitsiContainer').innerHTML = '';
+  document.body.style.overflow = '';
 });
 
 
